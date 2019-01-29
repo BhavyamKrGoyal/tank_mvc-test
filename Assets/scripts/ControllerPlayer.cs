@@ -36,8 +36,8 @@ public class ControllerPlayer
         if(model.lastShot+model.fireInterval<Time.timeSinceLevelLoad)
         { 
             model.lastShot = Time.timeSinceLevelLoad;
-            ControllerBullet controllerBullet = serviceBullet.MakeBullet();
-            controllerBullet.Shoot(view.muzzle.transform, model.firePower);
+            ControllerBullet controllerBullet = serviceBullet.MakeBullet(model.bulletType);
+            controllerBullet.Shoot(view.muzzle.transform);
         }
     }
     

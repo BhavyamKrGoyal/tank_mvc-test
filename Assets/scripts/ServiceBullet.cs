@@ -3,14 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServiceBullet
-{
-    
-    // Start is called before the first frame update
-    public ControllerBullet MakeBullet()
-    {
-        return new ControllerBullet();
-    }
 
-   
+public enum BulletTypes
+{
+    defaultBullet = 1,
+    fastBullet = 2,
+    explossiveBullet = 3
+}
+public class ServiceBullet
+{ 
+    public ControllerBullet MakeBullet(BulletTypes bulletType)
+    {
+
+            switch (bulletType)
+            {
+                case BulletTypes.defaultBullet: return new ControllerDefaultBullet();
+                                                break;
+                case BulletTypes.fastBullet: return new ControllerFastBullet();
+                                                break;
+                case BulletTypes.explossiveBullet: return new ControllerExplossiveBullet();
+                                                break;
+        }
+        return new ControllerDefaultBullet();
+    }
 }
