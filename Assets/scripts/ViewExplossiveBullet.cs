@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ViewExplossiveBullet : MonoBehaviour
+public class ViewExplossiveBullet : ViewBullet
 {
     public GameObject explossion;
     public void Start()
     {
         Destroy(gameObject, 3);
     }
-    public void StartShoot(Transform muzzle, float power)
+    public override void StartShoot(Transform muzzle, float power)
     {
         gameObject.transform.position = muzzle.position;
         gameObject.transform.rotation = muzzle.rotation;

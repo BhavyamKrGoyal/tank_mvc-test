@@ -2,18 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ViewBullet : MonoBehaviour
+public abstract class ViewBullet : MonoBehaviour
 {
-
-    public void Start()
-    {
-        Destroy(gameObject, 3);
-    }
-    public void StartShoot(Transform muzzle,float power)
-    {
-        gameObject.transform.position = muzzle.position;
-        gameObject.transform.rotation = muzzle.rotation;
-        GetComponent<Rigidbody>().velocity = transform.forward * power; ;
-
-    }
+    public abstract void StartShoot(Transform muzzle, float power);
 }
