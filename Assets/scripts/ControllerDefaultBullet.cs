@@ -15,7 +15,7 @@ public class ControllerDefaultBullet : ControllerBullet
     }
     public override void Shoot(Transform muzzle)
     {
-        view.StartShoot(muzzle, model.power);
+        view.StartShoot(muzzle, model.power,model.lifeTime);
     }
 
 

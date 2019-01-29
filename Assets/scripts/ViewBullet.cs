@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class ViewBullet : MonoBehaviour
 {
-    public abstract void StartShoot(Transform muzzle, float power);
+    public abstract void StartShoot(Transform muzzle, float power,float time);
 }
