@@ -19,19 +19,19 @@ public class ControllerPlayer
     public void moveTank(float h,float v)
     {
         //Debug.Log("controller");
-        view.moveTank(h*model.rotationSpeed*Time.deltaTime,v*model.speed*Time.deltaTime*model.boost);
+        view.MovePlayer(h*model.rotationSpeed*Time.deltaTime,v*model.speed*Time.deltaTime*model.boost);
 
     }
 
-    public void boosting()
+    public void StartBoost()
     {
         model.boost = 2;
     }
-    public void stopboosting()
+    public void StopBoost()
     {
         model.boost = 1;
     }
-    public void shooting()
+    public void Shoot()
     {
         if(model.lastShot+model.fireInterval<Time.timeSinceLevelLoad)
         { 

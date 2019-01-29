@@ -24,15 +24,15 @@ public class InputManager : GameElement
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            app.playerController.boosting();
+            app.playerController.StartBoost();
         }
         else if(Input.GetKeyUp(KeyCode.LeftShift))
         {
-            app.playerController.stopboosting();
+            app.playerController.StopBoost();
         }
         if (Input.GetKey(KeyCode.Space))
         {
-            app.playerController.shooting();
+            app.playerController.Shoot();
         }
 
     }
