@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerView : MonoBehaviour
+public class ViewPlayer : MonoBehaviour
 {
     Rigidbody rb;
     bool shoot = true;
-    public GameObject bullet,muzzle;
+    public GameObject muzzle;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,16 +26,6 @@ public class PlayerView : MonoBehaviour
     {
         Debug.Log("view");
         StartCoroutine(Move(h,v));
-    }
-    public void Startshoot(float power,float interval)
-    {
-        if (shoot)
-        {
-            StartCoroutine(Shoot(interval));
-            GameObject shell = Instantiate  (bullet, muzzle.transform.position,muzzle.transform.rotation, null);
-            shell.GetComponent<Rigidbody>().velocity = transform.forward * power;
-            Destroy(shell, 3);
-        }
     }
     IEnumerator Shoot(float time)
     {

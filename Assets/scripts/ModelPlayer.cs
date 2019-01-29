@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankModel
+public class ModelPlayer
 {
-   // public bool shoot=true;
+    public float lastShot=0;
     public float firePower=10;
     public float fireInterval = 1;
     public float speed=20;
