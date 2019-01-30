@@ -15,7 +15,7 @@ public class GameApplication : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ServiceBullet serviceBullet = new ServiceBullet();
+       
         playerController = new ControllerPlayer(player,spawnPoint.transform);
 
     }

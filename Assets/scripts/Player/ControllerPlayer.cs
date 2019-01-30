@@ -14,7 +14,7 @@ public class ControllerPlayer
 
         this.view = GameObject.Instantiate(player, spawnPoint.position,Quaternion.identity,null).GetComponent<ViewPlayer>();
         this.model =new ModelPlayer();
-        serviceBullet = new ServiceBullet();
+        serviceBullet =ServiceBullet.Instance;
     }
     public void moveTank(float h,float v)
     {

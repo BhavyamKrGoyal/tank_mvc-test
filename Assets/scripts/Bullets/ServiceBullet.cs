@@ -12,7 +12,7 @@ public enum BulletTypes
 }
 public class ServiceBullet : Singleton<ServiceBullet>
 {
-    List<ControllerBullet> bulletList = new List<ControllerBullet>();
+    public static List<ControllerBullet> bulletList = new List<ControllerBullet>();
     public ControllerBullet MakeBullet(BulletTypes bulletType)
     {
         ControllerBullet temp=null;
@@ -31,14 +31,17 @@ public class ServiceBullet : Singleton<ServiceBullet>
                 break;
 
             }
+       // Debug.Log(bulletList.Count);
         return temp;
     }
 
 
     public void RemoveBullet(ControllerBullet temp)
     {
-        bulletList.Remove(temp);
-
+        //Debug.Log(bulletList.Count);
+       // bulletList.Remove(temp);
+        bulletList.RemoveAt(bulletList.Count-1);
+        
     }
 
 }
