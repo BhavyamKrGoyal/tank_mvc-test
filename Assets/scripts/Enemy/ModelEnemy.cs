@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class ModelEenmy
+public class ModelEnemy
 {
    
 }
