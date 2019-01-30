@@ -2,11 +2,12 @@
 using UnityEditor;
 
 [CreateAssetMenu(fileName = "ScriptableEnemy", menuName = "ScriptableObj/EnemyObject", order = 0)]
-public class SriptableEnemy : ScriptableObject
+public class ScriptableEnemy : ScriptableObject
 {
     public float health;
-    public GameObject EnemeyPrefab;
+    public GameObject enemyPrefab;
     public float Speed;
     public Color color;
+    public Vector3 spawnPoint=new Vector3(-10,2,22);
    
 }
