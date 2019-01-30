@@ -4,5 +4,22 @@ using UnityEngine;
 
 public abstract class ViewBullet : MonoBehaviour
 {
-    public abstract void StartShoot(Transform muzzle, float power,float time);
+    public ControllerBullet controller;
+    public float time;
+    public virtual void StartShoot(Transform muzzle, float power, float time)
+    {
+        StartCoroutine(DeathTimer());
+    }
+    public void DestroyBullet()
+    {
+        Destroy(gameObject);
+    }
+    IEnumerator DeathTimer()
+    {
+        yield return new WaitForSeconds(time);
+        controller.Destroy();
+        DestroyBullet();
+    }
+
+
 }

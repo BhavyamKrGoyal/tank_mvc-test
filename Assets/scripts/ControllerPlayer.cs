@@ -9,12 +9,12 @@ public class ControllerPlayer
     public ViewPlayer view ;
     public ModelPlayer model;
     public ServiceBullet serviceBullet;
-    public ControllerPlayer(GameObject player,Transform spawnPoint,ServiceBullet service)
+    public ControllerPlayer(GameObject player,Transform spawnPoint)
     {
 
         this.view = GameObject.Instantiate(player, spawnPoint.position,Quaternion.identity,null).GetComponent<ViewPlayer>();
         this.model =new ModelPlayer();
-        this.serviceBullet = service;
+        serviceBullet = new ServiceBullet();
     }
     public void moveTank(float h,float v)
     {

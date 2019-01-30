@@ -12,10 +12,18 @@ public class ControllerDefaultBullet : ControllerBullet
         GameObject shell = Resources.Load<GameObject>("DefaultShell");
         view = GameObject.Instantiate<GameObject>(shell).GetComponent<ViewDefaultBullet>();
         model = new ModelDefaultBullet();
+        view.controller = this;
+        view.time = model.lifeTime;
     }
     public override void Shoot(Transform muzzle)
     {
         view.StartShoot(muzzle, model.power,model.lifeTime);
+    }
+    public override void Destroy()
+    {
+        base.Destroy();
+        model = null;
+        view.DestroyBullet();
     }
 
 

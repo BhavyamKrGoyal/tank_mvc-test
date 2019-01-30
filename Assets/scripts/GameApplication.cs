@@ -16,7 +16,7 @@ public class GameApplication : MonoBehaviour
     void Start()
     {
         ServiceBullet serviceBullet = new ServiceBullet();
-        playerController = new ControllerPlayer(player,spawnPoint.transform, serviceBullet);
+        playerController = new ControllerPlayer(player,spawnPoint.transform);
 
     }
 
