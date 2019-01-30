@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7062454437528491190}
   m_Layer: 0
   m_Name: ExplossiveShell
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6da8fae9cc11f40b18b39c87ad108d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  time: 0
   explossion: {fileID: 151086, guid: ee49a9a8678ecf8468eb488e1ac8d42b, type: 3}
 --- !u!136 &7062454437528491190
 CapsuleCollider:

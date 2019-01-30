@@ -28,5 +28,9 @@ namespace Enemy
             new ControllerEnemy(enemyList[enemyType]);
 
         }
+        public void RemoveEnemy(ControllerEnemy enemy)
+        {
+            enemyController.Remove(enemy);
+        }
     }
 }

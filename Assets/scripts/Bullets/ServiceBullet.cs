@@ -40,7 +40,7 @@ public class ServiceBullet : Singleton<ServiceBullet>
     {
         //Debug.Log(bulletList.Count);
        // bulletList.Remove(temp);
-        bulletList.RemoveAt(bulletList.Count-1);
+        bulletList.Remove(temp);
         
     }
 

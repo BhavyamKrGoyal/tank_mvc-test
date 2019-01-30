@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 3630596710485921380}
   - component: {fileID: 3737732709340066467}
   - component: {fileID: 1488852147999666995}
+  - component: {fileID: 6771255356477091088}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -218,7 +219,7 @@ Transform:
   m_GameObject: {fileID: 3111266862445625095}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 2614655395659949754}
   m_Father: {fileID: 0}
@@ -249,6 +250,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cb21ca6ed604f45bc0219626db6e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &6771255356477091088
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111266862445625095}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3909002345900501456
 GameObject:
   m_ObjectHideFlags: 0

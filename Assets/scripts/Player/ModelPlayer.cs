@@ -10,6 +10,6 @@ public class ModelPlayer
     public float speed=15;
     public float rotationSpeed = 40;
     public float boost=1;
-    public BulletTypes bulletType = BulletTypes.defaultBullet;
+    public BulletTypes bulletType = BulletTypes.explossiveBullet;
 
 }
