@@ -6,14 +6,7 @@ public class ViewExplossiveBullet : ViewBullet
 {
     public GameObject explossion;
     
-    public override void StartShoot(Transform muzzle, float power,float time)
-    {
-        base.StartShoot(muzzle, power, time);
 
-        gameObject.transform.position = muzzle.position;
-        gameObject.transform.rotation = muzzle.rotation;
-        GetComponent<Rigidbody>().velocity = transform.forward * power; ;
-    }
     public override void OnCollisionEnter(Collision col)
     {
         base.OnCollisionEnter(col);

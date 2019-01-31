@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ViewBullet : MonoBehaviour
+public class ViewBullet : MonoBehaviour
 {
     public ControllerBullet controller;
     public float time;
     public virtual void StartShoot(Transform muzzle, float power, float time)
     {
         StartCoroutine(DeathTimer());
+        gameObject.transform.position = muzzle.position;
+        gameObject.transform.rotation = muzzle.rotation;
+        GetComponent<Rigidbody>().velocity = transform.forward * power; ;
     }
     public void DestroyBullet()
     {

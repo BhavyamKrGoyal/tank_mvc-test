@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-
-
     private static T instance;
-
-
     public static T Instance
     {
         get
@@ -15,13 +11,12 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             if (instance == null)
             {
                 instance = FindObjectOfType<T>();
-
-
                 DontDestroyOnLoad(instance);
             }
-            else if (instance != FindObjectOfType<T>())
+            else 
             {
-                Destroy(instance);
+                //Destroy(this);
+                Debug.LogError("Creating a duplicate instance of a Sinleton");
             }
 
             return instance;

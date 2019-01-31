@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ModelFastBullet : ModelBullet
 {
-    public float power = 30;
-    
+    public ModelFastBullet()
+    {
+        power = 30;
+    }
 }

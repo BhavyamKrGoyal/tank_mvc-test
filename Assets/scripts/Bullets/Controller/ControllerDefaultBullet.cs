@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class ControllerDefaultBullet : ControllerBullet
 {
-    ModelDefaultBullet model;
-    ViewDefaultBullet view;
+    
 
-    public ControllerDefaultBullet()
+   
+    public override void getViewAndModel()
     {
         GameObject shell = Resources.Load<GameObject>("DefaultShell");
         view = GameObject.Instantiate<GameObject>(shell).GetComponent<ViewDefaultBullet>();
         model = new ModelDefaultBullet();
-        view.controller = this;
-        view.time = model.lifeTime;
     }
     public override void Shoot(Transform muzzle)
     {
