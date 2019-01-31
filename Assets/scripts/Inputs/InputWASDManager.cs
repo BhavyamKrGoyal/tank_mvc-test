@@ -9,7 +9,7 @@ public class InputWASDManager : InputManager
 
         playerInput[playerNumber].forward = Input.GetAxis("Horizontal1");
         playerInput[playerNumber].direction = Input.GetAxis("Vertical1");
-        Debug.Log("getting Input using WASD");
+       // Debug.Log("getting Input using WASD");
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {

@@ -20,6 +20,17 @@ public abstract class ViewBullet : MonoBehaviour
         controller.Destroy();
         DestroyBullet();
     }
+    public virtual void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+
+            
+            controller.HitEnemy(5);
+           
+            Destroy(gameObject);
+        }
+    }
 
 
 }

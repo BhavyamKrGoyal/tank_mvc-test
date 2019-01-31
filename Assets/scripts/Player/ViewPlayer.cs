@@ -7,13 +7,17 @@ public class ViewPlayer : MonoBehaviour
     Rigidbody rb;
     bool shoot = true;
     public GameObject muzzle;
+    ControllerPlayer controller;
     // Start is called before the first frame update
     void Start()
     {
 
         rb = gameObject.GetComponent<Rigidbody>();   
     }
-
+    public void SetController(ControllerPlayer controller)
+    {
+        this.controller = controller;
+    }
     public IEnumerator Move(float h,float v)
     {
         transform.Translate(0,0,v);
@@ -31,6 +35,14 @@ public class ViewPlayer : MonoBehaviour
         shoot = false;
         yield return new WaitForSeconds(time);
         shoot = true;
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            controller.TankHit(10);
+        }
     }
 
 }

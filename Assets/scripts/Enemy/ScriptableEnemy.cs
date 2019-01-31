@@ -8,6 +8,6 @@ public class ScriptableEnemy : ScriptableObject
     public GameObject enemyPrefab;
     public float Speed;
     public Color color;
-    public Vector3 spawnPoint=new Vector3(-10,2,22);
+    
    
 }

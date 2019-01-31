@@ -25,7 +25,7 @@ public class InputComponent
         {
             controller.StopBoost();
         }
-        Debug.Log("Updating InputComponent");
+       //Debug.Log("Updating InputComponent");
     }
 
     public void Move(float horizontal,float vertical)

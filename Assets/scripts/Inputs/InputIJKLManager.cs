@@ -10,7 +10,7 @@ public class InputIJKLManager : InputManager
 
         playerInput[playerNumber].forward = Input.GetAxis("Horizontal");
         playerInput[playerNumber].direction = Input.GetAxis("Vertical");
-        Debug.Log("getting Input using IJKL");
+        //Debug.Log("getting Input using IJKL");
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {

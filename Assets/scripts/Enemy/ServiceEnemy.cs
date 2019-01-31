@@ -11,7 +11,10 @@ namespace Enemy
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();
         void Start()
         {
-            SpawnEnemy();
+            for (int j = 0; j < 4; j++)
+            {
+                SpawnEnemy();
+            }
         }
 
         public void Update()
@@ -24,7 +27,7 @@ namespace Enemy
         }
         public void SpawnEnemy()
         {
-            int enemyType = Random.Range(0,3);
+            int enemyType = Random.Range(0, 3);
             new ControllerEnemy(enemyList[enemyType]);
 
         }

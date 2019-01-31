@@ -3,6 +3,10 @@ using UnityEditor;
 
 public abstract class BaseController 
 {
+    public virtual void UpdateScore(int score)
+    {
+
+    }
     public abstract bool CheckFreez();
     public abstract void Move(float horizontal, float vertical);
     public abstract void DestroyObject();

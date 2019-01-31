@@ -14,9 +14,10 @@ public class ViewExplossiveBullet : ViewBullet
         gameObject.transform.rotation = muzzle.rotation;
         GetComponent<Rigidbody>().velocity = transform.forward * power; ;
     }
-    public void OnCollisionEnter(Collision col)
+    public override void OnCollisionEnter(Collision col)
     {
-        Destroy(gameObject);
+        base.OnCollisionEnter(col);
+       
         Instantiate(explossion,col.transform.position,Quaternion.identity, null);
     }
 }

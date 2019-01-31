@@ -20,11 +20,11 @@ public class InputManager : Singleton<InputManager>
     {
         inputComponents.Add(inputComponent);
         playerInput.Add(new InputData());
-        Debug.Log("One InputComponent added, Total="+inputComponents.Count);
+       // Debug.Log("One InputComponent added, Total="+inputComponents.Count);
     }
     public void RemoveInputComponent(InputComponent inputComponent)
     {
         inputComponents.Remove(inputComponent);
-        Debug.Log("One InputComponent Removed, Total=" + inputComponents.Count);
+       // Debug.Log("One InputComponent Removed, Total=" + inputComponents.Count);
     }
 }

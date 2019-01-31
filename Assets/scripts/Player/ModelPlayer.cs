@@ -11,6 +11,8 @@ public class ModelPlayer
     public float speed=15;
     public float rotationSpeed = 40;
     public float boost=1;
+    public int health = 100;
+    public int score = 0;
     public BulletTypes bulletType = BulletTypes.explossiveBullet;
 
 }

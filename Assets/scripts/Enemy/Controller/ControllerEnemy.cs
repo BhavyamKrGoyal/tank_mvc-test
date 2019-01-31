@@ -19,7 +19,7 @@ namespace Enemy.Controller
         }
         public virtual void GetView()
         {
-            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, model.enemyObject.spawnPoint, Quaternion.identity, null).GetComponent<ViewEnemy>();
+            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, model.spawnPoint[Random.Range(0,3)], Quaternion.identity, null).GetComponent<ViewEnemy>();
             view.SetColour(model.enemyObject.color);
             view.controller=this;
         }
@@ -28,16 +28,16 @@ namespace Enemy.Controller
             TakeDamage(damage);
         }
 
-        public void TakeDamage(int damage)
+        private void TakeDamage(int damage)
         {
             model.enemyObject.health -= damage;
             if (model.enemyObject.health <= 0)
             {
-                
+                DestroyObject();
                 
             }
-
         }
+       
         public override void DestroyObject()
         {
             model = null;
