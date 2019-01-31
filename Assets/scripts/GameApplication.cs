@@ -3,20 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameElement : MonoBehaviour
-{
-    public GameApplication app { get { return GameObject.FindObjectOfType<GameApplication>(); } }
-}
-
-public class GameApplication : MonoBehaviour
+public class GameApplication : Singleton<GameApplication>
 {
 
     public ScriptableEnemy[] enemy;
-    public GameObject spawnPoint,player;
-    public ControllerPlayer playerController;
+    public GameObject spawnPoint,player,spawnPoint2;
+    
     public void Awake()
     {
-        playerController = new ControllerPlayer(player, spawnPoint.transform);
+        new ControllerPlayer(player, spawnPoint.transform);
+        new ControllerPlayer(player, spawnPoint2.transform);
+        
         ServiceEnemy.Instance.SetEnemyList(enemy);
     }
     // Start is called before the first frame update

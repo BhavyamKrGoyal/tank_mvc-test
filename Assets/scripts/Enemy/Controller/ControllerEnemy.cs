@@ -4,7 +4,7 @@ using Enemy.Model;
 
 namespace Enemy.Controller
 {
-    public class ControllerEnemy
+    public class ControllerEnemy: BaseController
     {
         ModelEnemy model;
         ViewEnemy view;
@@ -33,11 +33,27 @@ namespace Enemy.Controller
             model.enemyObject.health -= damage;
             if (model.enemyObject.health <= 0)
             {
-                model = null;
-                view.DestroyEnemy();
-                ServiceEnemy.Instance.RemoveEnemy(this);
+                
                 
             }
+
+        }
+        public override void DestroyObject()
+        {
+            model = null;
+            view.DestroyEnemy();
+            ServiceEnemy.Instance.RemoveEnemy(this);
+        }
+        public override void Move(float horizontal, float vertical)
+        {
+           
+        }
+        public override bool CheckFreez()
+        {
+            return model.freez; ;
+        }
+        public override void Shoot()
+        {
 
         }
     }

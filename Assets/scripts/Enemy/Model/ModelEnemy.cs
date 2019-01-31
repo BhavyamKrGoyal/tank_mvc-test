@@ -9,6 +9,7 @@ namespace Enemy.Model
         {
             enemyObject = enemyTemp;
         }
+        public bool freez = false;
 
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ModelPlayer
 {
+    public bool freez = false;
     public float lastShot=0;
     public float firePower=10;
     public float fireInterval = 1;
