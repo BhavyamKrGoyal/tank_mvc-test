@@ -14,6 +14,7 @@ namespace Enemy.Controller
             GetModel(enemyTemp);
             GetView();
         }
+        
         public virtual void GetModel(ScriptableEnemy enemyTemp)
         {
             model = new ModelEnemy(enemyTemp);

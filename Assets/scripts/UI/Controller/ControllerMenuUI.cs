@@ -7,7 +7,7 @@ public class ControllerMenuUI
     ViewMenuUI view;
     public ControllerMenuUI()
     {
-        view = new ViewMenuUI();
+        view = GameObject.FindObjectOfType<ViewMenuUI>().GetComponent<ViewMenuUI>();
     }
    public void DestroyUI()
     {

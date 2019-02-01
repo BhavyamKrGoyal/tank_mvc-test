@@ -11,13 +11,18 @@ public class ControllerPlayer:BasePlayerController
      ModelPlayer model;
      InputComponent inputComponent;
 
-    public ControllerPlayer(GameObject player,Transform spawnPoint)
+    public ControllerPlayer(GameObject player,Transform spawnPoint,Controls controls)
     {
       
         this.view = GameObject.Instantiate(player, spawnPoint.position,Quaternion.identity,null).GetComponent<ViewPlayer>();
-        this.model =new ModelPlayer();
+        this.model =new ModelPlayer(controls);
         view.SetController(this);
         inputComponent=new InputComponent(this);
+        
+    }
+    public override Controls GetControls()
+    {
+        return model.controls;
     }
     public override bool IsFreez()
     {
@@ -66,6 +71,7 @@ public class ControllerPlayer:BasePlayerController
     }
     public override void DestroyObject()
     {
+        view.DestroyPlayer();
         inputComponent.DestroyComponent();
     }
 

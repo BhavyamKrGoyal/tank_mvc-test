@@ -9,7 +9,7 @@ public class InputComponent
 
     public InputComponent(BasePlayerController controller) {
         this.controller = controller;
-        InputManager.Instance.RegisterInputComponent(this);
+        InputManager.Instance.RegisterInputComponent(this,controller.GetControls());
     }
     public void InputUpdate(float forward,float direction,bool shoot,bool boost)
     {
@@ -38,7 +38,7 @@ public class InputComponent
     }
     public void DestroyComponent()
     {
-        InputManager.Instance.RemoveInputComponent(this);
+        InputManager.Instance.RemoveInputComponent(this,controller.GetControls());
             
     }
 }

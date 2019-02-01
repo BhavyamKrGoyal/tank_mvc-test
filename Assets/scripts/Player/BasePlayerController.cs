@@ -8,6 +8,7 @@ namespace Player
         {
 
         }
+        public virtual Controls GetControls() { return Controls.WASD; }
         public abstract bool IsFreez();
         public abstract void Move(float horizontal, float vertical);
         public abstract void DestroyObject();

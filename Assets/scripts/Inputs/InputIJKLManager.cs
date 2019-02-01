@@ -2,34 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputIJKLManager : InputManager
+public class InputIJKLManager : MonoBehaviour
 {
-    int playerNumber = 1;
-    public override void Update()
+    Controls controls = Controls.IJKL;
+    public void Update()
     {
 
-        playerInput[playerNumber].forward = Input.GetAxis("Horizontal");
-        playerInput[playerNumber].direction = Input.GetAxis("Vertical");
+        InputManager.Instance.playerInput[controls].forward = Input.GetAxis("Horizontal");
+        InputManager.Instance.playerInput[controls].direction = Input.GetAxis("Vertical");
         //Debug.Log("getting Input using IJKL");
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            playerInput[playerNumber].boost = true;
+            InputManager.Instance.playerInput[controls].boost = true;
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            playerInput[playerNumber].boost = false;
+            InputManager.Instance.playerInput[controls].boost = false;
         }
 
 
         if (Input.GetKey(KeyCode.Space))
         {
-            playerInput[playerNumber].shoot = true;
+            InputManager.Instance.playerInput[controls].shoot = true;
         }
         else
         {
-            playerInput[playerNumber].shoot = false;
+            InputManager.Instance.playerInput[controls].shoot = false;
         }
-        base.Update();
     }
 }

@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ViewStartUI {
+public class ViewStartUI : MonoBehaviour
+{
     Text score;
     Text health;
-    public ViewStartUI()
+    public void Start()
     {
         score = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
         health = GameObject.FindGameObjectWithTag("Health").GetComponent<Text>();

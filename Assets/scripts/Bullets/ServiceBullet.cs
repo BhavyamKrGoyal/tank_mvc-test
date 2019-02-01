@@ -4,13 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum BulletTypes
-{
-    defaultBullet = 1,
-    fastBullet = 2,
-    explossiveBullet = 3
-}
-public class ServiceBullet : Singleton<ServiceBullet>
+
+public class ServiceBullet : SingletonScene<ServiceBullet>
 {
     public static List<ControllerBullet> bulletList = new List<ControllerBullet>();
     public ControllerBullet MakeBullet(BulletTypes bulletType)

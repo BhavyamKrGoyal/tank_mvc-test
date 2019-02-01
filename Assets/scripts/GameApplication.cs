@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameApplication : Singleton<GameApplication>
+public class GameApplication : MonoBehaviour
 {
 
     public ScriptableEnemy[] enemy;
@@ -12,9 +12,9 @@ public class GameApplication : Singleton<GameApplication>
     
     public void Awake()
     {
-        new ControllerPlayer(player, spawnPoint.transform);
-        new ControllerPlayer(player, spawnPoint2.transform);
-
+        Debug.Log("in awake of GameApplication");
+        new ControllerPlayer(player, spawnPoint.transform,Controls.WASD);
+        new ControllerPlayer(player, spawnPoint2.transform, Controls.IJKL);
         ServiceEnemy.Instance.SetEnemyList(enemy);
     }
     // Start is called before the first frame update

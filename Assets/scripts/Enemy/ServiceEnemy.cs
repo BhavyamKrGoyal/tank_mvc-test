@@ -5,7 +5,7 @@ using Enemy.Controller;
 
 namespace Enemy
 {
-    public class ServiceEnemy : Singleton<ServiceEnemy>
+    public class ServiceEnemy : SingletonScene<ServiceEnemy>
     {
         ScriptableEnemy[] enemyList;
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();

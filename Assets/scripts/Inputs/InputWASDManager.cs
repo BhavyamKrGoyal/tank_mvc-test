@@ -1,34 +1,34 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class InputWASDManager : InputManager
+public class InputWASDManager : MonoBehaviour
 {
-    int playerNumber = 0;
-    public override void Update()
+    Controls controls=Controls.WASD;
+    public void Update()
     {
 
-        playerInput[playerNumber].forward = Input.GetAxis("Horizontal1");
-        playerInput[playerNumber].direction = Input.GetAxis("Vertical1");
+        InputManager.Instance.playerInput[controls].forward = Input.GetAxis("Horizontal1");
+        InputManager.Instance.playerInput[controls].direction = Input.GetAxis("Vertical1");
        // Debug.Log("getting Input using WASD");
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            playerInput[playerNumber].boost = true;
+            InputManager.Instance.playerInput[controls].boost = true;
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            playerInput[playerNumber].boost = false;
+            InputManager.Instance.playerInput[controls].boost = false;
         }
 
 
         if (Input.GetKey(KeyCode.Space))
         {
-            playerInput[playerNumber].shoot = true;
+            InputManager.Instance.playerInput[controls].shoot = true;
         }
         else
         {
-            playerInput[playerNumber].shoot = false;
+            InputManager.Instance.playerInput[controls].shoot = false;
         }
-        base.Update();
+        
     }
 }
