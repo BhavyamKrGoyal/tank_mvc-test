@@ -5,7 +5,7 @@ using UnityEditor;
 public class ScriptableEnemy : ScriptableObject
 {
     public float health;
-    public GameObject enemyPrefab;
+    public ViewEnemy enemyPrefab;
     public float Speed;
     public Color color;
     

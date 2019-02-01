@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Player;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class ControllerBullet
 {
     protected ModelBullet model;
     protected ViewBullet view;
-    protected BaseController shooter;
+    protected BasePlayerController shooter;
     public virtual void Shoot (Transform muzzle){}
     public ControllerBullet()
     {
@@ -23,7 +24,7 @@ public class ControllerBullet
     {
         ServiceBullet.Instance.RemoveBullet(this);
     }
-    public void SetShooter(BaseController shooter)
+    public void SetShooter(BasePlayerController shooter)
     {
         this.shooter = shooter;
     }

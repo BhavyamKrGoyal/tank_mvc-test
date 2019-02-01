@@ -14,5 +14,15 @@ public class ModelPlayer
     public int health = 100;
     public int score = 0;
     public BulletTypes bulletType = BulletTypes.explossiveBullet;
+    public void TakeDamage(int damage)
+    {
+       health -= damage;
 
+    }
+    public bool IsAlive()
+    {
+        return health >= 0;
+
+
+    }
 }

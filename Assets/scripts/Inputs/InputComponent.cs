@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using Player;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InputComponent 
 {
-    BaseController controller;
+    BasePlayerController controller;
 
-    public InputComponent(BaseController controller) {
+    public InputComponent(BasePlayerController controller) {
         this.controller = controller;
         InputManager.Instance.RegisterInputComponent(this);
     }
@@ -30,7 +31,7 @@ public class InputComponent
 
     public void Move(float horizontal,float vertical)
     {
-        if (!controller.CheckFreez())
+        if (!controller.IsFreez())
         {
             controller.Move(horizontal, vertical);
         }

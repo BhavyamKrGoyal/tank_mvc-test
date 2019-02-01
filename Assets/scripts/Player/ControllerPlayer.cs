@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Player;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerPlayer:BaseController
+public class ControllerPlayer:BasePlayerController
 {
     
      ViewPlayer view ;
      ModelPlayer model;
-     ServiceBullet serviceBullet;
-    InputComponent inputComponent;
+     InputComponent inputComponent;
 
     public ControllerPlayer(GameObject player,Transform spawnPoint)
     {
@@ -17,10 +17,9 @@ public class ControllerPlayer:BaseController
         this.view = GameObject.Instantiate(player, spawnPoint.position,Quaternion.identity,null).GetComponent<ViewPlayer>();
         this.model =new ModelPlayer();
         view.SetController(this);
-        serviceBullet =ServiceBullet.Instance;
-        inputComponent = new InputComponent(this);
+        inputComponent=new InputComponent(this);
     }
-    public override bool CheckFreez()
+    public override bool IsFreez()
     {
         return model.freez;
     }
@@ -39,18 +38,14 @@ public class ControllerPlayer:BaseController
     {
         model.boost = 1;
     }
-    private void TakeDamage(int damage)
-    {
-        model.health -= damage;
-        if (model.health <= 0)
-        {
-            DestroyObject();
-
-        }
-    }
+    
     public void TankHit(int damage)
     {
-        TakeDamage(damage);
+        model.TakeDamage(damage);
+        if (!model.IsAlive())
+        {
+            DestroyObject();
+        }
         ServiceUI.Instance.updateUI(model.health, model.score);
     }
     public override void UpdateScore(int score)
@@ -64,7 +59,7 @@ public class ControllerPlayer:BaseController
         {
            
             model.lastShot = Time.timeSinceLevelLoad;
-            ControllerBullet controllerBullet = serviceBullet.MakeBullet(model.bulletType);
+            ControllerBullet controllerBullet = ServiceBullet.Instance.MakeBullet(model.bulletType);
             controllerBullet.SetShooter(this);
             controllerBullet.Shoot(view.muzzle.transform);
         }

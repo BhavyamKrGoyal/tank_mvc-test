@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using Enemy.Model;
+using Player;
 
 namespace Enemy.Controller
 {
-    public class ControllerEnemy: BaseController
+    public class ControllerEnemy: BasePlayerController
     {
         ModelEnemy model;
         ViewEnemy view;
@@ -19,24 +20,20 @@ namespace Enemy.Controller
         }
         public virtual void GetView()
         {
-            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, model.spawnPoint[Random.Range(0,3)], Quaternion.identity, null).GetComponent<ViewEnemy>();
+            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, model.GetRandomSpawnPoint(), Quaternion.identity, null).GetComponent<ViewEnemy>();
             view.SetColour(model.enemyObject.color);
             view.controller=this;
         }
         public void BulletHit(int damage)
         {
-            TakeDamage(damage);
-        }
-
-        private void TakeDamage(int damage)
-        {
-            model.enemyObject.health -= damage;
-            if (model.enemyObject.health <= 0)
+            model.TakeDamage(damage);
+            if (!model.IsAlive())
             {
-                DestroyObject();
-                
+                DestroyObject();    
             }
         }
+
+        
        
         public override void DestroyObject()
         {
@@ -48,7 +45,7 @@ namespace Enemy.Controller
         {
            
         }
-        public override bool CheckFreez()
+        public override bool IsFreez()
         {
             return model.freez; ;
         }
