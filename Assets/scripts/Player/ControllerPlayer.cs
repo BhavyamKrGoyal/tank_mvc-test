@@ -11,35 +11,35 @@ public class ControllerPlayer:BasePlayerController
      ModelPlayer model;
      InputComponent inputComponent;
 
-    public ControllerPlayer(GameObject player,Transform spawnPoint,Controls controls)
+    public ControllerPlayer(GameObject player,Vector3 spawnPoint,Controls controls)
     {
       
-        this.view = GameObject.Instantiate(player, spawnPoint.position,Quaternion.identity,null).GetComponent<ViewPlayer>();
+        this.view = GameObject.Instantiate(player, spawnPoint,Quaternion.identity,null).GetComponent<ViewPlayer>();
         this.model =new ModelPlayer(controls);
         view.SetController(this);
         inputComponent=new InputComponent(this);
         
     }
-    public override Controls GetControls()
+    public Controls GetControls()
     {
         return model.controls;
     }
-    public override bool IsFreez()
+    public bool IsFreez()
     {
         return model.freez;
     }
-    public override void Move(float horizontal,float vertical)
+    public void Move(float horizontal,float vertical)
     {
         //Debug.Log("controller");
         view.MovePlayer(horizontal*model.rotationSpeed*Time.deltaTime,vertical*model.speed*Time.deltaTime*model.boost);
 
     }
 
-    public override void StartBoost()
+    public void StartBoost()
     {
         model.boost = 2;
     }
-    public override void StopBoost()
+    public void StopBoost()
     {
         model.boost = 1;
     }
@@ -53,12 +53,12 @@ public class ControllerPlayer:BasePlayerController
         }
         ServiceUI.Instance.updateUI(model.health, model.score);
     }
-    public override void UpdateScore(int score)
+    public void UpdateScore(int score)
     {
         model.score = model.score + score;
         ServiceUI.Instance.updateUI(model.health, model.score);
     }
-    public override void Shoot()
+    public void Shoot()
     {
         if(model.lastShot+model.fireInterval<Time.timeSinceLevelLoad)
         {
@@ -69,9 +69,10 @@ public class ControllerPlayer:BasePlayerController
             controllerBullet.Shoot(view.muzzle.transform);
         }
     }
-    public override void DestroyObject()
+    public void DestroyObject()
     {
         view.DestroyPlayer();
+        GameApplication.Instance.ReSpawnPlayer(model.controls);
         inputComponent.DestroyComponent();
     }
 

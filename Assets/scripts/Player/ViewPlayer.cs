@@ -45,7 +45,7 @@ public class ViewPlayer : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            controller.TankHit(10);
+            controller.TankHit(60);
         }
     }
 

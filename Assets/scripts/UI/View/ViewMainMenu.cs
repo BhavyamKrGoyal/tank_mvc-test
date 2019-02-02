@@ -9,12 +9,17 @@ public class ViewMainMenu:MonoBehaviour
 {
     Button play;
     Text highScore;
+
     public void Start()
     {
         play = GameObject.FindGameObjectWithTag("PlayButton").GetComponent<Button>();
         highScore = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
         DisplayUI();
-        highScore.text = "HighScore : " + PlayerPrefs.GetInt("HighScore", 0); 
+        highScore.text = "HighScore : " + PlayerPrefs.GetInt("HighScore", 0);
+
+        play.onClick.AddListener(LoadGameScene);
+
+        
     }
     
     public void DestroyUI()

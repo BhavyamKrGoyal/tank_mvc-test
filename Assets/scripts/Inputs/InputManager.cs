@@ -16,7 +16,7 @@ public class InputManager : Singleton<InputManager>
         {
             foreach(InputComponent inputComponent in inputComponents[controls])
             {
-                Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
+                //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
               
                 inputComponent.InputUpdate(InputManager.Instance.playerInput[controls].forward, InputManager.Instance.playerInput[controls].direction, InputManager.Instance.playerInput[controls].shoot, InputManager.Instance.playerInput[controls].boost);
             }
@@ -37,15 +37,20 @@ public class InputManager : Singleton<InputManager>
         {
             InputManager.Instance.inputComponents[controls].Add(inputComponent);
         }
-         Debug.Log("One InputComponent added, Total="+inputComponents.Count +"  "+controls);
+         //Debug.Log("One InputComponent added, Total="+inputComponents.Count +"  "+controls);
     }
     public void RemoveInputComponent(InputComponent inputComponent, Controls controls)
     {
         InputManager.Instance.inputComponents[controls].Remove(inputComponent);
-        if(InputManager.Instance.inputComponents[Controls.WASD].Count==0 && InputManager.Instance.inputComponents[Controls.IJKL].Count == 0)
+        if(InputManager.Instance.inputComponents[Controls.WASD].Count==0 )
         {
-            ServiceUI.Instance.GameOver();
+            InputManager.Instance.inputComponents.Remove(Controls.WASD);
+            // ServiceUI.Instance.GameOver();
+            //Debug.Log("One InputComponent Removed, Total=" + inputComponents.Count);
         }
-         Debug.Log("One InputComponent Removed, Total=" + inputComponents.Count);
+        if(InputManager.Instance.inputComponents[Controls.IJKL].Count == 0){
+            InputManager.Instance.inputComponents.Remove(Controls.IJKL);
+
+        }
     }
 }

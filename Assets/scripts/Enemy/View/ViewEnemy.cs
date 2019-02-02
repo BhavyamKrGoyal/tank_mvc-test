@@ -26,4 +26,14 @@ public class ViewEnemy : MonoBehaviour
             controller.BulletHit(100);
         }
     }
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, 12);  
+    }
+#endif
 }

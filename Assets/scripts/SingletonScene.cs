@@ -10,13 +10,22 @@ public class SingletonScene<T> : MonoBehaviour where T : MonoBehaviour
         {
             return instance;
         }
-
+        set
+        {
+            if (instance != null)
+            {
+                Destroy(instance);
+            }
+        }
     }
 
     public void Awake()
     {
+        OnInitialize();
+    }
+    public virtual void OnInitialize()
+    {
         instance = FindObjectOfType<T>();
-       
     }
 
 

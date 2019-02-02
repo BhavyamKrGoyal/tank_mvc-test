@@ -10,10 +10,10 @@ namespace Enemy.Model
             enemyObject = enemyTemp;
         }
         public bool freez = false;
-        public Vector3[] spawnPoint = new Vector3[] { new Vector3(-10, 2, 22), new Vector3(-4, 2, 30), new Vector3(23, 2, -30) };
+        
         public Vector3 GetRandomSpawnPoint()
         {
-            return spawnPoint[Random.Range(0, 3)];
+            return new Vector3(Random.Range(-40,41), 5, Random.Range(-40,41));
         }
         public void TakeDamage(int damage)
         {

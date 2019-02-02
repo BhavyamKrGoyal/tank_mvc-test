@@ -2,18 +2,15 @@
 using UnityEditor;
 namespace Player
 {
-    public abstract class BasePlayerController
+    public interface BasePlayerController
     {
-        public virtual void UpdateScore(int score)
-        {
-
-        }
-        public virtual Controls GetControls() { return Controls.WASD; }
-        public abstract bool IsFreez();
-        public abstract void Move(float horizontal, float vertical);
-        public abstract void DestroyObject();
-        public abstract void Shoot();
-        public virtual void StartBoost() { }
-        public virtual void StopBoost() { }
+        void UpdateScore(int score);
+        Controls GetControls();
+        bool IsFreez();
+        void Move(float horizontal, float vertical);
+        void DestroyObject();
+        void Shoot();
+        void StartBoost();
+        void StopBoost();
     }
 }
