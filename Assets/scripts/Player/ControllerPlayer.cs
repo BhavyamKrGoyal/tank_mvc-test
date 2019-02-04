@@ -14,15 +14,20 @@ public class ControllerPlayer:IBasePlayerController
     public event Action<int,int> OnUIUpdate;
     public event Action<ControllerPlayer,InputComponent,Controls> OnPlayerDeath;
     public event Action<BulletTypes> OnBulletNeeded;
-    public ControllerPlayer(GameObject player,Vector3 spawnPoint,Controls controls)
+    public ControllerPlayer(GameObject player,Vector3 spawnPoint,Controls controls,PlayerNumber playerNumber)
     {
-      
+       
         this.view = GameObject.Instantiate(player, spawnPoint,Quaternion.identity,null).GetComponent<ViewPlayer>();
         this.model =new ModelPlayer(controls);
         view.SetController(this);
+        model.playerNumber = playerNumber;
         inputComponent=new InputComponent(this);
         
         
+    }
+    public PlayerNumber GetPlayerNumber()
+    {
+        return model.playerNumber;
     }
     public Controls GetControls()
     {

@@ -8,7 +8,7 @@ public class ModelPlayer
     {
         this.controls = controls;
     }
-    
+    public PlayerNumber playerNumber;
     public bool freez = false;
     public float lastShot=0;
     public float firePower=10;

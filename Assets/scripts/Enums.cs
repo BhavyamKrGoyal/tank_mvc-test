@@ -11,4 +11,20 @@ public enum Controls
     WASD = 1,
     IJKL = 2
 }
+public enum PlayerNumber
+{
+    Player1 = 1,
+    Player2 = 2,
+    Player3 = 3,
+    Player4 = 4
+}
+public enum AchievemtTypes
+{
+    BulletsShot=1,
+    Score=2,
+    GamesPlayed=3,
+    EnemiesKilled=4,
+    NumberOfRespawns=5    
+}
+
 

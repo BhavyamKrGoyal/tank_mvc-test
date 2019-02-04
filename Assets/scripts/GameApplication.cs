@@ -20,15 +20,15 @@ public class GameApplication : SingletonScene<GameApplication>
         Debug.Log("in awake of GameApplication");
         ServiceEnemy.Instance.SetEnemyList(enemy);
     }
-    public void ReSpawnPlayer(Controls controls)
+    public void ReSpawnPlayer(Controls controls,PlayerNumber playerNumber)
     {
-        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls));
+        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls,playerNumber));
     }
     // Start is called before the first frame update
     void Start()
     {
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD));
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD,PlayerNumber.Player1));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1));
 
     }
     // Update is called once per frame
@@ -102,7 +102,7 @@ public class GameApplication : SingletonScene<GameApplication>
     public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
     {
         GameApplication.Instance.players.Remove(player);
-        ReSpawnPlayer(player.GetControls());
+        ReSpawnPlayer(player.GetControls(),player.GetPlayerNumber());
     }
     
 }
