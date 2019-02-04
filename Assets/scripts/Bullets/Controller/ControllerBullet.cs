@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +8,18 @@ public class ControllerBullet
 {
     protected ModelBullet model;
     protected ViewBullet view;
-    protected BasePlayerController shooter;
+    protected IBasePlayerController shooter;
+    public event Action<ControllerBullet> OnBulletDestroy; 
     public virtual void Shoot (Transform muzzle){}
     public ControllerBullet()
     {
         getViewAndModel();
         view.controller = this;
         view.time = model.lifeTime;
+    }
+    public int GetDamage()
+    {
+        return model.bodyDamage;
     }
     public virtual void getViewAndModel()
     {
@@ -22,16 +28,15 @@ public class ControllerBullet
     }
     public virtual void Destroy()
     {
-        ServiceBullet.Instance.RemoveBullet(this);
+        OnBulletDestroy(this);
     }
-    public void SetShooter(BasePlayerController shooter)
+    public void SetShooter(IBasePlayerController shooter)
     {
         this.shooter = shooter;
     }
-    public virtual void HitEnemy(int score)
+    public virtual IBasePlayerController GetShooter()
     {
-        Debug.Log("hit enemy");
-        shooter.UpdateScore(score);
+        return shooter;
     }
 
 }

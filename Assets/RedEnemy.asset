@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe4bb1e83eb96a4c842fb3ae7786ee3, type: 3}
   m_Name: RedEnemy
   m_EditorClassIdentifier: 
-  health: 0
+  maxHealth: 100
   enemyPrefab: {fileID: 1488852147999666995, guid: a1b90e5c5f234eb438a6ada933beb4e4,
     type: 3}
   Speed: 0
+  score: 10
   color: {r: 1, g: 0, b: 0, a: 0}

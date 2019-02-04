@@ -1,4 +1,5 @@
 ﻿using Enemy;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class GameApplication : SingletonScene<GameApplication>
     public ScriptableEnemy[] enemy;
 
     public GameObject player;
+    public event Action<ControllerPlayer> OnPlayerSpawn;
+    public List<ControllerPlayer> players = new List<ControllerPlayer>();
     List<Vector3> EnemyPosition = new List<Vector3>();
     public override void OnInitialize()
     {
@@ -19,13 +22,13 @@ public class GameApplication : SingletonScene<GameApplication>
     }
     public void ReSpawnPlayer(Controls controls)
     {
-        new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls);
+        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls));
     }
     // Start is called before the first frame update
     void Start()
     {
-        new ControllerPlayer(player, new Vector3(Random.Range(-40, 41), 5, Random.Range(-40, 41)), Controls.WASD);
-        new ControllerPlayer(player, new Vector3(Random.Range(-40, 41), 5, Random.Range(-40, 41)), Controls.IJKL);
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL));
 
     }
     // Update is called once per frame
@@ -40,7 +43,7 @@ public class GameApplication : SingletonScene<GameApplication>
         int minThreat = 0;
         int xPos=0, zPos=0;
         List<Vector3> safeZones=new List<Vector3>(); ;
-        Debug.Log(enemyPositions.Count);
+        //Debug.Log(enemyPositions.Count);
         foreach (Vector3 enemyPosition in enemyPositions)
         {
             threatLevelGrid = increaseThreat(threatLevelGrid, GridValue(enemyPosition.x), GridValue(enemyPosition.z));
@@ -53,7 +56,7 @@ public class GameApplication : SingletonScene<GameApplication>
                 if (minThreat > threatLevelGrid[x, z])
                 {
                     safeZones = new List<Vector3>();
-                    Debug.Log("x=" + x + " Z=" + z);
+                        Debug.Log("x=" + x + " Z=" + z);
                     minThreat = threatLevelGrid[x, z];
                     xPos = x;
                     zPos = z;
@@ -67,7 +70,7 @@ public class GameApplication : SingletonScene<GameApplication>
             }
         }
         Debug.Log("x="+xPos+" Z="+zPos);
-        return safeZones[Random.Range(0,safeZones.Count)];
+        return safeZones[UnityEngine.Random.Range(0,safeZones.Count)];
     }
 
     private int[,] increaseThreat(int[,] grid, int enemyPosX, int enemyPosY)
@@ -90,4 +93,16 @@ public class GameApplication : SingletonScene<GameApplication>
         int grid = (int)Mathf.Ceil(pos / 4);
         return (grid + 10);
     }
+    public void AddPlayerController(ControllerPlayer player)
+    {
+        GameApplication.Instance.players.Add(player);
+        player.OnPlayerDeath += RemovePlayerController;
+        OnPlayerSpawn.Invoke(player);
+    }
+    public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
+    {
+        GameApplication.Instance.players.Remove(player);
+        ReSpawnPlayer(player.GetControls());
+    }
+    
 }

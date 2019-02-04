@@ -1,15 +1,17 @@
-﻿using Player;
+﻿using Interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class InputComponent 
 {
-    BasePlayerController controller;
+    IBasePlayerController controller;
 
-    public InputComponent(BasePlayerController controller) {
+    public InputComponent(IBasePlayerController controller) {
         this.controller = controller;
-        InputManager.Instance.RegisterInputComponent(this,controller.GetControls());
+        //InputManager.Instance.RegisterInputComponent(this,controller.GetControls());
     }
     public void InputUpdate(float forward,float direction,bool shoot,bool boost)
     {
@@ -36,9 +38,5 @@ public class InputComponent
             controller.Move(horizontal, vertical);
         }
     }
-    public void DestroyComponent()
-    {
-        InputManager.Instance.RemoveInputComponent(this,controller.GetControls());
-            
-    }
+    
 }

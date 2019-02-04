@@ -1,9 +1,10 @@
 ﻿using Enemy.Controller;
+using Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ViewEnemy : MonoBehaviour
+public class ViewEnemy : MonoBehaviour,ITakeDamageView
 {
     public ControllerEnemy controller;
     // Start is called before the first frame update
@@ -21,19 +22,23 @@ public class ViewEnemy : MonoBehaviour
     }
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "bullet")
-        {
-            controller.BulletHit(100);
-        }
+
     }
     public Vector3 GetPosition()
     {
         return transform.position;
+    }
+    public void TakeDamage(int damage,IBasePlayerController player)
+    {
+        controller.BulletHit(damage,player);
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, 12);  
     }
+
+
+
 #endif
 }

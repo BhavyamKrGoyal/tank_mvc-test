@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
-namespace Player
+namespace Interfaces
 {
-    public interface BasePlayerController
+    public interface IBasePlayerController
     {
         void UpdateScore(int score);
         Controls GetControls();

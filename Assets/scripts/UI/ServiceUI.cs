@@ -9,13 +9,15 @@ public class ServiceUI : Singleton<ServiceUI>
 
     ControllerMenuUI menu;
     ControllerStartUI start;
-    ControllerPlayer playerController;
+
+    
     private void OnLevelWasLoaded(int level)
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             start = new ControllerStartUI();
             menu = new ControllerMenuUI();
+            GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         }
         else
         {
@@ -26,7 +28,9 @@ public class ServiceUI : Singleton<ServiceUI>
     void Start()
     {
         //Set The Menu UI ie: play Button
-        
+       
+
+
     }
     public void StartGame()
     {
@@ -54,5 +58,9 @@ public class ServiceUI : Singleton<ServiceUI>
     {
         SceneManager.LoadScene("MainMenu");
 
+    }
+    public void AddPlayerListener(ControllerPlayer player)
+    {
+        player.OnUIUpdate += updateUI;
     }
 }
