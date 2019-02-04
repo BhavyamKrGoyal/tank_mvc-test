@@ -5,13 +5,13 @@ using Enemy.Controller;
 
 namespace Enemy
 {
-    public class ServiceEnemy : Singleton<ServiceEnemy>
+    public class ServiceEnemy : SingletonScene<ServiceEnemy>
     {
         ScriptableEnemy[] enemyList;
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();
         void Start()
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 20; j++)
             {
                 SpawnEnemy();
             }
@@ -21,6 +21,15 @@ namespace Enemy
         {
 
         }
+        public List<Vector3> GetEnemyPositions()
+        {
+            List<Vector3> positions = new List<Vector3>();
+            foreach(ControllerEnemy controller in enemyController)
+            {
+                positions.Add(controller.GetEnemyPosition());
+            }
+            return positions;
+        }
         public void SetEnemyList(ScriptableEnemy[] enemyList)
         {
             this.enemyList = enemyList;
@@ -28,7 +37,7 @@ namespace Enemy
         public void SpawnEnemy()
         {
             int enemyType = Random.Range(0, 3);
-            new ControllerEnemy(enemyList[enemyType]);
+            enemyController.Add(new ControllerEnemy(enemyList[enemyType]));
 
         }
         public void RemoveEnemy(ControllerEnemy enemy)

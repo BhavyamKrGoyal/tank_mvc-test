@@ -36,12 +36,16 @@ public class ViewPlayer : MonoBehaviour
         yield return new WaitForSeconds(time);
         shoot = true;
     }
+    public void DestroyPlayer()
+    {
+        Destroy(this.gameObject);
 
+    }
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            controller.TankHit(10);
+            controller.TankHit(60);
         }
     }
 

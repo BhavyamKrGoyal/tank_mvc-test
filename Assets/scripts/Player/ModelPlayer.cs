@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ModelPlayer
 {
+    public ModelPlayer(Controls controls)
+    {
+        this.controls = controls;
+    }
+    
     public bool freez = false;
     public float lastShot=0;
     public float firePower=10;
@@ -21,8 +26,7 @@ public class ModelPlayer
     }
     public bool IsAlive()
     {
-        return health >= 0;
-
-
+        return health > 0;
     }
+    public Controls controls;
 }

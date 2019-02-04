@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewMenuUI
+public class ViewMenuUI : MonoBehaviour
 {
     Button play;
 
-    public ViewMenuUI()
+    public void Start()
     {
         play = GameObject.FindGameObjectWithTag("PlayButton").GetComponent<Button>();
         play.gameObject.SetActive(true);
         
     }
-
+    public void updateUI() {
+        ServiceUI.Instance.StartGame();
+    }
     public void DestroyUI()
     {
         play.gameObject.SetActive(false);

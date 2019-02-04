@@ -8,7 +8,7 @@ public class ControllerStartUI
     ViewStartUI view;
     public ControllerStartUI()
     {
-        view = new ViewStartUI();
+        view = GameObject.FindObjectOfType<ViewStartUI>().GetComponent<ViewStartUI>();
     }
     public void DestroyUI()
     {

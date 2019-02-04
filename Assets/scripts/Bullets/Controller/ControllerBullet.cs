@@ -11,7 +11,7 @@ public class ControllerBullet
     public virtual void Shoot (Transform muzzle){}
     public ControllerBullet()
     {
-        
+        getViewAndModel();
         view.controller = this;
         view.time = model.lifeTime;
     }

@@ -14,6 +14,10 @@ namespace Enemy.Controller
             GetModel(enemyTemp);
             GetView();
         }
+        public Vector3 GetEnemyPosition()
+        {
+            return view.GetPosition();
+        }
         public virtual void GetModel(ScriptableEnemy enemyTemp)
         {
             model = new ModelEnemy(enemyTemp);
@@ -35,23 +39,43 @@ namespace Enemy.Controller
 
         
        
-        public override void DestroyObject()
+        public void DestroyObject()
         {
             model = null;
             view.DestroyEnemy();
             ServiceEnemy.Instance.RemoveEnemy(this);
         }
-        public override void Move(float horizontal, float vertical)
+        public void Move(float horizontal, float vertical)
         {
            
         }
-        public override bool IsFreez()
+        public bool IsFreez()
         {
             return model.freez; ;
         }
-        public override void Shoot()
+        public void Shoot()
         {
 
+        }
+
+        public void UpdateScore(int score)
+        {
+       
+        }
+
+        public Controls GetControls()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void StartBoost()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void StopBoost()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

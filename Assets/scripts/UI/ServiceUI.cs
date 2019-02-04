@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ServiceUI : Singleton<ServiceUI>
 {
@@ -9,13 +10,24 @@ public class ServiceUI : Singleton<ServiceUI>
     ControllerMenuUI menu;
     ControllerStartUI start;
     ControllerPlayer playerController;
+    private void OnLevelWasLoaded(int level)
+    {
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            start = new ControllerStartUI();
+            menu = new ControllerMenuUI();
+        }
+        else
+        {
+            start = null;
+            menu = null;
+        }
+    }
     void Start()
     {
         //Set The Menu UI ie: play Button
-        start = new ControllerStartUI();
-        menu = new ControllerMenuUI();
+        
     }
-
     public void StartGame()
     {
         menu.DestroyUI();
@@ -25,5 +37,22 @@ public class ServiceUI : Singleton<ServiceUI>
     {
         start.UpdateHealth(health);
         start.UpdateScore(score);
+        if (score > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            PlayerPrefs.SetInt("HighScore", score);
+        }
+    }
+    public void Replay()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+    public void GameOver()
+    {
+        SceneManager.LoadScene("GameOver");
+    }
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+
     }
 }
