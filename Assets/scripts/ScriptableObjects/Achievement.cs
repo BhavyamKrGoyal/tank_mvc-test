@@ -12,8 +12,9 @@ namespace ScriptableObjects
         public bool sessionBased;
 
 
-        public void UpdateAchievement(int progress, ControllerPlayer player)
+        public string UpdateAchievement(int progress, ControllerPlayer player)
         {
+            string result = null;
             //Debug.Log("Updating achievement: " + achievementDisplayName);
             int currentLevel = PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "level", 0);
             
@@ -27,7 +28,7 @@ namespace ScriptableObjects
                     {
 
                         PlayerPrefs.SetInt(achievementDisplayName + player.GetPlayerNumber() + "level", ++currentLevel);
-                        Debug.Log(achievementDisplayName + " : " + achievementLevel[currentLevel - 1].levelName + " Unlocked by " + player.GetPlayerNumber());
+                        result=achievementDisplayName + " : " + achievementLevel[currentLevel - 1].levelName + " Unlocked by " + player.GetPlayerNumber();
                     }
                 }
             }
@@ -38,12 +39,13 @@ namespace ScriptableObjects
                     {
 
                         PlayerPrefs.SetInt(achievementDisplayName + player.GetPlayerNumber() + "level", ++currentLevel);
-                        Debug.Log(achievementDisplayName + " : " + achievementLevel[currentLevel - 1].levelName + " Unlocked by player " + player.GetPlayerNumber());
+                        result=achievementDisplayName + " : " + achievementLevel[currentLevel - 1].levelName + " Unlocked by player " + player.GetPlayerNumber();
                     }
                 }
             }
             //Debug.Log(currentLevel + " for" + achievementType.ToString() + " " + progress);
             PlayerPrefs.SetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", progress);
+            return result;
 
         }
     }

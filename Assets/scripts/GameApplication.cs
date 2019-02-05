@@ -7,9 +7,7 @@ using UnityEngine;
 
 public class GameApplication : SingletonScene<GameApplication>
 {
-
     public ScriptableEnemy[] enemy;
-
     public GameObject player;
     public event Action<ControllerPlayer> OnPlayerSpawn;
     public List<ControllerPlayer> players = new List<ControllerPlayer>();
@@ -17,14 +15,11 @@ public class GameApplication : SingletonScene<GameApplication>
     public override void OnInitialize()
     {
         base.OnInitialize();
-
         //Debug.Log("in awake of GameApplication");
         ServiceEnemy.Instance.SetEnemyList(enemy);
     }
     public void ReSpawnPlayer(Controls controls,PlayerNumber playerNumber)
-
-    {
-        
+    { 
         AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls,playerNumber,false));
     }
     // Start is called before the first frame update
@@ -34,12 +29,6 @@ public class GameApplication : SingletonScene<GameApplication>
         AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1,true));
 
     }
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private Vector3 SpawnPlayer(List<Vector3> enemyPositions)
     {
         int[,] threatLevelGrid = new int[20, 20];
@@ -107,6 +96,5 @@ public class GameApplication : SingletonScene<GameApplication>
     {
         GameApplication.Instance.players.Remove(player);
         ReSpawnPlayer(player.GetControls(),player.GetPlayerNumber());
-    }
-    
+    } 
 }

@@ -1,4 +1,5 @@
 ﻿using ScriptableObjects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Achievements
     {
 
         [SerializeField] private Achievement[] achievements;
-
+        public event Action<string> OnAchievementUnlocked;
         Dictionary<AchievementTypes, Achievement> gameAchievements = new Dictionary<AchievementTypes, Achievement>();
         public override void OnInitialize()
         {
@@ -51,14 +52,16 @@ namespace Achievements
 
         public void AchievementUpdate(PlayerData playerData)
         {
+            string achieved;
             if (gameAchievements.ContainsKey(playerData.achievementTypes))
             {
-                gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player);
+                achieved=gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player);
+                if (achieved != null)
+                {
+                    OnAchievementUnlocked.Invoke(achieved);
+                }
             }
-            else
-            {
-                //Debug.Log("not set"+playerData.achievementTypes.ToString());
-            }
+           
         }
     }
 }

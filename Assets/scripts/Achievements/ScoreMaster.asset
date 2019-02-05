@@ -20,5 +20,7 @@ MonoBehaviour:
     levelMarker: 50
   - levelName: Expert
     levelMarker: 100
+  - levelName: Expert
+    levelMarker: 150
   achievementType: 2
   sessionBased: 1
