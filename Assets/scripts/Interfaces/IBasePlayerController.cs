@@ -4,7 +4,7 @@ namespace Interfaces
 {
     public interface IBasePlayerController
     {
-        void UpdateScore(int score);
+       
         Controls GetControls();
         bool IsFreez();
         void Move(float horizontal, float vertical);

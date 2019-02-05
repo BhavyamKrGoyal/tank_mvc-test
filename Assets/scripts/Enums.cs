@@ -18,7 +18,7 @@ public enum PlayerNumber
     Player3 = 3,
     Player4 = 4
 }
-public enum AchievemtTypes
+public enum AchievementTypes
 {
     BulletsShot=1,
     Score=2,

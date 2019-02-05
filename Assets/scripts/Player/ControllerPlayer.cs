@@ -10,20 +10,27 @@ public class ControllerPlayer:IBasePlayerController
     
      ViewPlayer view ;
      ModelPlayer model;
+     public PlayerData playerData;
      InputComponent inputComponent;
-    public event Action<int,int> OnUIUpdate;
+    public event Action<PlayerData> OnUIUpdate;
+    public event Action<PlayerData> OnBulletShot;
+    public event Action<PlayerData> OnEnemyKilled;
     public event Action<ControllerPlayer,InputComponent,Controls> OnPlayerDeath;
-    public event Action<BulletTypes> OnBulletNeeded;
-    public ControllerPlayer(GameObject player,Vector3 spawnPoint,Controls controls,PlayerNumber playerNumber)
+    public ControllerPlayer(GameObject player,Vector3 spawnPoint,Controls controls,PlayerNumber playerNumber,bool gameStarted)
     {
        
         this.view = GameObject.Instantiate(player, spawnPoint,Quaternion.identity,null).GetComponent<ViewPlayer>();
         this.model =new ModelPlayer(controls);
         view.SetController(this);
         model.playerNumber = playerNumber;
-        inputComponent=new InputComponent(this);
+        model.gameStarted = gameStarted;
+        inputComponent =new InputComponent(this);
+        playerData.player = this;
         
-        
+    }
+    public bool GetGameStarted()
+    {
+        return model.gameStarted;
     }
     public PlayerNumber GetPlayerNumber()
     {
@@ -56,7 +63,10 @@ public class ControllerPlayer:IBasePlayerController
     public void TankHit(int damage)
     {
         model.TakeDamage(damage);
-        OnUIUpdate.Invoke(model.health, model.score);
+        playerData.score = model.score;
+        playerData.health = model.health;
+        playerData.achievementTypes = AchievementTypes.Score;
+        OnUIUpdate.Invoke(playerData);
         if (!model.IsAlive())
         {
             DestroyObject();
@@ -64,10 +74,21 @@ public class ControllerPlayer:IBasePlayerController
         
         //ServiceUI.Instance.updateUI(model.health, model.score);
     }
-    public void UpdateScore(int score)
+    public void EnemyKilled(int score)
+    {
+        UpdateScore(score);
+        playerData.achievementTypes = AchievementTypes.EnemiesKilled;
+        OnEnemyKilled?.Invoke(playerData);
+    }
+    private void UpdateScore(int score)
     {
         model.score = model.score + score;
-        OnUIUpdate.Invoke(model.health, model.score);
+
+        playerData.score = model.score;
+        playerData.health = model.health;
+        playerData.progress = model.score;
+        playerData.achievementTypes = AchievementTypes.Score;
+        OnUIUpdate.Invoke(playerData);
 
         //ServiceUI.Instance.updateUI(model.health, model.score);
     }
@@ -77,7 +98,10 @@ public class ControllerPlayer:IBasePlayerController
         {
            
             model.lastShot = Time.timeSinceLevelLoad;
+            playerData.achievementTypes = AchievementTypes.BulletsShot;
+            playerData.progress = 1;
             ControllerBullet controllerBullet = ServiceBullet.Instance.MakeBullet(model.bulletType);
+            OnBulletShot?.Invoke(playerData);
             controllerBullet.SetShooter(this);
             controllerBullet.Shoot(view.muzzle.transform);
         }

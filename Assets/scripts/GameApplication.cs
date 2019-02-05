@@ -1,4 +1,5 @@
 ﻿using Enemy;
+using ScriptableObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,18 +18,20 @@ public class GameApplication : SingletonScene<GameApplication>
     {
         base.OnInitialize();
 
-        Debug.Log("in awake of GameApplication");
+        //Debug.Log("in awake of GameApplication");
         ServiceEnemy.Instance.SetEnemyList(enemy);
     }
     public void ReSpawnPlayer(Controls controls,PlayerNumber playerNumber)
+
     {
-        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls,playerNumber));
+        
+        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls,playerNumber,false));
     }
     // Start is called before the first frame update
     void Start()
     {
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD,PlayerNumber.Player1));
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD,PlayerNumber.Player1,true));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1,true));
 
     }
     // Update is called once per frame
@@ -69,7 +72,7 @@ public class GameApplication : SingletonScene<GameApplication>
                 }
             }
         }
-        Debug.Log("x="+xPos+" Z="+zPos);
+        //Debug.Log("x="+xPos+" Z="+zPos);
         return safeZones[UnityEngine.Random.Range(0,safeZones.Count)];
     }
 
@@ -98,6 +101,7 @@ public class GameApplication : SingletonScene<GameApplication>
         GameApplication.Instance.players.Add(player);
         player.OnPlayerDeath += RemovePlayerController;
         OnPlayerSpawn.Invoke(player);
+        
     }
     public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
     {

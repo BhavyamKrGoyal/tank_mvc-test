@@ -37,13 +37,13 @@ public class ServiceUI : Singleton<ServiceUI>
         menu.DestroyUI();
         start.DisplayUI();
     }
-    public void updateUI(int health,int score)
+    public void updateUI(PlayerData playerData)
     {
-        start.UpdateHealth(health);
-        start.UpdateScore(score);
-        if (score > PlayerPrefs.GetInt("HighScore", 0))
+        start.UpdateHealth(playerData.health);
+        start.UpdateScore(playerData.score);
+        if (playerData.score > PlayerPrefs.GetInt("HighScore", 0))
         {
-            PlayerPrefs.SetInt("HighScore", score);
+            PlayerPrefs.SetInt("HighScore", playerData.score);
         }
     }
     public void Replay()

@@ -61,7 +61,7 @@ public class InputManager : Singleton<InputManager>
     public void RemoveInputComponent(ControllerPlayer controller, InputComponent inputComponent, Controls controls)
     {
         InputManager.Instance.inputComponents[controls].Remove(inputComponent);
-        Debug.Log("One InputComponent Removed WASD, Total=" + inputComponents[controls].Count);
+       // Debug.Log("One InputComponent Removed WASD, Total=" + inputComponents[controls].Count);
         if (InputManager.Instance.inputComponents[Controls.WASD].Count == 0)
         {
             InputManager.Instance.inputComponents.Remove(Controls.WASD);
@@ -71,7 +71,7 @@ public class InputManager : Singleton<InputManager>
         if (InputManager.Instance.inputComponents[Controls.IJKL].Count == 0)
         {
             InputManager.Instance.inputComponents.Remove(Controls.IJKL);
-            Debug.Log("One InputComponent Removed IJKL, Total=" + inputComponents.Count);
+           // Debug.Log("One InputComponent Removed IJKL, Total=" + inputComponents.Count);
         }
 
 

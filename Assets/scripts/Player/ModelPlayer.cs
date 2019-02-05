@@ -8,6 +8,7 @@ public class ModelPlayer
     {
         this.controls = controls;
     }
+    public bool gameStarted;
     public PlayerNumber playerNumber;
     public bool freez = false;
     public float lastShot=0;

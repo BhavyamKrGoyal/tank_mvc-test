@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using ScriptableObjects;
+
 namespace Enemy.Model
 {
     public class ModelEnemy

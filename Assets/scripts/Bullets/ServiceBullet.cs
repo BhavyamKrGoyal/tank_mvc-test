@@ -8,6 +8,7 @@ using UnityEngine;
 public class ServiceBullet : SingletonScene<ServiceBullet>
 {
     public static List<ControllerBullet> bulletList = new List<ControllerBullet>();
+    
     public ControllerBullet MakeBullet(BulletTypes bulletType)
     {
         ControllerBullet temp=null;
