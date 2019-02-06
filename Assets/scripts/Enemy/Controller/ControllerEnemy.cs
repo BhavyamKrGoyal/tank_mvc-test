@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using Enemy.Model;
-using Player;
+using Interfaces;
 
 namespace Enemy.Controller
 {
-    public class ControllerEnemy: BasePlayerController
+    public class ControllerEnemy: IBasePlayerController
     {
         ModelEnemy model;
         ViewEnemy view;
@@ -28,15 +28,21 @@ namespace Enemy.Controller
             view.SetColour(model.enemyObject.color);
             view.controller=this;
         }
-        public void BulletHit(int damage)
+        public void BulletHit(int damage,IBasePlayerController player)
         {
             model.TakeDamage(damage);
+            
+            Debug.Log(model.IsAlive());
             if (!model.IsAlive())
             {
+                player.UpdateScore(model.GetScore());
                 DestroyObject();    
             }
         }
-
+        public int GetScore()
+        {
+            return model.GetScore();
+        }
         
        
         public void DestroyObject()

@@ -5,9 +5,11 @@ namespace Enemy.Model
     public class ModelEnemy
     {
         public ScriptableEnemy enemyObject;
+        int currentHealth;
         public ModelEnemy(ScriptableEnemy enemyTemp)
         {
             enemyObject = enemyTemp;
+            currentHealth = enemyObject.maxHealth;
         }
         public bool freez = false;
         
@@ -17,14 +19,16 @@ namespace Enemy.Model
         }
         public void TakeDamage(int damage)
         {
-            enemyObject.health -= damage;
+            currentHealth -= damage;
             
         }
         public bool IsAlive()
         {
-            return enemyObject.health >= 0;
-            
-            
+            return currentHealth > 0;  
+        }
+        public int GetScore()
+        {
+            return enemyObject.score;
         }
     }
 }

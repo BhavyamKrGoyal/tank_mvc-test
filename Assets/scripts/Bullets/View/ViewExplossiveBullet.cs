@@ -11,6 +11,6 @@ public class ViewExplossiveBullet : ViewBullet
     {
         base.OnCollisionEnter(col);
        
-        Instantiate(explossion,col.transform.position,Quaternion.identity, null);
+        Instantiate(explossion,transform.position,Quaternion.identity, null);
     }
 }

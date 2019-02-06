@@ -26,6 +26,7 @@ public class ServiceBullet : SingletonScene<ServiceBullet>
                 break;
 
             }
+        temp.OnBulletDestroy += RemoveBullet;
        // Debug.Log(bulletList.Count);
         return temp;
     }

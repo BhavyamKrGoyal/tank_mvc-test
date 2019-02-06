@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Interfaces;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,12 +26,12 @@ public class ViewBullet : MonoBehaviour
     }
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        ITakeDamageView damageView = collision.gameObject.GetComponent<ITakeDamageView>();
+        if (damageView!=null)
         {
-
             
-            controller.HitEnemy(5);
-           
+            
+            damageView.TakeDamage(controller.GetDamage(),controller.GetShooter());  
             Destroy(gameObject);
         }
     }

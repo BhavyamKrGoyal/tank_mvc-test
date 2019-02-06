@@ -1,16 +1,19 @@
-﻿using Player;
+﻿
+using Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerPlayer:BasePlayerController
+public class ControllerPlayer:IBasePlayerController
 {
     
      ViewPlayer view ;
      ModelPlayer model;
      InputComponent inputComponent;
-
+    public event Action<int,int> OnUIUpdate;
+    public event Action<ControllerPlayer,InputComponent,Controls> OnPlayerDeath;
+    public event Action<BulletTypes> OnBulletNeeded;
     public ControllerPlayer(GameObject player,Vector3 spawnPoint,Controls controls)
     {
       
@@ -18,6 +21,7 @@ public class ControllerPlayer:BasePlayerController
         this.model =new ModelPlayer(controls);
         view.SetController(this);
         inputComponent=new InputComponent(this);
+        
         
     }
     public Controls GetControls()
@@ -47,16 +51,20 @@ public class ControllerPlayer:BasePlayerController
     public void TankHit(int damage)
     {
         model.TakeDamage(damage);
+        OnUIUpdate.Invoke(model.health, model.score);
         if (!model.IsAlive())
         {
             DestroyObject();
         }
-        ServiceUI.Instance.updateUI(model.health, model.score);
+        
+        //ServiceUI.Instance.updateUI(model.health, model.score);
     }
     public void UpdateScore(int score)
     {
         model.score = model.score + score;
-        ServiceUI.Instance.updateUI(model.health, model.score);
+        OnUIUpdate.Invoke(model.health, model.score);
+
+        //ServiceUI.Instance.updateUI(model.health, model.score);
     }
     public void Shoot()
     {
@@ -69,12 +77,19 @@ public class ControllerPlayer:BasePlayerController
             controllerBullet.Shoot(view.muzzle.transform);
         }
     }
+    public InputComponent GetInputComponent()
+    {
+        return inputComponent;
+    }
     public void DestroyObject()
     {
+        OnPlayerDeath.Invoke(this, inputComponent, GetControls());
         view.DestroyPlayer();
-        GameApplication.Instance.ReSpawnPlayer(model.controls);
-        inputComponent.DestroyComponent();
+        
+        //GameApplication.Instance.ReSpawnPlayer(model.controls);
+        //inputComponent.DestroyComponent();
     }
+
 
 
 }
