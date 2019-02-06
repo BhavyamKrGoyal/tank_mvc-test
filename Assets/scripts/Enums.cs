@@ -18,6 +18,12 @@ public enum PlayerNumber
     Player3 = 3,
     Player4 = 4
 }
+public enum States{
+    LobbyState,
+    GamePlayState,
+    LoadingState,
+    GameOverState
+}
 public enum AchievementTypes
 {
     BulletsShot=1,

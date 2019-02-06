@@ -52,14 +52,16 @@ namespace Achievements
 
         public void AchievementUpdate(PlayerData playerData)
         {
-            string achieved;
+            AchievementData achieved;
             if (gameAchievements.ContainsKey(playerData.achievementTypes))
             {
                 achieved=gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player);
-                if (achieved != null)
+                if (achieved.achievementUnlocked)
                 {
-                    OnAchievementUnlocked.Invoke(achieved);
+                    OnAchievementUnlocked.Invoke(achieved.achievementName + " : " + achieved.achievementLevelName + " Unlocked by " + achieved.player);
+                     PlayerPrefs.SetInt(achieved.achievementName + achieved.player+ "level", achieved.achievementLevel);
                 }
+                PlayerPrefs.SetInt(achieved.achievementName + achieved.player + "progress", achieved.achievementProgress);
             }
            
         }

@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using UnityEditor;
-[System.Serializable]
-public struct AchievementsLevel
+
+namespace Achievements
 {
-    public string levelName;
-    public int levelMarker;
+[System.Serializable]
+    public struct AchievementsLevel
+    {
+        public string levelName;
+        public int levelMarker;
+    }
 }

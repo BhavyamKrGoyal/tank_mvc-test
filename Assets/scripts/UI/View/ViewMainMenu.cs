@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using StateMachines;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -33,6 +34,7 @@ public class ViewMainMenu:MonoBehaviour
     }
     public void LoadGameScene()
     {
-        SceneManager.LoadScene("GameScene");
+       
+        StateManager.Instance.ChangeState(new GamePlayState(),true);
     }
 }

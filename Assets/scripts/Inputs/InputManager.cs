@@ -19,7 +19,6 @@ public class InputManager : Singleton<InputManager>
             GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         }
     }
-
     public virtual void Update()
     {
         foreach (Controls controls in InputManager.Instance.inputComponents.Keys)
@@ -27,15 +26,15 @@ public class InputManager : Singleton<InputManager>
             foreach (InputComponent inputComponent in inputComponents[controls])
             {
                 //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
-
-                inputComponent.InputUpdate(InputManager.Instance.playerInput[controls].forward, InputManager.Instance.playerInput[controls].direction, InputManager.Instance.playerInput[controls].shoot, InputManager.Instance.playerInput[controls].boost);
+               
+                    inputComponent.InputUpdate(InputManager.Instance.playerInput[controls].forward, InputManager.Instance.playerInput[controls].direction, InputManager.Instance.playerInput[controls].shoot, InputManager.Instance.playerInput[controls].boost);
+              
             }
         }
 
     }
     public void RegisterInputComponent(InputComponent inputComponent, Controls controls)
     {
-
         if (!InputManager.Instance.playerInput.ContainsKey(controls))
         {
             InputManager.Instance.playerInput.Add(controls, new InputData());
@@ -51,27 +50,21 @@ public class InputManager : Singleton<InputManager>
     }
     public void AddPlayerListener(ControllerPlayer controller)
     {
+
         RegisterInputComponent(controller.GetInputComponent(), controller.GetControls());
         controller.OnPlayerDeath += RemoveInputComponent;
 
     }
-
-
-
     public void RemoveInputComponent(ControllerPlayer controller, InputComponent inputComponent, Controls controls)
     {
         InputManager.Instance.inputComponents[controls].Remove(inputComponent);
-       // Debug.Log("One InputComponent Removed WASD, Total=" + inputComponents[controls].Count);
-        if (InputManager.Instance.inputComponents[Controls.WASD].Count == 0)
+
+        // Debug.Log("One InputComponent Removed WASD, Total=" + inputComponents[controls].Count);
+        if (InputManager.Instance.inputComponents.ContainsKey(controls) && InputManager.Instance.inputComponents[controls].Count == 0)
         {
             InputManager.Instance.inputComponents.Remove(Controls.WASD);
-
+            InputManager.Instance.playerInput.Remove(controls);
             // ServiceUI.Instance.GameOver();
-        }
-        if (InputManager.Instance.inputComponents[Controls.IJKL].Count == 0)
-        {
-            InputManager.Instance.inputComponents.Remove(Controls.IJKL);
-           // Debug.Log("One InputComponent Removed IJKL, Total=" + inputComponents.Count);
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using Enemy;
 using ScriptableObjects;
+using StateMachines;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,42 +19,43 @@ public class GameApplication : SingletonScene<GameApplication>
         //Debug.Log("in awake of GameApplication");
         ServiceEnemy.Instance.SetEnemyList(enemy);
     }
-    public void ReSpawnPlayer(Controls controls,PlayerNumber playerNumber)
-    { 
-        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls,playerNumber,false));
+    public void ReSpawnPlayer(Controls controls, PlayerNumber playerNumber)
+    {
+        StartCoroutine(LateRespawn(controls,playerNumber));
     }
     // Start is called before the first frame update
     void Start()
     {
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD,PlayerNumber.Player1,true));
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1,true));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD, PlayerNumber.Player1, true));
+        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1, true));
 
     }
     private Vector3 SpawnPlayer(List<Vector3> enemyPositions)
     {
         int[,] threatLevelGrid = new int[20, 20];
         int minThreat = 0;
-        int xPos=0, zPos=0;
-        List<Vector3> safeZones=new List<Vector3>(); ;
+        int xPos = 0, zPos = 0;
+        List<Vector3> safeZones = new List<Vector3>(); ;
         //Debug.Log(enemyPositions.Count);
         foreach (Vector3 enemyPosition in enemyPositions)
         {
             threatLevelGrid = increaseThreat(threatLevelGrid, GridValue(enemyPosition.x), GridValue(enemyPosition.z));
         }
         minThreat = threatLevelGrid[0, 0];
-        for(int x=0;x<20;x++)
+        for (int x = 0; x < 20; x++)
         {
             for (int z = 0; z < 20; z++)
             {
                 if (minThreat > threatLevelGrid[x, z])
                 {
                     safeZones = new List<Vector3>();
-                        Debug.Log("x=" + x + " Z=" + z);
+                    Debug.Log("x=" + x + " Z=" + z);
                     minThreat = threatLevelGrid[x, z];
                     xPos = x;
                     zPos = z;
                     safeZones.Add(new Vector3((xPos - 10) * 4, 5, (zPos - 10) * 4));
-                }else if(minThreat == threatLevelGrid[x, z])
+                }
+                else if (minThreat == threatLevelGrid[x, z])
                 {
                     xPos = x;
                     zPos = z;
@@ -62,7 +64,7 @@ public class GameApplication : SingletonScene<GameApplication>
             }
         }
         //Debug.Log("x="+xPos+" Z="+zPos);
-        return safeZones[UnityEngine.Random.Range(0,safeZones.Count)];
+        return safeZones[UnityEngine.Random.Range(0, safeZones.Count)];
     }
 
     private int[,] increaseThreat(int[,] grid, int enemyPosX, int enemyPosY)
@@ -90,11 +92,20 @@ public class GameApplication : SingletonScene<GameApplication>
         GameApplication.Instance.players.Add(player);
         player.OnPlayerDeath += RemovePlayerController;
         OnPlayerSpawn.Invoke(player);
-        
+
     }
     public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
     {
         GameApplication.Instance.players.Remove(player);
-        ReSpawnPlayer(player.GetControls(),player.GetPlayerNumber());
-    } 
+        ReSpawnPlayer(player.GetControls(), player.GetPlayerNumber());
+        if(GameApplication.Instance.players.Count==0){
+            StateManager.Instance.ChangeState(new GameOverState(),true);
+        }
+    }
+    IEnumerator LateRespawn(Controls controls, PlayerNumber playerNumber)
+    {
+        yield return new WaitForSeconds(10f);
+        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls, playerNumber, false));
+
+    }
 }

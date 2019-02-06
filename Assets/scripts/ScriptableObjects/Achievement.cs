@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using Achievements;
 
 namespace ScriptableObjects
 {
@@ -12,41 +13,38 @@ namespace ScriptableObjects
         public bool sessionBased;
 
 
-        public string UpdateAchievement(int progress, ControllerPlayer player)
+        public AchievementData UpdateAchievement(int progress, ControllerPlayer player)
         {
-            string result = null;
+            AchievementData result = new AchievementData();
+            result.achievementUnlocked=false;
+            result.player=player.GetPlayerNumber();
             //Debug.Log("Updating achievement: " + achievementDisplayName);
             int currentLevel = PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "level", 0);
             
             if (!sessionBased)
             {
-                if (currentLevel < achievementLevel.Length)
+                progress = progress + PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", 0);
+            }
+                if (IsMaxAchievementLevel(currentLevel))
                 {
-                    progress = progress + PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", 0);
                     //Debug.Log(progress);
                     if (achievementLevel[currentLevel].levelMarker <= progress )
                     {
 
-                        PlayerPrefs.SetInt(achievementDisplayName + player.GetPlayerNumber() + "level", ++currentLevel);
-                        result=achievementDisplayName + " : " + achievementLevel[currentLevel - 1].levelName + " Unlocked by " + player.GetPlayerNumber();
+                        result.achievementLevel=currentLevel+1;
+                        result.achievementLevelName=achievementLevel[currentLevel+1].levelName;
+                        result.achievementName=achievementDisplayName;
+                        result.achievementProgress=progress;
                     }
                 }
-            }
-            else
-            {if (currentLevel < achievementLevel.Length)
-                {
-                    if (achievementLevel[currentLevel].levelMarker <= progress)
-                    {
-
-                        PlayerPrefs.SetInt(achievementDisplayName + player.GetPlayerNumber() + "level", ++currentLevel);
-                        result=achievementDisplayName + " : " + achievementLevel[currentLevel - 1].levelName + " Unlocked by player " + player.GetPlayerNumber();
-                    }
-                }
-            }
             //Debug.Log(currentLevel + " for" + achievementType.ToString() + " " + progress);
-            PlayerPrefs.SetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", progress);
+            
             return result;
 
         }
+        
+    private bool IsMaxAchievementLevel(int currentLevel){
+        return currentLevel < achievementLevel.Length;
+    }
     }
 }

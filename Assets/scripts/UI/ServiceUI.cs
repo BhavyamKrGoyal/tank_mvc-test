@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using StateMachines;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -48,15 +49,15 @@ public class ServiceUI : Singleton<ServiceUI>
     }
     public void Replay()
     {
-        SceneManager.LoadScene("GameScene");
+       StateManager.Instance.ChangeState(new GamePlayState(),true);
     }
     public void GameOver()
     {
-        SceneManager.LoadScene("GameOver");
+        StateManager.Instance.ChangeState(new GameOverState(),true);
     }
     public void LoadMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        StateManager.Instance.ChangeState(new LobbyState(),false);
 
     }
     public void AddPlayerListener(ControllerPlayer player)
