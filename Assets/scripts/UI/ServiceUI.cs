@@ -8,22 +8,17 @@ public class ServiceUI : Singleton<ServiceUI>
 {
     //For Changing Between Different UI Screens and any actions to be performed by the UI like Button Press
 
-    ControllerMenuUI menu;
     ControllerStartUI start;
-
     
     private void OnLevelWasLoaded(int level)
     {
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
-            start = new ControllerStartUI();
-            menu = new ControllerMenuUI();
             GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         }
         else
         {
-            start = null;
-            menu = null;
+           
         }
     }
     void Start()
@@ -35,16 +30,20 @@ public class ServiceUI : Singleton<ServiceUI>
     }
     public void StartGame()
     {
-        menu.DestroyUI();
-        start.DisplayUI();
+        
+    }
+    public void SetCurrentUI(ControllerStartUI start){
+        this.start =start;
     }
     public void updateUI(PlayerData playerData)
     {
+        if(start!=null){
         start.UpdateHealth(playerData.health);
         start.UpdateScore(playerData.score);
         if (playerData.score > PlayerPrefs.GetInt("HighScore", 0))
         {
             PlayerPrefs.SetInt("HighScore", playerData.score);
+        }
         }
     }
     public void Replay()

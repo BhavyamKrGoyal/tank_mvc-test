@@ -15,7 +15,7 @@ public class InputComponent
     }
     public void InputUpdate(float forward,float direction,bool shoot,bool boost)
     {
-        controller.Move(forward,direction);
+        controller.Update(forward,direction);
         if (shoot)
         {
             controller.Shoot();
@@ -29,14 +29,6 @@ public class InputComponent
             controller.StopBoost();
         }
        //Debug.Log("Updating InputComponent");
-    }
-
-    public void Move(float horizontal,float vertical)
-    {
-        if (!controller.IsFreez())
-        {
-            controller.Move(horizontal, vertical);
-        }
     }
     
 }

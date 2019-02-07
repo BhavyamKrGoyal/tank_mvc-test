@@ -8,9 +8,6 @@ namespace StateMachines
 
         public LoadingState()
         {
-                stateName=States.LoadingState;
-               
-                   
         }
         public override void OnStateExit()
         {

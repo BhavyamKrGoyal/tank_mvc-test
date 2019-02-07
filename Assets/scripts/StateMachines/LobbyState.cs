@@ -5,9 +5,7 @@ namespace StateMachines
     public class LobbyState : GameState
     {
         public LobbyState()
-        {
-            stateName = States.GamePlayState;
-           
+        {  
         }
         public override void OnStateExit()
         {

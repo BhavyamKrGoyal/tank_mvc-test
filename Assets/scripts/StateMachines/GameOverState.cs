@@ -6,7 +6,7 @@ namespace StateMachines
     {
         public GameOverState()
         {
-            stateName = States.GameOverState;
+           
         }
         public override void OnStateExit()
         {

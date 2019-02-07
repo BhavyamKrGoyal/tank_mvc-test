@@ -80,5 +80,10 @@ namespace Enemy.Controller
         {
             throw new System.NotImplementedException();
         }
+
+        public void Update(float horizontal, float vertical)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

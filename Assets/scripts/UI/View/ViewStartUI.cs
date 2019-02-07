@@ -1,4 +1,5 @@
 ﻿using Achievements;
+using StateMachines;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,40 +7,47 @@ using UnityEngine.UI;
 
 
 public class ViewStartUI : MonoBehaviour
-{
-    Text score;
-    Text health;
-    Text achievement;
+{   
+    [SerializeField]public Text score;
+    [SerializeField]public Button pause;
+    [SerializeField]public Text health;
+    [SerializeField]public Text achievement;
     public void Start()
     {
         if (ServiceAchievements.Instance != null)
         {
             ServiceAchievements.Instance.OnAchievementUnlocked += AchievementUnlocked;
         }
-        score = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
-        health = GameObject.FindGameObjectWithTag("Health").GetComponent<Text>();
-        achievement= GameObject.FindGameObjectWithTag("AchievementUI").GetComponent<Text>();
-        DestroyUI();
+       
+        
+      //
+      
     }
-
+    public void GamePaused(){
+        StateManager.Instance.ChangeState(new GamePauseState(),false);
+    }
     public void DestroyUI()
     {
+        pause.gameObject.SetActive(false);
         achievement.gameObject.SetActive(false);
         score.gameObject.SetActive(false);
         health.gameObject.SetActive(false);
+         pause.onClick.RemoveListener(GamePaused);
     }
     public void DisplayUI()
     {
+        pause.gameObject.SetActive(true);
         health.gameObject.SetActive(true);
         score.gameObject.SetActive(true);
+        pause.onClick.AddListener(GamePaused);
     }
-    public void UpdateScore(string score)
+    public void UpdateScore(string scor)
     {
-        this.score.text = score;
+        score.text = scor;
     }
-    public void UpdateHealth(string health)
+    public void UpdateHealth(string healt)
     {
-        this.health.text = health;
+        health.text = healt;
     }
     public void AchievementUnlocked(string display)
     {

@@ -49,7 +49,7 @@ public class GameApplication : SingletonScene<GameApplication>
                 if (minThreat > threatLevelGrid[x, z])
                 {
                     safeZones = new List<Vector3>();
-                    Debug.Log("x=" + x + " Z=" + z);
+                    //Debug.Log("x=" + x + " Z=" + z);
                     minThreat = threatLevelGrid[x, z];
                     xPos = x;
                     zPos = z;

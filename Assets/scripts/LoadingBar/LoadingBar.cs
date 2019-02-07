@@ -12,8 +12,10 @@ namespace LoadingBar
     {
         // Start is called before the first frame update
         Slider slider;
+        bool changeScene=true;
         void Start()
         {
+            
            // StateManager.Instance.OnStateChanged+=SetUI;
             slider = gameObject.GetComponent<Slider>();
         }
@@ -23,6 +25,7 @@ namespace LoadingBar
         {
             if (loaded < .6)
             {
+                changeScene=true;
                 loaded = loaded + 0.008f;
                 slider.value = loaded;
 
@@ -39,10 +42,13 @@ namespace LoadingBar
             else
             {
                 slider.value = loaded;
+                if(changeScene){
                 StateManager.Instance.ChangeState();
+                changeScene=false;
+                }
             }
         }
-        private void SetUI(States stateName){
+        private void SetUI(){
             slider.gameObject.SetActive(true);
         }
         

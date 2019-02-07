@@ -18,7 +18,7 @@ public class ViewMainMenu:MonoBehaviour
         DisplayUI();
         highScore.text = "HighScore : " + PlayerPrefs.GetInt("HighScore", 0);
 
-        play.onClick.AddListener(LoadGameScene);
+        
 
         
     }
