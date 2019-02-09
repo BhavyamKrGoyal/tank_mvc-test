@@ -16,35 +16,40 @@ namespace ScriptableObjects
         public AchievementData UpdateAchievement(int progress, ControllerPlayer player)
         {
             AchievementData result = new AchievementData();
-            result.achievementUnlocked=false;
-            result.player=player.GetPlayerNumber();
-            //Debug.Log("Updating achievement: " + achievementDisplayName);
+            result.achievementUnlocked = false;
+            //Debug.Log(achievementType);
+            result.achievementName = achievementDisplayName;
+            result.player = player.GetPlayerNumber();
             int currentLevel = PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "level", 0);
-            
-            if (!sessionBased)
+            result.achievementLevel = currentLevel;
+            result.achievementId = achievementLevel[currentLevel].UniqueId;
+            result.achievementLevelName = achievementLevel[currentLevel].levelName;
+            progress = progress + PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", 0);
+            //Debug.Log("Updating achievement: " + achievementDisplayName + " " + progress);
+            if (IsMaxAchievementLevel(currentLevel))
             {
-                progress = progress + PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", 0);
-            }
-                if (IsMaxAchievementLevel(currentLevel))
+                //Debug.Log(progress + " " + achievementDisplayName);
+                if (achievementLevel[currentLevel].levelMarker <= progress)
                 {
-                    //Debug.Log(progress);
-                    if (achievementLevel[currentLevel].levelMarker <= progress )
-                    {
 
-                        result.achievementLevel=currentLevel+1;
-                        result.achievementLevelName=achievementLevel[currentLevel+1].levelName;
-                        result.achievementName=achievementDisplayName;
-                        result.achievementProgress=progress;
-                    }
+                    result.achievementUnlocked = true;
+                    result.achievementLevel = ++currentLevel;
+                    result.achievementId = achievementLevel[currentLevel-1].UniqueId;
+                    result.achievementLevelName = achievementLevel[currentLevel-1].levelName;
+
                 }
+            }
+            result.achievementProgress = progress;
+
             //Debug.Log(currentLevel + " for" + achievementType.ToString() + " " + progress);
-            
+
             return result;
 
         }
-        
-    private bool IsMaxAchievementLevel(int currentLevel){
-        return currentLevel < achievementLevel.Length;
-    }
+
+        private bool IsMaxAchievementLevel(int currentLevel)
+        {
+            return currentLevel < achievementLevel.Length;
+        }
     }
 }

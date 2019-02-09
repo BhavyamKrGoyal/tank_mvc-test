@@ -16,11 +16,12 @@ MonoBehaviour:
   achievementLevel:
   - levelName: Regular Player
     levelMarker: 4
+    UniqueId: 1
   - levelName: Most Of The Time
     levelMarker: 6
+    UniqueId: 2
   - levelName: Always Playing
     levelMarker: 9
-  - levelName: Always Playing
-    levelMarker: 30
+    UniqueId: 3
   achievementType: 5
   sessionBased: 0

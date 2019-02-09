@@ -11,6 +11,7 @@ public struct PlayerData
 }
 public struct AchievementData{
     public string achievementName;
+    public int achievementId;
     public int achievementLevel;
     public string achievementLevelName;
     public int achievementProgress;

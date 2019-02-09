@@ -3,21 +3,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 namespace Achievements
 {
-    public class ServiceAchievements : SingletonScene<ServiceAchievements>
+    public class ServiceAchievements : Singleton<ServiceAchievements>
     {
 
         [SerializeField] private Achievement[] achievements;
-        public event Action<string> OnAchievementUnlocked;
+        public event Action<string, int> OnAchievementUnlocked;
         Dictionary<AchievementTypes, Achievement> gameAchievements = new Dictionary<AchievementTypes, Achievement>();
-        public override void OnInitialize()
+        private void OnEnable()
         {
-            base.OnInitialize();
-            GameApplication.Instance.OnPlayerSpawn += AddListener;
-
+            SceneManager.sceneLoaded += OnLevelLoaded;
         }
-
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnLevelLoaded;
+        }
+        void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "GameScene")
+            {
+                //GameApplication.Instance.OnPlayerSpawn += AddListener;
+            }
+        } 
 
         public void Start()
         {
@@ -27,13 +37,15 @@ namespace Achievements
             {
                 gameAchievements.Add(achievement.achievementType, achievement);
             }
-           
+             GameApplication.Instance.OnPlayerSpawn += AddListener;
+
         }
         public void AddListener(ControllerPlayer player)
         {
+           
             PlayerData playerData = player.playerData;
             player.OnBulletShot += AchievementUpdate;
-            player.OnUIUpdate += AchievementUpdate;
+            player.OnScoreUpdate += AchievementUpdate;
             player.OnEnemyKilled += AchievementUpdate;
             //Debug.Log("All listeners added for achievements");
             if (player.GetGameStarted())
@@ -49,21 +61,25 @@ namespace Achievements
                 AchievementUpdate(playerData);
             }
         }
-
         public void AchievementUpdate(PlayerData playerData)
         {
+            
             AchievementData achieved;
+            
             if (gameAchievements.ContainsKey(playerData.achievementTypes))
             {
-                achieved=gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player);
+                achieved = gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player);
                 if (achieved.achievementUnlocked)
                 {
-                    OnAchievementUnlocked.Invoke(achieved.achievementName + " : " + achieved.achievementLevelName + " Unlocked by " + achieved.player);
-                     PlayerPrefs.SetInt(achieved.achievementName + achieved.player+ "level", achieved.achievementLevel);
+                   //Debug.Log("dddddd");
+                    OnAchievementUnlocked.Invoke(achieved.achievementName + " : " + achieved.achievementLevelName + " Unlocked by " + achieved.player, achieved.achievementId);
+                    PlayerPrefs.SetInt(achieved.achievementName+achieved.player + "level", achieved.achievementLevel);
                 }
                 PlayerPrefs.SetInt(achieved.achievementName + achieved.player + "progress", achieved.achievementProgress);
             }
-           
+
         }
+        
+        
     }
 }

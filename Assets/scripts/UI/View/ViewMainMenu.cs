@@ -1,27 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ScriptableObjects;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class ViewMainMenu:MonoBehaviour
+public class ViewMainMenu : MonoBehaviour
 {
     Button play;
     Text highScore;
-
-    public void Start()
+       public void Start()
     {
+        //scrollContent = GameObject.FindGameObjectWithTag("ScrollContent").GetComponent<RectTransform>();
         play = GameObject.FindGameObjectWithTag("PlayButton").GetComponent<Button>();
         highScore = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
         DisplayUI();
         highScore.text = "HighScore : " + PlayerPrefs.GetInt("HighScore", 0);
-
-        
-
         
     }
+
     
     public void DestroyUI()
     {
@@ -34,7 +33,7 @@ public class ViewMainMenu:MonoBehaviour
     }
     public void LoadGameScene()
     {
-       
-        StateManager.Instance.ChangeState(new GamePlayState(),true);
+
+        StateManager.Instance.ChangeState(new GamePlayState(), true);
     }
 }

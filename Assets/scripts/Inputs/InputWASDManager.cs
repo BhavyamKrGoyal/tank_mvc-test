@@ -19,8 +19,6 @@ public class InputWASDManager : MonoBehaviour
             {
                 InputManager.Instance.playerInput[controls].boost = false;
             }
-
-
             if (Input.GetKey(KeyCode.Space))
             {
                 InputManager.Instance.playerInput[controls].shoot = true;
@@ -28,6 +26,9 @@ public class InputWASDManager : MonoBehaviour
             else
             {
                 InputManager.Instance.playerInput[controls].shoot = false;
+            }
+            if(Input.GetKeyDown(KeyCode.B)){
+                PlayerPrefs.DeleteAll();
             }
         }
 

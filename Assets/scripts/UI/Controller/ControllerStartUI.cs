@@ -6,6 +6,7 @@ public class ControllerStartUI
 {
     // For Controlling the UI in the Start screen
     ViewStartUI view;
+    
     public ControllerStartUI()
     {
         view = GameObject.FindObjectOfType<ViewStartUI>().GetComponent<ViewStartUI>();

@@ -8,5 +8,6 @@ namespace Achievements
     {
         public string levelName;
         public int levelMarker;
+        public int UniqueId;
     }
 }

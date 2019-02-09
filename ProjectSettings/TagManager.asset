@@ -12,6 +12,9 @@ TagManager:
   - Health
   - AchievementUI
   - Pause
+  - ScrollContent
+  - IndicatorPanal
+  - Indicator
   layers:
   - Default
   - TransparentFX

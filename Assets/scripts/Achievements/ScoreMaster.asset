@@ -16,11 +16,12 @@ MonoBehaviour:
   achievementLevel:
   - levelName: Noob
     levelMarker: 15
-  - levelName: Expert
+    UniqueId: 5
+  - levelName: mid
     levelMarker: 50
+    UniqueId: 6
   - levelName: Expert
     levelMarker: 100
-  - levelName: Expert
-    levelMarker: 150
+    UniqueId: 7
   achievementType: 2
   sessionBased: 1

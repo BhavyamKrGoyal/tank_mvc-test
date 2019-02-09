@@ -85,5 +85,10 @@ namespace Enemy.Controller
         {
             throw new System.NotImplementedException();
         }
+
+        public void Update()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

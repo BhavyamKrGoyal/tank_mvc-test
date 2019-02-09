@@ -11,13 +11,12 @@ public class InputManager : Singleton<InputManager>
 
     // Start is called before the first frame update
     // Update is called once per frame
+    void Start() {
+        GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
+    }
     private void OnLevelWasLoaded(int level)
     {
-        if (SceneManager.GetActiveScene().name == "GameScene")
-        {
-
-            GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
-        }
+        
     }
     public virtual void Update()
     {
@@ -62,7 +61,7 @@ public class InputManager : Singleton<InputManager>
         // Debug.Log("One InputComponent Removed WASD, Total=" + inputComponents[controls].Count);
         if (InputManager.Instance.inputComponents.ContainsKey(controls) && InputManager.Instance.inputComponents[controls].Count == 0)
         {
-            InputManager.Instance.inputComponents.Remove(Controls.WASD);
+            InputManager.Instance.inputComponents.Remove(controls);
             InputManager.Instance.playerInput.Remove(controls);
             // ServiceUI.Instance.GameOver();
         }

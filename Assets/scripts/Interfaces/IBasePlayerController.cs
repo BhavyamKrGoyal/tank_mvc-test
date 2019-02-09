@@ -7,7 +7,8 @@ namespace Interfaces
        
         Controls GetControls();
         bool IsFreez();
-        void Update(float horizontal, float vertical);
+        void Move(float horizontal, float vertical);
+          void Update();
         void DestroyObject();
         void Shoot();
         void StartBoost();

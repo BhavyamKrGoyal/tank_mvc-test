@@ -6,27 +6,23 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ControllerPlayer : IBasePlayerController
 {
-    public Dictionary<PlayerStates, bool> currentStates = new Dictionary<PlayerStates, bool>();
+   
     ViewPlayer view;
     float pauseTartedTime=0;
     ModelPlayer model;
-    Dictionary<PlayerStates, List<PlayerStates>> StateGraph = new Dictionary<PlayerStates, List<PlayerStates>>();
+   
     public PlayerData playerData;
     InputComponent inputComponent;
+    PlayerStateMachine stateMachine;
     public event Action<PlayerData> OnUIUpdate;
+    public event Action<PlayerData> OnScoreUpdate;
     public event Action<PlayerData> OnBulletShot;
     public event Action<PlayerData> OnEnemyKilled;
     public event Action<ControllerPlayer, InputComponent, Controls> OnPlayerDeath;
     public ControllerPlayer(GameObject player, Vector3 spawnPoint, Controls controls, PlayerNumber playerNumber, bool gameStarted)
     {
-        currentStates.Add(PlayerStates.Move, false);
-        currentStates.Add(PlayerStates.Regen, false);
-        currentStates.Add(PlayerStates.Shoot, false);
-        currentStates.Add(PlayerStates.paused, false);
-        StateGraph.Add(PlayerStates.Move, new List<PlayerStates> { PlayerStates.paused, PlayerStates.Regen });
-        StateGraph.Add(PlayerStates.Shoot, new List<PlayerStates> { PlayerStates.paused });
-        StateGraph.Add(PlayerStates.Regen, new List<PlayerStates> { PlayerStates.paused, PlayerStates.Move });
-        StateGraph.Add(PlayerStates.paused, new List<PlayerStates> { PlayerStates.Regen, PlayerStates.Move, PlayerStates.Shoot });
+      
+        stateMachine=new PlayerStateMachine(this);
         this.view = GameObject.Instantiate(player, spawnPoint, Quaternion.identity, null).GetComponent<ViewPlayer>();
         this.model = new ModelPlayer(controls);
         view.SetController(this);
@@ -41,16 +37,13 @@ public class ControllerPlayer : IBasePlayerController
     {
         if (currentState is GamePauseState)
         {
+            stateMachine.EnterPauseState();
             pauseTartedTime = Time.timeSinceLevelLoad;
-            currentStates[PlayerStates.Move] = false;
-            currentStates[PlayerStates.Regen] = false;
-            currentStates[PlayerStates.Shoot] = false;
-            currentStates[PlayerStates.paused] = true;
         }
         else
         {
+            stateMachine.Resume();
             pauseTartedTime = Time.timeSinceLevelLoad - pauseTartedTime;
-            currentStates[PlayerStates.paused] = false;
         }
     }
     public bool GetGameStarted()
@@ -69,31 +62,23 @@ public class ControllerPlayer : IBasePlayerController
     {
         return model.freez;
     }
-    public void Update(float horizontal, float vertical)
+    public void Update()
     {
-        if (!currentStates[PlayerStates.paused])
+        if (!stateMachine.isPaused()&&!stateMachine.isMoving())
         {
-            if (horizontal != 0 || vertical != 0)
-            {
-                Move(horizontal, vertical);
-            }else{
-                currentStates[PlayerStates.Regen] = true;
+                stateMachine.EnterRegenState();
                 if(model.health<100){
                 model.TakeDamage(-0.1f);
                 //Debug.Log(model.health);
                 }
             }
         }
-    }
+    
     public void Move(float horizontal, float vertical)
     {
-
         //Debug.Log("controller");
-
-        currentStates[PlayerStates.Move] = true;
-        currentStates[PlayerStates.Regen] = false;
+        stateMachine.EnterMoveState();
         view.MovePlayer(horizontal * model.rotationSpeed * Time.deltaTime, vertical * model.speed * Time.deltaTime * model.boost);
-
     }
     public void StartBoost()
     {
@@ -127,19 +112,18 @@ public class ControllerPlayer : IBasePlayerController
         model.score = model.score + score;
         playerData.score = model.score;
         playerData.health = (int)model.health;
-        playerData.progress = model.score;
+        playerData.progress = score;
         playerData.achievementTypes = AchievementTypes.Score;
-        OnUIUpdate.Invoke(playerData);
+        OnUIUpdate?.Invoke(playerData);
+        OnScoreUpdate?.Invoke(playerData);
         //ServiceUI.Instance.updateUI(model.health, model.score);
     }
     public void Shoot()
-    {
-       
-        if (!currentStates[PlayerStates.paused])
+    { 
+        if (!stateMachine.isPaused())
         {
             if (model.lastShot + (model.fireInterval + pauseTartedTime) < Time.timeSinceLevelLoad)
             {
-              
                 pauseTartedTime = 0;
                 model.lastShot = Time.timeSinceLevelLoad;
                 playerData.achievementTypes = AchievementTypes.BulletsShot;
@@ -150,7 +134,6 @@ public class ControllerPlayer : IBasePlayerController
                 controllerBullet.Shoot(view.muzzle.transform);
             }
         }
-
     }
     public InputComponent GetInputComponent()
     {
@@ -160,11 +143,5 @@ public class ControllerPlayer : IBasePlayerController
     {
         OnPlayerDeath.Invoke(this, inputComponent, GetControls());
         view.DestroyPlayer();
-
-        //GameApplication.Instance.ReSpawnPlayer(model.controls);
-        //inputComponent.DestroyComponent();
     }
-
-
-
 }

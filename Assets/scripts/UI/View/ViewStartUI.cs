@@ -49,7 +49,7 @@ public class ViewStartUI : MonoBehaviour
     {
         health.text = healt;
     }
-    public void AchievementUnlocked(string display)
+    public void AchievementUnlocked(string display,int achievementId)
     {
         StartCoroutine(DisplayAchievement(display));
     }

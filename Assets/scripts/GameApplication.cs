@@ -5,29 +5,47 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameApplication : SingletonScene<GameApplication>
+public class GameApplication : Singleton<GameApplication>
 {
     public ScriptableEnemy[] enemy;
     public GameObject player;
     public event Action<ControllerPlayer> OnPlayerSpawn;
     public List<ControllerPlayer> players = new List<ControllerPlayer>();
     List<Vector3> EnemyPosition = new List<Vector3>();
-    public override void OnInitialize()
-    {
-        base.OnInitialize();
-        //Debug.Log("in awake of GameApplication");
-        ServiceEnemy.Instance.SetEnemyList(enemy);
-    }
+    //Debug.Log("in awake of GameApplication");
+
     public void ReSpawnPlayer(Controls controls, PlayerNumber playerNumber)
     {
-        StartCoroutine(LateRespawn(controls,playerNumber));
+        StartCoroutine(LateRespawn(controls, playerNumber));
     }
     // Start is called before the first frame update
     void Start()
     {
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD, PlayerNumber.Player1, true));
-        AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1, true));
+
+
+    }
+    public void SetPlayerPrefab(GameObject player)
+    {
+        this.player = player;
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLevelLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelLoaded;
+    }
+    void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "GameScene")
+        {
+            ServiceEnemy.Instance.SetEnemyList(enemy);
+            AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.WASD, PlayerNumber.Player1, true));
+            AddPlayerController(new ControllerPlayer(player, new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41)), Controls.IJKL, PlayerNumber.Player1, true));
+        }
 
     }
     private Vector3 SpawnPlayer(List<Vector3> enemyPositions)
@@ -98,14 +116,17 @@ public class GameApplication : SingletonScene<GameApplication>
     {
         GameApplication.Instance.players.Remove(player);
         ReSpawnPlayer(player.GetControls(), player.GetPlayerNumber());
-        if(GameApplication.Instance.players.Count==0){
-            StateManager.Instance.ChangeState(new GameOverState(),true);
+        if (GameApplication.Instance.players.Count == 0)
+        {
+            StateManager.Instance.ChangeState(new GameOverState(), true);
         }
     }
     IEnumerator LateRespawn(Controls controls, PlayerNumber playerNumber)
     {
-        yield return new WaitForSeconds(10f);
-        AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls, playerNumber, false));
-
+        yield return new WaitForSeconds(3f);
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls, playerNumber, false));
+        }
     }
 }

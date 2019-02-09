@@ -15,7 +15,8 @@ public class InputComponent
     }
     public void InputUpdate(float forward,float direction,bool shoot,bool boost)
     {
-        controller.Update(forward,direction);
+        controller.Update();
+        controller.Move(forward,direction);
         if (shoot)
         {
             controller.Shoot();
