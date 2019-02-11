@@ -1,15 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Replay_Service;
 using UnityEngine;
 
 public class InputIJKLManager : MonoBehaviour
 {
     Controls controls = Controls.IJKL;
-    InputData inputData = new InputData();
+    InputData inputData;
+    int initialFame;
+    private void Start() {
+        InputManager.Instance.playerInput.Add(controls,new Queue<InputData>());
+        initialFame=InputManager.Instance.initialFame;
+    }
     public void Update()
     {
         if (InputManager.Instance.playerInput.ContainsKey(controls))
         {
+            inputData = new InputData();
             inputData.forward = Input.GetAxis("Horizontal");
             inputData.direction = Input.GetAxis("Vertical");
             //Debug.Log("getting Input using IJKL");
@@ -30,7 +37,9 @@ public class InputIJKLManager : MonoBehaviour
             {
                 inputData.shoot = false;
             }
+            inputData.frame=Time.frameCount-initialFame;
         }
         InputManager.Instance.EnqueueData(inputData,controls);
+        ServiceReplay.Instance.RecordInput(inputData, controls);
     }
 }

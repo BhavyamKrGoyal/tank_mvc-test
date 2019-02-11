@@ -20,7 +20,7 @@ namespace SavingSystem
             RewardsData data=new RewardsData();
             data.Unlocked = PlayerPrefs.GetInt(rewardUnlockedId + "Rewards", 0);
             data.RewardUnlockedID = rewardUnlockedId;
-            Debug.Log(data.Unlocked+" ff "+data.RewardUnlockedID);
+            //Debug.Log(data.Unlocked+" ff "+data.RewardUnlockedID);
             return data;
         }
 
@@ -31,7 +31,7 @@ namespace SavingSystem
         }
         public void SaveRewardsData(RewardsData data)
         {
-            Debug.Log(data.Unlocked+" "+data.RewardUnlockedID);
+            //Debug.Log(data.Unlocked+" "+data.RewardUnlockedID);
             PlayerPrefs.SetInt(data.RewardUnlockedID + "Rewards", data.Unlocked);
         }
     }

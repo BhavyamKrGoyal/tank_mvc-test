@@ -14,7 +14,7 @@ namespace StateMachines
         {
             menu = new ControllerMenuUI();
            // menu.DisplayUI();
-            Debug.Log("pause Enter");
+           // Debug.Log("pause Enter");
         }
         public override void OnStateExit()
         {

@@ -9,13 +9,9 @@ namespace StateMachines
     {
         public GameState currentState=null, previousState=null, afterLoadingState;
         public event Action<GameState> OnStateChanged;
-
-
         public void Start()
         {
-            
             SetState(new LoadingState());
-
         }
 
         private void SetState(GameState state)

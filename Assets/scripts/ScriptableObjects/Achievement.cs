@@ -22,12 +22,12 @@ namespace ScriptableObjects
             result.player = player.GetPlayerNumber();
             int currentLevel = data.achievementLevel;
             result.achievementLevel = currentLevel;
-            result.achievementId = achievementLevel[currentLevel].UniqueId;
-            result.achievementLevelName = achievementLevel[currentLevel].levelName;
             progress = progress +data.achievementProgress;
             //Debug.Log("Updating achievement: " + achievementDisplayName + " " + progress);
             if (IsMaxAchievementLevel(currentLevel))
             {
+                 result.achievementId = achievementLevel[currentLevel].UniqueId;
+                 result.achievementLevelName = achievementLevel[currentLevel].levelName;
                 //Debug.Log(progress + " " + achievementDisplayName);
                 if (achievementLevel[currentLevel].levelMarker <= progress)
                 {

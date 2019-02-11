@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using Replay_Service;
+using System.Collections.Generic;
 
 public class InputWASDManager : MonoBehaviour
 {
-    InputData inputData=new InputData();
+    InputData inputData;
     Controls controls = Controls.WASD;
+    int initialFame;
+    private void Start()
+    {
+        InputManager.Instance.playerInput.Add(controls,new Queue<InputData>());
+        initialFame = InputManager.Instance.initialFame;
+    }
     public void Update()
     {
-          if (InputManager.Instance.playerInput.ContainsKey(controls))
+        if (InputManager.Instance.playerInput.ContainsKey(controls))
         {
+            inputData = new InputData();
             inputData.forward = Input.GetAxis("Horizontal1");
             inputData.direction = Input.GetAxis("Vertical1");
             //Debug.Log("getting Input using IJKL");
@@ -34,8 +43,9 @@ public class InputWASDManager : MonoBehaviour
             {
                 PlayerPrefs.DeleteAll();
             }
-
+            inputData.frame = Time.frameCount - initialFame;
         }
-       InputManager.Instance.EnqueueData(inputData,controls);
+        InputManager.Instance.EnqueueData(inputData, controls);
+        ServiceReplay.Instance.RecordInput(inputData, controls);
     }
 }
