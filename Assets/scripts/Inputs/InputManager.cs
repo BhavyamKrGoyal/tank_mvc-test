@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : Singleton<InputManager>
 {
-    public Dictionary<Controls, InputData> playerInput = new Dictionary<Controls, InputData>();
+    public Dictionary<Controls, Queue<InputData>> playerInput = new Dictionary<Controls, Queue<InputData>>();
     public Dictionary<Controls, List<InputComponent>> inputComponents = new Dictionary<Controls, List<InputComponent>>();
 
 
@@ -25,9 +25,7 @@ public class InputManager : Singleton<InputManager>
             foreach (InputComponent inputComponent in inputComponents[controls])
             {
                 //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
-               
-                    inputComponent.InputUpdate(InputManager.Instance.playerInput[controls].forward, InputManager.Instance.playerInput[controls].direction, InputManager.Instance.playerInput[controls].shoot, InputManager.Instance.playerInput[controls].boost);
-              
+                    inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());        
             }
         }
 
@@ -36,7 +34,7 @@ public class InputManager : Singleton<InputManager>
     {
         if (!InputManager.Instance.playerInput.ContainsKey(controls))
         {
-            InputManager.Instance.playerInput.Add(controls, new InputData());
+            InputManager.Instance.playerInput.Add(controls, new Queue<InputData>());
             List<InputComponent> newList = new List<InputComponent>();
             newList.Add(inputComponent);
             InputManager.Instance.inputComponents.Add(controls, newList);

@@ -13,15 +13,15 @@ public class InputComponent
         this.controller = controller;
         //InputManager.Instance.RegisterInputComponent(this,controller.GetControls());
     }
-    public void InputUpdate(float forward,float direction,bool shoot,bool boost)
+    public void InputUpdate(InputData inputData)
     {
         controller.Update();
-        controller.Move(forward,direction);
-        if (shoot)
+        controller.Move(inputData.forward,inputData.direction);
+        if (inputData.shoot)
         {
             controller.Shoot();
         }
-        if (boost)
+        if (inputData.boost)
         {
             controller.StartBoost();
         }

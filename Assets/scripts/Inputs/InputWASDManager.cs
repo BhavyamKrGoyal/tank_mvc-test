@@ -3,34 +3,39 @@ using UnityEditor;
 
 public class InputWASDManager : MonoBehaviour
 {
+    InputData inputData=new InputData();
     Controls controls = Controls.WASD;
     public void Update()
     {
-        if (InputManager.Instance.playerInput.ContainsKey(controls)){
-            InputManager.Instance.playerInput[controls].forward = Input.GetAxis("Horizontal1");
-            InputManager.Instance.playerInput[controls].direction = Input.GetAxis("Vertical1");
-            // Debug.Log("getting Input using WASD");
+          if (InputManager.Instance.playerInput.ContainsKey(controls))
+        {
+            inputData.forward = Input.GetAxis("Horizontal1");
+            inputData.direction = Input.GetAxis("Vertical1");
+            //Debug.Log("getting Input using IJKL");
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                InputManager.Instance.playerInput[controls].boost = true;
+                inputData.boost = true;
             }
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                InputManager.Instance.playerInput[controls].boost = false;
+                inputData.boost = false;
             }
             if (Input.GetKey(KeyCode.Space))
             {
-                InputManager.Instance.playerInput[controls].shoot = true;
+                inputData.shoot = true;
             }
             else
             {
-                InputManager.Instance.playerInput[controls].shoot = false;
+                inputData.shoot = false;
             }
-            if(Input.GetKeyDown(KeyCode.B)){
+
+            if (Input.GetKeyDown(KeyCode.B))
+            {
                 PlayerPrefs.DeleteAll();
             }
-        }
 
+        }
+        InputManager.Instance.playerInput[controls].Enqueue(inputData);
     }
 }
