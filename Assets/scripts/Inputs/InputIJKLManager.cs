@@ -31,6 +31,6 @@ public class InputIJKLManager : MonoBehaviour
                 inputData.shoot = false;
             }
         }
-        InputManager.Instance.playerInput[controls].Enqueue(inputData);
+        InputManager.Instance.EnqueueData(inputData,controls);
     }
 }

@@ -36,6 +36,6 @@ public class InputWASDManager : MonoBehaviour
             }
 
         }
-        InputManager.Instance.playerInput[controls].Enqueue(inputData);
+       InputManager.Instance.EnqueueData(inputData,controls);
     }
 }

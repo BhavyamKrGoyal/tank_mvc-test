@@ -11,12 +11,20 @@ public class InputManager : Singleton<InputManager>
 
     // Start is called before the first frame update
     // Update is called once per frame
-    void Start() {
+    void Start()
+    {
         GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
     }
     private void OnLevelWasLoaded(int level)
     {
-        
+
+    }
+    public void EnqueueData(InputData inputdata, Controls controls)
+    {
+        if (Instance.playerInput.ContainsKey(controls))
+        {
+            Instance.playerInput[controls].Enqueue(inputdata);
+        }
     }
     public virtual void Update()
     {
@@ -24,8 +32,11 @@ public class InputManager : Singleton<InputManager>
         {
             foreach (InputComponent inputComponent in inputComponents[controls])
             {
-                //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
-                    inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());        
+                if (Instance.playerInput[controls].Count != 0)
+                {
+                    //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
+                    inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
+                }
             }
         }
 

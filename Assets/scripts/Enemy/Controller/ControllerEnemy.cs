@@ -90,5 +90,10 @@ namespace Enemy.Controller
         {
             throw new System.NotImplementedException();
         }
+
+        public void UpdateScore(int score)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
