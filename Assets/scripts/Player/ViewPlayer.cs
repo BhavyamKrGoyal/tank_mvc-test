@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using StateMachines;
 using UnityEngine;
 
 public class ViewPlayer : MonoBehaviour
@@ -12,7 +13,7 @@ public class ViewPlayer : MonoBehaviour
     void Start()
     {
 
-        rb = gameObject.GetComponent<Rigidbody>();   
+        rb = gameObject.GetComponent<Rigidbody>(); 
     }
     public void SetController(ControllerPlayer controller)
     {
@@ -29,12 +30,6 @@ public class ViewPlayer : MonoBehaviour
     {
       
         StartCoroutine(Move(h,v));
-    }
-    IEnumerator Shoot(float time)
-    {
-        shoot = false;
-        yield return new WaitForSeconds(time);
-        shoot = true;
     }
     public void DestroyPlayer()
     {

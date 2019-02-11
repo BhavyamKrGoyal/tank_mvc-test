@@ -7,7 +7,7 @@ public class InputIJKLManager : MonoBehaviour
     Controls controls = Controls.IJKL;
     public void Update()
     {
-
+        if(InputManager.Instance.playerInput.ContainsKey(controls)){
         InputManager.Instance.playerInput[controls].forward = Input.GetAxis("Horizontal");
         InputManager.Instance.playerInput[controls].direction = Input.GetAxis("Vertical");
         //Debug.Log("getting Input using IJKL");
@@ -29,6 +29,7 @@ public class InputIJKLManager : MonoBehaviour
         else
         {
             InputManager.Instance.playerInput[controls].shoot = false;
+        }
         }
     }
 }

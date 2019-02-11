@@ -2,6 +2,7 @@
 using UnityEditor;
 using Enemy.Model;
 using Interfaces;
+using ScriptableObjects;
 
 namespace Enemy.Controller
 {
@@ -28,14 +29,14 @@ namespace Enemy.Controller
             view.SetColour(model.enemyObject.color);
             view.controller=this;
         }
-        public void BulletHit(int damage,IBasePlayerController player)
+        public void BulletHit(int damage,ControllerPlayer player)
         {
             model.TakeDamage(damage);
             
-            Debug.Log(model.IsAlive());
+           // Debug.Log(model.IsAlive());
             if (!model.IsAlive())
             {
-                player.UpdateScore(model.GetScore());
+                player.EnemyKilled(model.GetScore());
                 DestroyObject();    
             }
         }
@@ -64,11 +65,7 @@ namespace Enemy.Controller
 
         }
 
-        public void UpdateScore(int score)
-        {
-       
-        }
-
+    
         public Controls GetControls()
         {
             throw new System.NotImplementedException();
@@ -80,6 +77,16 @@ namespace Enemy.Controller
         }
 
         public void StopBoost()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Update(float horizontal, float vertical)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Update()
         {
             throw new System.NotImplementedException();
         }

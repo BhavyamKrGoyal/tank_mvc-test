@@ -30,7 +30,7 @@ public class ViewEnemy : MonoBehaviour,ITakeDamageView
     }
     public void TakeDamage(int damage,IBasePlayerController player)
     {
-        controller.BulletHit(damage,player);
+        controller.BulletHit(damage,(ControllerPlayer)player);
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

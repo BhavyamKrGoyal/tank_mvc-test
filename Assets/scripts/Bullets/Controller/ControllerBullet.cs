@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using StateMachines;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,13 +10,25 @@ public class ControllerBullet
     protected ModelBullet model;
     protected ViewBullet view;
     protected IBasePlayerController shooter;
-    public event Action<ControllerBullet> OnBulletDestroy; 
-    public virtual void Shoot (Transform muzzle){}
+    public event Action<ControllerBullet> OnBulletDestroy;
+    public virtual void Shoot(Transform muzzle) { }
     public ControllerBullet()
     {
         getViewAndModel();
         view.controller = this;
-        view.time = model.lifeTime;
+        //view.time = model.lifeTime;
+        StateManager.Instance.OnStateChanged += GameStateChanged;
+    }
+    public void GameStateChanged(GameState currentState)
+    {
+        if (currentState is GamePauseState)
+        {
+            view.BulletPaused();
+        }
+        else
+        {
+            view.BulletResume();
+        }
     }
     public int GetDamage()
     {

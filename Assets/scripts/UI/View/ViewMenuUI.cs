@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using StateMachines;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ViewMenuUI : MonoBehaviour
 {
-    Button play;
+    public Button play;
 
     public void Start()
     {
-        play = GameObject.FindGameObjectWithTag("PlayButton").GetComponent<Button>();
-        play.gameObject.SetActive(true);
-        
+        //play = GameObject.FindGameObjectWithTag("PlayButton").GetComponent<Button>();   
     }
     public void updateUI() {
-        ServiceUI.Instance.StartGame();
+        StateManager.Instance.ChangeState(new GamePlayState(),true);
     }
     public void DestroyUI()
     {

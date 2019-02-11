@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using ScriptableObjects;
+using StateMachines;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,57 +10,63 @@ public class ServiceUI : Singleton<ServiceUI>
 {
     //For Changing Between Different UI Screens and any actions to be performed by the UI like Button Press
 
-    ControllerMenuUI menu;
     ControllerStartUI start;
 
-    
-    private void OnLevelWasLoaded(int level)
-    {
-        if (SceneManager.GetActiveScene().name == "GameScene")
-        {
-            start = new ControllerStartUI();
-            menu = new ControllerMenuUI();
-            GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
-        }
-        else
-        {
-            start = null;
-            menu = null;
-        }
-    }
     void Start()
     {
+        GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         //Set The Menu UI ie: play Button
-       
+        StateManager.Instance.OnStateChanged += GameStateChanged;
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLevelLoaded;
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelLoaded;
+    }
+    void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+    {
+    }
+
+    public void GameStateChanged(GameState currentState)
+    {
+        
 
 
     }
     public void StartGame()
     {
-        menu.DestroyUI();
-        start.DisplayUI();
+
     }
-    public void updateUI(int health,int score)
+    public void SetCurrentUI(ControllerStartUI start)
     {
-        start.UpdateHealth(health);
-        start.UpdateScore(score);
-        if (score > PlayerPrefs.GetInt("HighScore", 0))
+        this.start = start;
+    }
+    public void updateUI(PlayerData playerData)
+    {
+        if (start != null)
         {
-            PlayerPrefs.SetInt("HighScore", score);
+            start.UpdateHealth(playerData.health);
+            start.UpdateScore(playerData.score);
+            if (playerData.score > PlayerPrefs.GetInt("HighScore", 0))
+            {
+                PlayerPrefs.SetInt("HighScore", playerData.score);
+            }
         }
     }
     public void Replay()
     {
-        SceneManager.LoadScene("GameScene");
+        StateManager.Instance.ChangeState(new GamePlayState(), true);
     }
     public void GameOver()
     {
-        SceneManager.LoadScene("GameOver");
+        StateManager.Instance.ChangeState(new GameOverState(), true);
     }
     public void LoadMenu()
     {
-        SceneManager.LoadScene("MainMenu");
-
+        StateManager.Instance.ChangeState(new LobbyState(), false);
     }
     public void AddPlayerListener(ControllerPlayer player)
     {
