@@ -18,3 +18,8 @@ public struct AchievementData{
     public bool achievementUnlocked;
     public PlayerNumber player;
 }
+public struct RewardsData{
+    public int RewardUnlockedID;
+    public int Unlocked;
+
+}

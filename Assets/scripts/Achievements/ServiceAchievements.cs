@@ -1,4 +1,5 @@
-﻿using ScriptableObjects;
+﻿using SavingSystem;
+using ScriptableObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -68,14 +69,14 @@ namespace Achievements
             
             if (gameAchievements.ContainsKey(playerData.achievementTypes))
             {
-                achieved = gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player);
+                achieved = gameAchievements[playerData.achievementTypes].UpdateAchievement(playerData.progress, playerData.player,SaveService.Instance.ReadAchievementData(gameAchievements[playerData.achievementTypes].achievementDisplayName,playerData.player.GetPlayerNumber()));
                 if (achieved.achievementUnlocked)
                 {
                    //Debug.Log("dddddd");
                     OnAchievementUnlocked.Invoke(achieved.achievementName + " : " + achieved.achievementLevelName + " Unlocked by " + achieved.player, achieved.achievementId);
-                    PlayerPrefs.SetInt(achieved.achievementName+achieved.player + "level", achieved.achievementLevel);
+                    
                 }
-                PlayerPrefs.SetInt(achieved.achievementName + achieved.player + "progress", achieved.achievementProgress);
+                SaveService.Instance.SaveAchievementsData(achieved);
             }
 
         }

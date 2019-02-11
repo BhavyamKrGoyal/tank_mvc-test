@@ -13,25 +13,24 @@ namespace ScriptableObjects
         public bool sessionBased;
 
 
-        public AchievementData UpdateAchievement(int progress, ControllerPlayer player)
+        public AchievementData UpdateAchievement(int progress, ControllerPlayer player,AchievementData data)
         {
             AchievementData result = new AchievementData();
             result.achievementUnlocked = false;
             //Debug.Log(achievementType);
             result.achievementName = achievementDisplayName;
             result.player = player.GetPlayerNumber();
-            int currentLevel = PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "level", 0);
+            int currentLevel = data.achievementLevel;
             result.achievementLevel = currentLevel;
             result.achievementId = achievementLevel[currentLevel].UniqueId;
             result.achievementLevelName = achievementLevel[currentLevel].levelName;
-            progress = progress + PlayerPrefs.GetInt(achievementDisplayName + player.GetPlayerNumber() + "progress", 0);
+            progress = progress +data.achievementProgress;
             //Debug.Log("Updating achievement: " + achievementDisplayName + " " + progress);
             if (IsMaxAchievementLevel(currentLevel))
             {
                 //Debug.Log(progress + " " + achievementDisplayName);
                 if (achievementLevel[currentLevel].levelMarker <= progress)
                 {
-
                     result.achievementUnlocked = true;
                     result.achievementLevel = ++currentLevel;
                     result.achievementId = achievementLevel[currentLevel-1].UniqueId;

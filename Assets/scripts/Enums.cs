@@ -18,6 +18,10 @@ public enum PlayerNumber
     Player3 = 3,
     Player4 = 4
 }
+public enum SaveTypes{
+    PlayePrefs,
+    JSONFile
+}
 public enum PlayerStates{
     Move,
     Shoot,

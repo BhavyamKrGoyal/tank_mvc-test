@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Achievements;
+using SavingSystem;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,10 +16,16 @@ namespace Rewards
     {
         [SerializeField] List<ScriptableUnlockable> unlockables = new List<ScriptableUnlockable>();
         public RectTransform scrollContent, scrollView;
+        [SerializeField] Dictionary<ScriptableUnlockable,bool> unlockablesDictionary = new Dictionary<ScriptableUnlockable,bool>();
+        
         public event Action<ControllerReward> OnSelection;
         public RectTransform scrollPlaceHolder;
         public void Start()
         {
+            foreach(ScriptableUnlockable unlockable in unlockables){
+                unlockablesDictionary.Add(unlockable,(1==SaveService.Instance.ReadRewardData(unlockable.onAchievementIdUnlocked).Unlocked));
+            }
+            unlockables=null;
             //PlayerPrefs.DeleteAll();
             ServiceAchievements.Instance.OnAchievementUnlocked += UnlockReward;
         }
@@ -37,23 +45,24 @@ namespace Rewards
                 scrollPlaceHolder = FindObjectOfType<Canvas>().gameObject.GetComponent<RectTransform>();
                 RectTransform obj = Instantiate(scrollView, scrollPlaceHolder);
                 scrollContent = obj.GetComponentInChildren<HorizontalLayoutGroup>().gameObject.GetComponent<RectTransform>();
-                SetScrollView(unlockables);
+                SetScrollView(unlockablesDictionary.Keys.ToList());
             }
         }
         public void UnlockReward(String name, int Id)
         {
-
-            PlayerPrefs.SetInt(Id + "Unlockable", 1);
-
+            RewardsData data=new RewardsData();
+            data.RewardUnlockedID=Id;
+            data.Unlocked=1;
+            SaveService.Instance.SaveRewardsData(data);
         }
         public void SetScrollView(List<ScriptableUnlockable> unlockables)
         {
             GameObject obj;
             for (int i = 0; i < unlockables.Count; i++)
             {
-                int unlocked = PlayerPrefs.GetInt(unlockables[i].onAchievementIdUnlocked + "Unlockable", 0);
+               // int unlocked = PlayerPrefs.GetInt(unlockables[i].onAchievementIdUnlocked + "Unlockable", 0);
 
-                new ControllerReward(unlockables[i], scrollContent, unlocked == 1);
+                new ControllerReward(unlockables[i], scrollContent, unlockablesDictionary[unlockables[i]]);
                 //obj.transform.SetParent();
             }
             scrollContent.sizeDelta = new Vector2(scrollContent.sizeDelta.x + ((unlockables.Count - 4) * 111), scrollContent.sizeDelta.y);
