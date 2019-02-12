@@ -26,18 +26,18 @@ namespace LoadingBar
             if (loaded < .6)
             {
                 changeScene=true;
-                loaded = loaded + 0.008f;
+                loaded = loaded + 0.02f;
                 slider.value = loaded;
 
             }
             else if (loaded < .85)
             {
-                loaded += 0.002f;
+                loaded += 0.02f;
                 slider.value = loaded;
             }
             else if (loaded < 1)
             {
-                loaded += 0.002f;
+                loaded += 0.02f;
             }
             else
             {

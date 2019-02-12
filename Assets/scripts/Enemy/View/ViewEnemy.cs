@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ViewEnemy : MonoBehaviour,ITakeDamageView
+public class ViewEnemy : MonoBehaviour, ITakeDamageView
 {
     public ControllerEnemy controller;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
     public void SetColour(Color color)
     {
@@ -24,13 +24,23 @@ public class ViewEnemy : MonoBehaviour,ITakeDamageView
     {
 
     }
+    public void TurnTowards(Vector3 position){
+        gameObject.transform.LookAt(position);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<ViewPlayer>() != null)
+        {
+            controller.SetAlert(other.gameObject.transform.position);
+        }
+    }
     public Vector3 GetPosition()
     {
         return transform.position;
     }
-    public void TakeDamage(int damage,IBasePlayerController player)
+    public void TakeDamage(int damage, IBasePlayerController player)
     {
-        controller.BulletHit(damage,(ControllerPlayer)player);
+        controller.BulletHit(damage, (ControllerPlayer)player);
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

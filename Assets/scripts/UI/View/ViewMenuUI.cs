@@ -12,8 +12,14 @@ public class ViewMenuUI : MonoBehaviour
     {
         //play = GameObject.FindGameObjectWithTag("PlayButton").GetComponent<Button>();   
     }
-    public void updateUI() {
-        StateManager.Instance.ChangeState(new GamePlayState(),false);
+    public void updateUI()
+    {
+        if (!(StateManager.Instance.previousState is GameReplayState))
+        {
+            StateManager.Instance.ChangeState(new GamePlayState(), false);
+        }else{
+            StateManager.Instance.ChangeState(new GameReplayState(), false);
+        }
     }
     public void DestroyUI()
     {

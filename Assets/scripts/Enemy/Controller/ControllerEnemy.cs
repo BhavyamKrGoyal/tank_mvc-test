@@ -12,17 +12,17 @@ namespace Enemy.Controller
         ViewEnemy view;
         public ControllerEnemy(ScriptableEnemy enemyTemp, int type)
         {
-
             GetModel(enemyTemp);
             GetView(model.GetRandomSpawnPoint());
             model.enemytype = type;
+            ServiceEnemy.Instance.OnAlert+=OnAlert;
         }
         public ControllerEnemy(ScriptableEnemy enemyTemp, Vector3 position, int type)
         {
-
             GetModel(enemyTemp);
             GetView(position);
             model.enemytype = type;
+             ServiceEnemy.Instance.OnAlert+=OnAlert;
         }
         public Vector3 GetEnemyPosition()
         {
@@ -48,15 +48,23 @@ namespace Enemy.Controller
                 DestroyObject();
             }
         }
+        public void OnAlert(Vector3 position){
+            view.TurnTowards(position);
+        }
         public int GetScore()
         {
             return model.GetScore();
         }
+        public void SetAlert(Vector3 playerPosition){
+            ServiceEnemy.Instance.SetAlert(playerPosition);
+        }
         public void DestroyObject()
         {
+            ServiceEnemy.Instance.OnAlert-=OnAlert;
             model = null;
             view.DestroyEnemy();
             ServiceEnemy.Instance.RemoveEnemy(this);
+            
         }
         public void Move(float horizontal, float vertical)
         {

@@ -8,12 +8,12 @@ using UnityEngine.SceneManagement;
 public class InputManager : Singleton<InputManager>
 {
 
-    public int initialFame;
+    public int initialFame, pauseFrame, resumeFrame;
 
     public Dictionary<Controls, Queue<InputData>> playerInput = new Dictionary<Controls, Queue<InputData>>();
     public GameObject InputControllersPrefab, referenceInput;
     public Dictionary<Controls, List<InputComponent>> inputComponents = new Dictionary<Controls, List<InputComponent>>();
-    public bool userControls = true, replay = false;
+     bool userControls = true, replay = false;
     // Start is called before the first frame update
     // Update is called once per frame
     void Start()
@@ -26,8 +26,8 @@ public class InputManager : Singleton<InputManager>
     public void SetQueue(Dictionary<Controls, Queue<InputData>> Pinput)
     {
         playerInput = Pinput;
-        Debug.Log(playerInput.Count);
-        Debug.Log(playerInput[Controls.IJKL].Peek().frame);
+        //Debug.Log(playerInput.Count);
+        //Debug.Log(playerInput[Controls.IJKL].Peek().frame);
 
         // foreach (Controls controls in Pinput.Keys)
         // {
@@ -56,8 +56,12 @@ public class InputManager : Singleton<InputManager>
 
                 if (Instance.playerInput[controls].Count > 0)
                 {
-
-                    if ((Time.frameCount - initialFame - 1) == Instance.playerInput[controls].Peek().frame)
+                    Debug.Log(replay);
+                    if (replay)
+                    {
+                    //    Debug.Log("current: " + (Time.frameCount - initialFame) + "input: " + Instance.playerInput[controls].Peek().frame);
+                    }
+                    if ((Time.frameCount - initialFame - 1) == (Instance.playerInput[controls].Peek().frame))
                     {
 
                         //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
@@ -75,6 +79,7 @@ public class InputManager : Singleton<InputManager>
             }
         }
     }
+
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnLevelLoaded;
@@ -98,12 +103,12 @@ public class InputManager : Singleton<InputManager>
     {
         if (currentState is GamePlayState)
         {
-
             // Debug.Log("gameplaystate");
             userControls = true;
             replay = false;
             if (referenceInput != null)
             {
+
                 referenceInput.SetActive(true);
             }
         }
@@ -116,8 +121,22 @@ public class InputManager : Singleton<InputManager>
             userControls = false;
             if (currentState is GameReplayState)
             {
-                replay = true;
+                if (currentState is GamePauseState)
+                {
+                    resumeFrame=Time.frameCount;
+                    initialFame+=resumeFrame-pauseFrame;
+                }
                 initialFame = Time.frameCount;
+                replay = true;
+                // initialFame = Time.frameCount;
+            }
+            if (currentState is GamePauseState)
+            {
+                if (StateManager.Instance.previousState is GameReplayState)
+                {
+                    replay=false;
+                    pauseFrame = Time.frameCount;
+                }
 
             }
         }

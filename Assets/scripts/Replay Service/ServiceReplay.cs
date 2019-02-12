@@ -13,7 +13,6 @@ namespace Replay_Service
         Dictionary<Controls, Queue<InputData>> inputRecord = new Dictionary<Controls, Queue<InputData>>();
         public ServiceReplay()
         {
-            ServiceEnemy.Instance.OnEnemySpawned += OnEnemySpawn;
         }
         public void RecordInput(InputData inputData, Controls controls)
         {
@@ -56,7 +55,6 @@ namespace Replay_Service
                 q.Enqueue(spawnData);
                 playerPosition.Add(playerNumber, q);
             }
-
         }
         public void ReplaySpawn()
         {
@@ -69,21 +67,17 @@ namespace Replay_Service
             {
                 ServiceEnemy.Instance.SpawnEnemy(enemy);
             }
-
         }
         public void ReplayReSpawn(PlayerNumber playerNumber)
         {
             GameApplication.Instance.ReSpawnPlayer2(playerPosition[playerNumber].Peek().controlls, playerNumber, playerPosition[playerNumber].Peek().position);
             playerPosition[playerNumber].Dequeue();
         }
-
         public void SetQueue()
         {
             //Debug.Log("Last frame number Peek"+inputRecord[Controls.WASD].Peek().frame);
             //Debug.Log("Last frame number Dequeue"+inputRecord[Controls.WASD].Dequeue().frame);
             InputManager.Instance.SetQueue(inputRecord);
         }
-
-
     }
 }

@@ -10,7 +10,7 @@ namespace Enemy
     public class ServiceEnemy : SingletonScene<ServiceEnemy>
     {
         ScriptableEnemy[] enemyList;
-        public event System.Action OnEnemySpawned;
+        public event System.Action<Vector3> OnAlert;
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();
         void Start()
         {
@@ -24,7 +24,9 @@ namespace Enemy
 
         public void Update()
         {
-
+        }
+        public void SetAlert(Vector3 playerPos){
+            OnAlert.Invoke(playerPos);
         }
         public List<EnemyData> GetEnemyData(){
             List<EnemyData> enemyData=new List<EnemyData>();
