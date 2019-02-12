@@ -8,6 +8,7 @@ namespace Enemy.Model
     {
         public ScriptableEnemy enemyObject;
         int currentHealth;
+        public int enemytype;
         public ModelEnemy(ScriptableEnemy enemyTemp)
         {
             enemyObject = enemyTemp;

@@ -28,7 +28,6 @@ public class ViewPlayer : MonoBehaviour
     }
     public void MovePlayer(float h,float v)
     {
-      
         StartCoroutine(Move(h,v));
     }
     public void DestroyPlayer()

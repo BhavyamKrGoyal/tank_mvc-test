@@ -1,3 +1,4 @@
+using Replay_Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -32,6 +33,7 @@ namespace StateMachines
             start = new ControllerStartUI();
             ServiceUI.Instance.SetCurrentUI(start);
             //start.DisplayUI();
+           
         }
     }
 }

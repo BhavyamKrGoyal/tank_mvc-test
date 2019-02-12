@@ -16,7 +16,7 @@ namespace StateMachines
 
         private void SetState(GameState state)
         {
-            Debug.Log(state);
+            //Debug.Log(state);
             if (currentState != null)
             {
                 previousState = currentState;

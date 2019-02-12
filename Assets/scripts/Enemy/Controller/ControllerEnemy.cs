@@ -6,14 +6,23 @@ using ScriptableObjects;
 
 namespace Enemy.Controller
 {
-    public class ControllerEnemy: IBasePlayerController
+    public class ControllerEnemy : IBasePlayerController
     {
         ModelEnemy model;
         ViewEnemy view;
-        public ControllerEnemy(ScriptableEnemy enemyTemp)
+        public ControllerEnemy(ScriptableEnemy enemyTemp, int type)
         {
+
             GetModel(enemyTemp);
-            GetView();
+            GetView(model.GetRandomSpawnPoint());
+            model.enemytype = type;
+        }
+        public ControllerEnemy(ScriptableEnemy enemyTemp, Vector3 position, int type)
+        {
+
+            GetModel(enemyTemp);
+            GetView(position);
+            model.enemytype = type;
         }
         public Vector3 GetEnemyPosition()
         {
@@ -23,29 +32,26 @@ namespace Enemy.Controller
         {
             model = new ModelEnemy(enemyTemp);
         }
-        public virtual void GetView()
+        public virtual void GetView(Vector3 position)
         {
-            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, model.GetRandomSpawnPoint(), Quaternion.identity, null).GetComponent<ViewEnemy>();
+            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, position, Quaternion.identity, null).GetComponent<ViewEnemy>();
             view.SetColour(model.enemyObject.color);
-            view.controller=this;
+            view.controller = this;
         }
-        public void BulletHit(int damage,ControllerPlayer player)
+        public void BulletHit(int damage, ControllerPlayer player)
         {
             model.TakeDamage(damage);
-            
-           // Debug.Log(model.IsAlive());
+            // Debug.Log(model.IsAlive());
             if (!model.IsAlive())
             {
                 player.EnemyKilled(model.GetScore());
-                DestroyObject();    
+                DestroyObject();
             }
         }
         public int GetScore()
         {
             return model.GetScore();
         }
-        
-       
         public void DestroyObject()
         {
             model = null;
@@ -54,7 +60,7 @@ namespace Enemy.Controller
         }
         public void Move(float horizontal, float vertical)
         {
-           
+
         }
         public bool IsFreez()
         {
@@ -64,8 +70,11 @@ namespace Enemy.Controller
         {
 
         }
+        public int GetEnemyType()
+        {
+            return model.enemytype;
+        }
 
-    
         public Controls GetControls()
         {
             throw new System.NotImplementedException();

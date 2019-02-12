@@ -37,8 +37,5 @@ public class ViewEnemy : MonoBehaviour,ITakeDamageView
     {
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, 12);  
     }
-
-
-
 #endif
 }

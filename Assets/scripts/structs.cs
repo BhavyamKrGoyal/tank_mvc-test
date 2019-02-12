@@ -21,5 +21,12 @@ public struct AchievementData{
 public struct RewardsData{
     public int RewardUnlockedID;
     public int Unlocked;
-
+}
+public struct EnemyData{
+    public Vector3 position;
+    public int type;
+}
+public struct PlayerSpawnData{
+    public Vector3 position;
+    public Controls controlls;
 }

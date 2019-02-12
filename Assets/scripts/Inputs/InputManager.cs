@@ -23,15 +23,19 @@ public class InputManager : Singleton<InputManager>
 
         GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
     }
-    public void SetQueue(Dictionary<Controls, List<InputData>> Pinput)
+    public void SetQueue(Dictionary<Controls, Queue<InputData>> Pinput)
     {
-        foreach (Controls controls in Pinput.Keys)
-        {
-            for (int i = 0; i < Pinput[controls].Count; i++)
-            {
-                playerInput[controls].Enqueue(Pinput[controls][i]);
-            }
-        }
+        playerInput = Pinput;
+        Debug.Log(playerInput.Count);
+        Debug.Log(playerInput[Controls.IJKL].Peek().frame);
+
+        // foreach (Controls controls in Pinput.Keys)
+        // {
+        //     for (int i = 0; i < Pinput[controls].Count; i++)
+        //     {
+        //         playerInput[controls].Enqueue(Pinput[controls][i]);
+        //     }
+        // }
     }
 
     public void EnqueueData(InputData inputdata, Controls controls)
@@ -49,14 +53,22 @@ public class InputManager : Singleton<InputManager>
             foreach (InputComponent inputComponent in inputComponents[controls])
             {
 
+
                 if (Instance.playerInput[controls].Count > 0)
                 {
 
-                    // Debug.Log((Time.frameCount - initialFame - 1) + "  " + Instance.playerInput[controls].Peek().frame);
                     if ((Time.frameCount - initialFame - 1) == Instance.playerInput[controls].Peek().frame)
                     {
+
                         //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
                         inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
+                    }
+                    else
+                    {
+                        while (Instance.playerInput[controls].Count > 0 && (Time.frameCount - initialFame - 1) >= Instance.playerInput[controls].Peek().frame)
+                        {
+                            inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
+                        }
                     }
 
                 }
@@ -118,25 +130,30 @@ public class InputManager : Singleton<InputManager>
             List<InputComponent> newList = new List<InputComponent>();
             newList.Add(inputComponent);
             InputManager.Instance.inputComponents.Add(controls, newList);
+            //Debug.Log("One InputComponent added, Total=" + inputComponents.Count + "  " + controls);
         }
         else
         {
             InputManager.Instance.inputComponents[controls].Add(inputComponent);
         }
-        //Debug.Log("One InputComponent added, Total="+inputComponents.Count +"  "+controls);
+
     }
     public void AddPlayerListener(ControllerPlayer controller)
     {
-
         RegisterInputComponent(controller.GetInputComponent(), controller.GetControls());
         controller.OnPlayerDeath += RemoveInputComponent;
-
+    }
+    public void ResetInput()
+    {
+        InputManager.Instance.playerInput = new Dictionary<Controls, Queue<InputData>>();
+        InputManager.Instance.inputComponents = new Dictionary<Controls, List<InputComponent>>();
     }
     public void RemoveInputComponent(ControllerPlayer controller, InputComponent inputComponent, Controls controls)
     {
+        //Debug.Log("One InputComponent Removed" + controls);
         InputManager.Instance.inputComponents[controls].Remove(inputComponent);
 
-        // Debug.Log("One InputComponent Removed WASD, Total=" + inputComponents[controls].Count);
+
         if (InputManager.Instance.inputComponents.ContainsKey(controls) && InputManager.Instance.inputComponents[controls].Count == 0)
         {
             InputManager.Instance.inputComponents.Remove(controls);

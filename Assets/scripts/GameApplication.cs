@@ -22,15 +22,16 @@ public class GameApplication : Singleton<GameApplication>
     {
         StartCoroutine(LateRespawn(controls, playerNumber));
     }
-    public void ReSpawnPlayer2(Controls controls, PlayerNumber playerNumber,Vector3 pos)
+    public void ReSpawnPlayer2(Controls controls, PlayerNumber playerNumber, Vector3 pos)
     {
-        AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
+        StartCoroutine(LateReplayRespawn(playerNumber,controls,pos));
+       // AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
 
     }
     // Start is called before the first frame update
     void Start()
     {
-
+        StateManager.Instance.OnStateChanged += OnStateChanged;
 
     }
     public void SetPlayerPrefab(GameObject player)
@@ -51,21 +52,24 @@ public class GameApplication : Singleton<GameApplication>
         {
             playState = true;
             ServiceEnemy.Instance.SetEnemyList(enemy);
-            Vector3 pos1=new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
-            Vector3 pos2=new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
-            ServiceReplay.Instance.SetPosition( PlayerNumber.Player1,pos1);
-            ServiceReplay.Instance.SetPosition( PlayerNumber.Player2,pos2);
-            AddPlayerController(new ControllerPlayer(player,pos1, Controls.WASD, PlayerNumber.Player1, true));
-            AddPlayerController(new ControllerPlayer(player,pos2, Controls.IJKL, PlayerNumber.Player2, true));
+            Vector3 pos1 = new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
+            Vector3 pos2 = new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
+            ServiceReplay.Instance.SetPosition(PlayerNumber.Player1, pos1, Controls.WASD);
+            ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
+            AddPlayerController(new ControllerPlayer(player, pos1, Controls.WASD, PlayerNumber.Player1, true));
+            AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
         }
 
     }
     void OnStateChanged(GameState currentState)
     {
-        if (currentState is GameReplayState){
-            playState=false;
-        }else{
-            playState=true;
+        if (currentState is GameReplayState)
+        {
+            playState = false;
+        }
+        else
+        {
+            playState = true;
         }
     }
     private Vector3 SpawnPlayer(List<Vector3> enemyPositions)
@@ -135,10 +139,24 @@ public class GameApplication : Singleton<GameApplication>
     public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
     {
         GameApplication.Instance.players.Remove(player);
-        ReSpawnPlayer(player.GetControls(), player.GetPlayerNumber());
+        if (!playState)
+        {
+            ServiceReplay.Instance.ReplayReSpawn(player.GetPlayerNumber());
+        }
+        else
+        {
+            ReSpawnPlayer(player.GetControls(), player.GetPlayerNumber());
+        }
         if (GameApplication.Instance.players.Count == 0)
         {
-            StateManager.Instance.ChangeState(new GameReplayState(), false);
+            if (StateManager.Instance.currentState is GameReplayState)
+            {
+                StateManager.Instance.ChangeState(new GameOverState(), true);
+            }
+            else
+            {
+                StateManager.Instance.ChangeState(new GameReplayState(), false);
+            }
         }
     }
     IEnumerator LateRespawn(Controls controls, PlayerNumber playerNumber)
@@ -146,7 +164,19 @@ public class GameApplication : Singleton<GameApplication>
         yield return new WaitForSeconds(3f);
         if (SceneManager.GetActiveScene().name == "GameScene" && playState)
         {
-            AddPlayerController(new ControllerPlayer(player, SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions()), controls, playerNumber, false));
+            Vector3 pos = SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions());
+            AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
+            ServiceReplay.Instance.SetPosition(playerNumber, pos, controls);
         }
+    }
+    IEnumerator LateReplayRespawn(PlayerNumber playerNumber,Controls controls,Vector3 pos)
+    {
+        yield return new WaitForSeconds(3f);
+        if (!playState)
+        {
+            AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
+//            ServiceReplay.Instance.SetPosition(playerNumber, pos, controls);
+        }
+
     }
 }
