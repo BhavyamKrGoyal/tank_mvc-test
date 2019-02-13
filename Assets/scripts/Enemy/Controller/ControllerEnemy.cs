@@ -10,23 +10,41 @@ namespace Enemy.Controller
     {
         ModelEnemy model;
         ViewEnemy view;
+        EnemyStateMachine stateMachine;
         public ControllerEnemy(ScriptableEnemy enemyTemp, int type)
         {
             GetModel(enemyTemp);
             GetView(model.GetRandomSpawnPoint());
             model.enemytype = type;
-            ServiceEnemy.Instance.OnAlert+=OnAlert;
+            stateMachine = new EnemyStateMachine(this);
         }
         public ControllerEnemy(ScriptableEnemy enemyTemp, Vector3 position, int type)
         {
             GetModel(enemyTemp);
             GetView(position);
             model.enemytype = type;
-             ServiceEnemy.Instance.OnAlert+=OnAlert;
+            stateMachine = new EnemyStateMachine(this);
+
+        }
+        public void StateChangeNotify(EnemyState state)
+        {
+            stateMachine.Notify(state);
+
         }
         public Vector3 GetEnemyPosition()
         {
             return view.GetPosition();
+        }
+
+        public void ActivateState(EnemyState state, Vector3 position)
+        {
+            view.ActivateState(state, position);
+            //Debug.Log(state+" Activated");
+        }
+        public void DeactivateState(EnemyState state)
+        {
+            view.DeactivateState(state);
+            //Debug.Log(state+"DeActivated");
         }
         public virtual void GetModel(ScriptableEnemy enemyTemp)
         {
@@ -48,23 +66,25 @@ namespace Enemy.Controller
                 DestroyObject();
             }
         }
-        public void OnAlert(Vector3 position){
-            view.TurnTowards(position);
-        }
+
         public int GetScore()
         {
             return model.GetScore();
         }
-        public void SetAlert(Vector3 playerPosition){
+        public void SetAlert(Vector3 playerPosition)
+        {
             ServiceEnemy.Instance.SetAlert(playerPosition);
         }
         public void DestroyObject()
         {
-            ServiceEnemy.Instance.OnAlert-=OnAlert;
+            //ServiceEnemy.Instance.OnAlert-=OnAlert;
             model = null;
+            stateMachine.DestroyMachine();
+            stateMachine = null;
             view.DestroyEnemy();
+            view = null;
             ServiceEnemy.Instance.RemoveEnemy(this);
-            
+
         }
         public void Move(float horizontal, float vertical)
         {

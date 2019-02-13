@@ -53,11 +53,11 @@ public class GameApplication : Singleton<GameApplication>
             playState = true;
             ServiceEnemy.Instance.SetEnemyList(enemy);
             Vector3 pos1 = new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
-            Vector3 pos2 = new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
+           // Vector3 pos2 = new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
             ServiceReplay.Instance.SetPosition(PlayerNumber.Player1, pos1, Controls.WASD);
-            ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
+            //ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
             AddPlayerController(new ControllerPlayer(player, pos1, Controls.WASD, PlayerNumber.Player1, true));
-            AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
+           // AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
         }
 
     }

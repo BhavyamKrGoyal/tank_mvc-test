@@ -11,6 +11,10 @@ public enum Controls
     WASD = 1,
     IJKL = 2
 }
+public enum EnemyState{
+    Petrolling,
+    Chansing
+}
 public enum PlayerNumber
 {
     Player1 = 1,
