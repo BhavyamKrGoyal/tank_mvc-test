@@ -15,6 +15,7 @@ TagManager:
   - ScrollContent
   - IndicatorPanal
   - Indicator
+  - Ground
   layers:
   - Default
   - TransparentFX
