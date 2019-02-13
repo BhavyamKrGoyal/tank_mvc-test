@@ -7,13 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : Singleton<InputManager>
 {
-
     public int initialFame, pauseFrame, resumeFrame;
-
     public Dictionary<Controls, Queue<InputData>> playerInput = new Dictionary<Controls, Queue<InputData>>();
     public GameObject InputControllersPrefab, referenceInput;
     public Dictionary<Controls, List<InputComponent>> inputComponents = new Dictionary<Controls, List<InputComponent>>();
-     bool userControls = true, replay = false;
+    bool userControls = true, replay = false, pause = false;
     // Start is called before the first frame update
     // Update is called once per frame
     void Start()
@@ -46,35 +44,40 @@ public class InputManager : Singleton<InputManager>
             Instance.playerInput[controls].Enqueue(inputdata);
         }
     }
-    public virtual void Update()
+    public void Update()
     {
-        foreach (Controls controls in InputManager.Instance.inputComponents.Keys)
+        
+        if (!pause)
         {
-            foreach (InputComponent inputComponent in inputComponents[controls])
+            foreach (Controls controls in InputManager.Instance.inputComponents.Keys)
             {
-
-
-                if (Instance.playerInput[controls].Count > 0)
+                
+                foreach (InputComponent inputComponent in inputComponents[controls])
                 {
-                    Debug.Log(replay);
-                    if (replay)
+                    if (Instance.playerInput[controls].Count > 0)
                     {
-                    //    Debug.Log("current: " + (Time.frameCount - initialFame) + "input: " + Instance.playerInput[controls].Peek().frame);
-                    }
-                    if ((Time.frameCount - initialFame - 1) == (Instance.playerInput[controls].Peek().frame))
-                    {
-
-                        //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
-                        inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
-                    }
-                    else
-                    {
-                        while (Instance.playerInput[controls].Count > 0 && (Time.frameCount - initialFame - 1) >= Instance.playerInput[controls].Peek().frame)
+                        //Debug.Log(replay);
+                        // if (replay)
+                        // {
+                        //         Debug.Log("current: " + (Time.frameCount - initialFame) + "input: " + Instance.playerInput[controls].Peek().frame);
+                        // }
+                        if ((Time.frameCount - initialFame - 1) == (Instance.playerInput[controls].Peek().frame))
                         {
+
+                            //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
+                            //Debug.Log("try moving");
                             inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
                         }
-                    }
+                        else
+                        {
+                            while (Instance.playerInput[controls].Count > 0 && (Time.frameCount - initialFame - 1) >= Instance.playerInput[controls].Peek().frame)
+                            {
+                                //Debug.Log("removing");
+                                inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
+                            }
+                        }
 
+                    }
                 }
             }
         }
@@ -121,23 +124,29 @@ public class InputManager : Singleton<InputManager>
             userControls = false;
             if (currentState is GameReplayState)
             {
-                if (currentState is GamePauseState)
-                {
-                    resumeFrame=Time.frameCount;
-                    initialFame+=resumeFrame-pauseFrame;
+                if (StateManager.Instance.previousState is GamePauseState)
+                {pause=true;
+                    resumeFrame = Time.frameCount;
+                    initialFame += resumeFrame - pauseFrame;
+                }else{
+                    initialFame = Time.frameCount;
+                    pause=false;
                 }
-                initialFame = Time.frameCount;
+                
                 replay = true;
                 // initialFame = Time.frameCount;
             }
             if (currentState is GamePauseState)
             {
+                pause=true;
                 if (StateManager.Instance.previousState is GameReplayState)
                 {
-                    replay=false;
+                    replay = false;
                     pauseFrame = Time.frameCount;
                 }
 
+            }else{
+                pause=false;
             }
         }
     }

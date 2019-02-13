@@ -13,6 +13,7 @@ namespace Replay_Service
         Dictionary<Controls, Queue<InputData>> inputRecord = new Dictionary<Controls, Queue<InputData>>();
         public ServiceReplay()
         {
+            
         }
         public void RecordInput(InputData inputData, Controls controls)
         {

@@ -14,12 +14,15 @@ public class ViewMenuUI : MonoBehaviour
     }
     public void updateUI()
     {
-        if (!(StateManager.Instance.previousState is GameReplayState))
+       
+        if ((StateManager.Instance.previousState is GameReplayState))
         {
-            StateManager.Instance.ChangeState(new GamePlayState(), false);
+             StateManager.Instance.ChangeState(new GameReplayState(), false);
         }else{
-            StateManager.Instance.ChangeState(new GameReplayState(), false);
+            StateManager.Instance.ChangeState(new GamePlayState(), false);
         }
+        //Debug.Log(StateManager.Instance.previousState+" "+StateManager.Instance.currentState);
+       
     }
     public void DestroyUI()
     {

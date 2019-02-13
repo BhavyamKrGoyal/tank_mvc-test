@@ -16,21 +16,26 @@ namespace StateMachines
         }
         public override void OnStateExit()
         {
-            InputManager.Instance.ResetInput();
+            if (!(StateManager.Instance.previousState is GameReplayState))
+            {
+                InputManager.Instance.ResetInput();
+            }
             controller.DestroyUI();
             controller = null;
         }
         public override void OnStateEnter()
         {
             controller = new ControllerReplayUI();
-             controller.DisplayUI();
+            controller.DisplayUI();
             if (!(StateManager.Instance.previousState is GamePauseState))
             {
                 ServiceEnemy.Instance.RemoveAllEnemy();
                 ServiceReplay.Instance.ReplaySpawn();
                 ServiceReplay.Instance.SetQueue();
-               
-            }else{    
+
+            }
+            else
+            {
             }
         }
         public override void Update()

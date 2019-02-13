@@ -10,7 +10,7 @@ public class InputIJKLManager : MonoBehaviour
     int initialFame;
     private void Start() {
         InputManager.Instance.playerInput.Add(controls,new Queue<InputData>());
-        initialFame=InputManager.Instance.initialFame;
+      initialFame = InputManager.Instance.initialFame;
     }
     public void Update()
     {
