@@ -6,16 +6,15 @@ namespace StateMachines
 {
     public class GamePlayState : GameState
     {
-        ControllerStartUI start;
-
+      
         public GamePlayState()
         {
           
         }
         public override void OnStateExit()
         {
-            start.DestroyUI();
-            ServiceUI.Instance.SetCurrentUI(null);
+            ServiceUI.Instance.DestroyStartUI();
+            
 
         }
         public override void OnStateEnter()
@@ -30,8 +29,7 @@ namespace StateMachines
 
         public override void Update()
         {
-            start = new ControllerStartUI();
-            ServiceUI.Instance.SetCurrentUI(start);
+            ServiceUI.Instance.DisplayStartUI();
             //start.DisplayUI();
            
         }

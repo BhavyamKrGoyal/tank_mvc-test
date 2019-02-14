@@ -277,6 +277,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f190da6971905c540ab92842839fc6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startUI: {fileID: 4270624336900154809, guid: a146dd76ab90e9f48ac86b6c20055cb4, type: 3}
+  startUIParent: {fileID: 0}
 --- !u!4 &367690605
 Transform:
   m_ObjectHideFlags: 0
@@ -321,11 +323,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialFame: 0
+  pauseFrame: 0
+  resumeFrame: 0
   InputControllersPrefab: {fileID: 8726440734721626323, guid: fef4dcd12812ec44bbd50c7e2d29689a,
     type: 3}
   referenceInput: {fileID: 0}
-  userControls: 1
-  replay: 0
 --- !u!4 &657575918
 Transform:
   m_ObjectHideFlags: 0

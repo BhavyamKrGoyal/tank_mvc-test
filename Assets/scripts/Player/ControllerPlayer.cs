@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Camera;
+
 public class ControllerPlayer : IBasePlayerController
 {
 
@@ -32,7 +32,12 @@ public class ControllerPlayer : IBasePlayerController
         inputComponent = new InputComponent(this);
         playerData.player = this;
         StateManager.Instance.OnStateChanged += GamePauseState;
-        GameObject.FindObjectOfType<MiniMap>().SetMinimapTarget(view.gameObject);
+        //GameObject.FindObjectOfType<MiniMap>().SetMinimapTarget(view.gameObject);
+    }
+    public void SetCamera(Rect camRect){
+        
+        Debug.Log(camRect);
+        view.gameObject.GetComponentInChildren<Camera>().rect=camRect;
     }
     public void GamePauseState(GameState currentState)
     {
@@ -100,6 +105,7 @@ public class ControllerPlayer : IBasePlayerController
     {
         model.TakeDamage(damage);
         playerData.score = model.score;
+        playerData.player=this;
         playerData.health = (int)model.health;
         playerData.achievementTypes = AchievementTypes.Score;
         OnUIUpdate.Invoke(playerData);

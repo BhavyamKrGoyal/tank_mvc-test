@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 public class GameApplication : Singleton<GameApplication>
 {
     bool playState = false;
+    int noPlayer=2;
+    Rect cam1,cam2;
     public ScriptableEnemy[] enemy;
     public GameObject player;
     public event Action<ControllerPlayer> OnPlayerSpawn;
@@ -31,6 +33,8 @@ public class GameApplication : Singleton<GameApplication>
     // Start is called before the first frame update
     void Start()
     {
+        cam1=new Rect(0,0,0.5f,1);
+        cam2=new Rect(0.5f,0,0.5f,1);
         StateManager.Instance.OnStateChanged += OnStateChanged;
 
     }
@@ -53,11 +57,11 @@ public class GameApplication : Singleton<GameApplication>
             playState = true;
             ServiceEnemy.Instance.SetEnemyList(enemy);
             Vector3 pos1 = SpawnPlayer(EnemyPosition);
-           // Vector3 pos2 = new Vector3(UnityEngine.Random.Range(-40, 41), 5, UnityEngine.Random.Range(-40, 41));
+            Vector3 pos2 = SpawnPlayer(EnemyPosition);
             ServiceReplay.Instance.SetPosition(PlayerNumber.Player1, pos1, Controls.WASD);
-            //ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
+            ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
             AddPlayerController(new ControllerPlayer(player, pos1, Controls.WASD, PlayerNumber.Player1, true));
-           // AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
+            AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
         }
 
     }
@@ -134,7 +138,11 @@ public class GameApplication : Singleton<GameApplication>
         GameApplication.Instance.players.Add(player);
         player.OnPlayerDeath += RemovePlayerController;
         OnPlayerSpawn.Invoke(player);
-
+        if(player.GetPlayerNumber()==PlayerNumber.Player1){
+        player.SetCamera(cam1);
+        }else{
+        player.SetCamera(cam2);            
+        }
     }
     public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
     {

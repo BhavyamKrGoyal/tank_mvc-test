@@ -7,39 +7,28 @@ using UnityEngine.UI;
 
 
 public class ViewStartUI : MonoBehaviour
-{   
-    [SerializeField]public Text score;
-    [SerializeField]public Button pause;
-    [SerializeField]public Text health;
-    [SerializeField]public Text achievement;
+{
+    [SerializeField] public Text score;
+    [SerializeField] public Text health;
+
     public void Start()
     {
-        if (ServiceAchievements.Instance != null)
-        {
-            ServiceAchievements.Instance.OnAchievementUnlocked += AchievementUnlocked;
-        }
-       
-        
-      //
-      
     }
-    public void GamePaused(){
-        StateManager.Instance.ChangeState(new GamePauseState(),false);
-    }
+
     public void DestroyUI()
     {
-        pause.gameObject.SetActive(false);
-        achievement.gameObject.SetActive(false);
+        Debug.Log("InStartView");
+         Destroy(this.gameObject);
         score.gameObject.SetActive(false);
         health.gameObject.SetActive(false);
-         pause.onClick.RemoveListener(GamePaused);
+       
     }
     public void DisplayUI()
     {
-        pause.gameObject.SetActive(true);
+
         health.gameObject.SetActive(true);
         score.gameObject.SetActive(true);
-        pause.onClick.AddListener(GamePaused);
+
     }
     public void UpdateScore(string scor)
     {
@@ -49,15 +38,6 @@ public class ViewStartUI : MonoBehaviour
     {
         health.text = healt;
     }
-    public void AchievementUnlocked(string display,int achievementId)
-    {
-        StartCoroutine(DisplayAchievement(display));
-    }
-    IEnumerator DisplayAchievement(string display)
-    {
-        achievement.gameObject.SetActive(true);
-        achievement.text = display;
-        yield return new WaitForSeconds(3f);
-        achievement.gameObject.SetActive(false);
-    }
+   
+
 }
