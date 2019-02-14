@@ -4,13 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Camera;
 public class ControllerPlayer : IBasePlayerController
 {
-   
+
     ViewPlayer view;
-    float pauseTartedTime=0;
+    float pauseTartedTime = 0;
     ModelPlayer model;
-   
+
     public PlayerData playerData;
     InputComponent inputComponent;
     PlayerStateMachine stateMachine;
@@ -21,8 +22,8 @@ public class ControllerPlayer : IBasePlayerController
     public event Action<ControllerPlayer, InputComponent, Controls> OnPlayerDeath;
     public ControllerPlayer(GameObject player, Vector3 spawnPoint, Controls controls, PlayerNumber playerNumber, bool gameStarted)
     {
-      
-        stateMachine=new PlayerStateMachine(this);
+
+        stateMachine = new PlayerStateMachine(this);
         this.view = GameObject.Instantiate(player, spawnPoint, Quaternion.identity, null).GetComponent<ViewPlayer>();
         this.model = new ModelPlayer(controls);
         view.SetController(this);
@@ -31,7 +32,7 @@ public class ControllerPlayer : IBasePlayerController
         inputComponent = new InputComponent(this);
         playerData.player = this;
         StateManager.Instance.OnStateChanged += GamePauseState;
-
+        GameObject.FindObjectOfType<MiniMap>().SetMinimapTarget(view.gameObject);
     }
     public void GamePauseState(GameState currentState)
     {
@@ -64,21 +65,28 @@ public class ControllerPlayer : IBasePlayerController
     }
     public void Update()
     {
-        if (!stateMachine.isPaused()&&!stateMachine.isMoving())
+        if (!stateMachine.isPaused() && !stateMachine.isMoving())
         {
-                stateMachine.EnterRegenState();
-                if(model.health<100){
+            stateMachine.EnterRegenState();
+            if (model.health < 100)
+            {
                 model.TakeDamage(-0.1f);
-                //Debug.Log(model.health);
-                }
+               // Debug.Log(model.health);
             }
         }
-    
+    }
+
     public void Move(float horizontal, float vertical)
     {
         //Debug.Log("controller");
+        if(horizontal!=0 || vertical!=0){
         stateMachine.EnterMoveState();
         view.MovePlayer(horizontal * model.rotationSpeed * Time.deltaTime, vertical * model.speed * Time.deltaTime * model.boost);
+        }else{
+            stateMachine.EnterIdleState();
+        }
+        Update();
+
     }
     public void StartBoost()
     {
@@ -119,7 +127,7 @@ public class ControllerPlayer : IBasePlayerController
         //ServiceUI.Instance.updateUI(model.health, model.score);
     }
     public void Shoot()
-    { 
+    {
         if (!stateMachine.isPaused())
         {
             if (model.lastShot + (model.fireInterval + pauseTartedTime) < Time.timeSinceLevelLoad)

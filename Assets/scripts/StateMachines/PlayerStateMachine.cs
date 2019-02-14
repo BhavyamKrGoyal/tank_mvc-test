@@ -41,6 +41,11 @@ namespace StateMachines
              currentStates[PlayerStates.Move] = true;
              currentStates[PlayerStates.Regen] = false;
         }
+         public void EnterIdleState()
+        {
+             currentStates[PlayerStates.Move] = false;
+            // currentStates[PlayerStates.Regen] = false;
+        }
         public bool isPaused(){
             return currentStates[PlayerStates.paused];
         }

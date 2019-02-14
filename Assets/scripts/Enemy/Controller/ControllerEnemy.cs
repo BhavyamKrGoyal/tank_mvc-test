@@ -24,7 +24,6 @@ namespace Enemy.Controller
             GetView(position);
             model.enemytype = type;
             stateMachine = new EnemyStateMachine(this);
-
         }
         public void StateChangeNotify(EnemyState state)
         {

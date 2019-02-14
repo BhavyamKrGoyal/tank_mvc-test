@@ -12,6 +12,7 @@ namespace Enemy
     {
         public ControllerEnemy controller;
         Rigidbody rb;
+       
         public ViewEnemyComponentChasing chasing;
         public ViewEnemyComponentPetrolling petrolling;
 
@@ -19,9 +20,10 @@ namespace Enemy
         void Start()
         {
             rb = gameObject.GetComponent<Rigidbody>();
-
         }
-        public void StateChange(EnemyState state){
+     
+        public void StateChange(EnemyState state)
+        {
             controller.StateChangeNotify(state);
         }
         private void Update()
@@ -47,20 +49,20 @@ namespace Enemy
                 controller.SetAlert(other.gameObject.transform.position);
             }
         }
-        public void ActivateState(EnemyState state,Vector3 position)
+        public void ActivateState(EnemyState state, Vector3 position)
         {
             switch (state)
             {
-                case EnemyState.Chansing:chasing.enabled=true; chasing.SetFollowPosition(position); break;
-                case EnemyState.Petrolling:petrolling.enabled=true; break;
+                case EnemyState.Chansing: chasing.enabled = true; chasing.SetFollowPosition(position); break;
+                case EnemyState.Petrolling: petrolling.enabled = true; break;
             }
         }
         public void DeactivateState(EnemyState state)
-        {  
+        {
             switch (state)
             {
-                case EnemyState.Chansing:chasing.enabled=false; break;
-                case EnemyState.Petrolling:petrolling.enabled=false; break;
+                case EnemyState.Chansing: chasing.enabled = false; break;
+                case EnemyState.Petrolling: petrolling.enabled = false; break;
             }
         }
         public Vector3 GetPosition()

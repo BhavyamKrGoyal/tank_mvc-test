@@ -25,8 +25,10 @@ public struct RewardsData{
 public struct EnemyData{
     public Vector3 position;
     public int type;
+      public Vector3 petrollingPosition;
 }
 public struct PlayerSpawnData{
     public Vector3 position;
     public Controls controlls;
+  
 }

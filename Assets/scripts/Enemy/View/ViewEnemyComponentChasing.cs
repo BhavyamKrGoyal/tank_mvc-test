@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+
 namespace Enemy
 {
     public class ViewEnemyComponentChasing : MonoBehaviour
@@ -9,38 +11,40 @@ namespace Enemy
         public ViewEnemy mainview;
         // Start is called before the first frame update
         Vector3 lastSeen;
+        public NavMeshAgent navAgent;
+        private void Awake()
+        {
+            navAgent = GetComponent<NavMeshAgent>();
 
+        }
         private void Start()
         {
             rb = gameObject.GetComponent<Rigidbody>();
         }
-        private void Update()
+      
+    public void SetFollowPosition(Vector3 position)
+    {
+        lastSeen = position;
+        if (Mathf.Abs((gameObject.transform.position - lastSeen).magnitude) < 20)
         {
-            //Debug.Log(Mathf.Abs((gameObject.transform.position - lastSeen).magnitude));
-
-            if (Mathf.Abs((gameObject.transform.position - lastSeen).magnitude) > 6)
-            {
-                gameObject.transform.LookAt(lastSeen);
-                rb.velocity = transform.forward * 10;
-            }
-            else
-            {
-                mainview.StateChange(EnemyState.Petrolling);
-            }
+            navAgent.destination = position;
+            // rb.velocity = transform.forward * 10;
         }
-        public void SetFollowPosition(Vector3 position)
+        else
         {
-            lastSeen = position;
-        }
-        private void OnEnable()
-        {
-
-        }
-
-        IEnumerator ChangeToPetrolling(Vector3 curr)
-        {
-            yield return new WaitForSeconds(10);
             mainview.StateChange(EnemyState.Petrolling);
         }
+
     }
+    private void OnEnable()
+    {
+
+    }
+
+    IEnumerator ChangeToPetrolling(Vector3 curr)
+    {
+        yield return new WaitForSeconds(10);
+        mainview.StateChange(EnemyState.Petrolling);
+    }
+}
 }
