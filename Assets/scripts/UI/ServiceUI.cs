@@ -7,38 +7,59 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UI;
+using Achievements;
 
 public class ServiceUI : Singleton<ServiceUI>
-{
-    //For Changing Between Different UI Screens and any actions to be performed by the UI like Button Press
-
+{    //For Changing Between Different UI Screens and any actions to be performed by the UI like Button Press
+    Queue<string> achievementsQueue = new Queue<string>();
     public GameObject startUI;
     public ControllerGamePlayUI GameUI;
+    ControllerMainMenu lobbyUI;
     public RectTransform startUIParent;
     public Dictionary<PlayerNumber, ControllerStartUI> playerUI = new Dictionary<PlayerNumber, ControllerStartUI>();
 
     void Start()
     {
+        ServiceAchievements.Instance.OnAchievementUnlocked+=AchievementUnlocked;
         GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         //Set The Menu UI ie: play Button
         StateManager.Instance.OnStateChanged += GameStateChanged;
     }
-    public void DestroyStartUI(){
+    public void DestroyStartUI()
+    {
         GameUI.DestroyUI();
-
     }
-    
-    public void DisplayStartUI(){
-        if(GameUI==null){
-            GameUI=new ControllerGamePlayUI();
-       }else{
-           GameUI.DisplayUI();
-       }
+    public void AchievementUnlocked(string display, int achievementId)
+    {
+        achievementsQueue.Enqueue(display);
+    }
+    public void DisplayStartUI()
+    {
+        if (GameUI == null)
+        {
+            GameUI = new ControllerGamePlayUI();
+        }
+        else
+        {
+            GameUI.DisplayUI();
+        }
     }
     public void SetStartUI(PlayerNumber playerNumber)
     {
+        lobbyUI = null;
         //ControllerStartUI start=new ControllerStartUI(startUI,startUIParent);
-        playerUI.Add(playerNumber, new ControllerStartUI(startUI,startUIParent));
+        if (!playerUI.ContainsKey(playerNumber))
+        {
+            playerUI.Add(playerNumber, new ControllerStartUI(startUI, startUIParent));
+        }
+        else
+        {
+            playerUI[playerNumber].DisplayUI();
+        }
+    }
+    public void SetMiniMap(PlayerNumber playerNumber, RenderTexture texture)
+    {
+        playerUI[playerNumber].SetMiniMap(texture);
     }
     private void OnEnable()
     {
@@ -50,10 +71,21 @@ public class ServiceUI : Singleton<ServiceUI>
     }
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name=="GameScene"){
-            startUIParent=GameObject.FindObjectOfType<HorizontalLayoutGroup>().gameObject.GetComponent<RectTransform>();
-        }else{
-            GameUI=null;
+        if (scene.name == "GameScene")
+        {
+            startUIParent = GameObject.FindObjectOfType<HorizontalLayoutGroup>().gameObject.GetComponent<RectTransform>();
+        }
+        else if (scene.name == "MainMenu")
+        {
+            lobbyUI = new ControllerMainMenu();
+            if (achievementsQueue.Count > 0)
+            {
+                StartCoroutine(DisplayAchievement());
+            }
+        }
+        else
+        {
+            GameUI = null;
         }
     }
 
@@ -87,11 +119,23 @@ public class ServiceUI : Singleton<ServiceUI>
     public void AddPlayerListener(ControllerPlayer player)
     {
         player.OnUIUpdate += updateUI;
-        player.OnPlayerDeath+=OnPlayerDead;
+        player.OnPlayerDeath += OnPlayerDead;
         SetStartUI(player.GetPlayerNumber());
     }
-    public void OnPlayerDead(ControllerPlayer player,InputComponent component,Controls controls){
+    public void OnPlayerDead(ControllerPlayer player, InputComponent component, Controls controls)
+    {
         playerUI[player.GetPlayerNumber()].DestroyUI();
-        playerUI.Remove(player.GetPlayerNumber());
+        // playerUI.Remove(player.GetPlayerNumber());
+    }
+    IEnumerator DisplayAchievement()
+    {
+
+        lobbyUI.ShowAchievements(achievementsQueue.Dequeue());
+        yield return new WaitForSeconds(3f);
+        lobbyUI.HideAchievements();
+        if (achievementsQueue.Count > 0)
+        {
+            StartCoroutine(DisplayAchievement());
+        }
     }
 }

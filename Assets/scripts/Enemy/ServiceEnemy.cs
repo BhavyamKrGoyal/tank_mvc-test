@@ -14,7 +14,7 @@ namespace Enemy
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();
         void Start()
         {
-            for (int j = 0; j < 1; j++)
+            for (int j = 0; j < 10; j++)
             {
                 SpawnEnemy();
             }

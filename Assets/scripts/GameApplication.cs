@@ -1,4 +1,5 @@
-﻿using Enemy;
+﻿using Cameras;
+using Enemy;
 using Replay_Service;
 using ScriptableObjects;
 using StateMachines;
@@ -11,31 +12,33 @@ using UnityEngine.SceneManagement;
 public class GameApplication : Singleton<GameApplication>
 {
     bool playState = false;
-    int noPlayer=2;
-    Rect cam1,cam2;
+    public Camera miniMapCamera;
+    public int noPlayer = 2;
+    List<PlayerSpawnData> playersSpawnData = new List<PlayerSpawnData>();
+    Rect cam1, cam2;
+    Dictionary<PlayerNumber, Camera> playerMiniMapCamera = new Dictionary<PlayerNumber, Camera>();
+    public RenderTexture cameratexture1, cameratexture2;
     public ScriptableEnemy[] enemy;
     public GameObject player;
     public event Action<ControllerPlayer> OnPlayerSpawn;
     public List<ControllerPlayer> players = new List<ControllerPlayer>();
     List<Vector3> EnemyPosition = new List<Vector3>();
     //Debug.Log("in awake of GameApplication");
-
     public void ReSpawnPlayer(Controls controls, PlayerNumber playerNumber)
     {
         StartCoroutine(LateRespawn(controls, playerNumber));
     }
     public void ReSpawnPlayer2(Controls controls, PlayerNumber playerNumber, Vector3 pos)
     {
-        StartCoroutine(LateReplayRespawn(playerNumber,controls,pos));
-       // AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
+        StartCoroutine(LateReplayRespawn(playerNumber, controls, pos));
+        // AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
 
     }
     // Start is called before the first frame update
     void Start()
     {
-        cam1=new Rect(0,0,0.5f,1);
-        cam2=new Rect(0.5f,0,0.5f,1);
-        StateManager.Instance.OnStateChanged += OnStateChanged;
+        cam1 = new Rect(0, 0, 1f / noPlayer, 1);
+        cam2 = new Rect(0.5f, 0, 0.5f, 1);
 
     }
     public void SetPlayerPrefab(GameObject player)
@@ -57,11 +60,15 @@ public class GameApplication : Singleton<GameApplication>
             playState = true;
             ServiceEnemy.Instance.SetEnemyList(enemy);
             Vector3 pos1 = SpawnPlayer(EnemyPosition);
-            Vector3 pos2 = SpawnPlayer(EnemyPosition);
             ServiceReplay.Instance.SetPosition(PlayerNumber.Player1, pos1, Controls.WASD);
-            ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
             AddPlayerController(new ControllerPlayer(player, pos1, Controls.WASD, PlayerNumber.Player1, true));
-            AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
+            if (noPlayer == 2)
+            {
+                Vector3 pos2 = SpawnPlayer(EnemyPosition);
+                ServiceReplay.Instance.SetPosition(PlayerNumber.Player2, pos2, Controls.IJKL);
+                AddPlayerController(new ControllerPlayer(player, pos2, Controls.IJKL, PlayerNumber.Player2, true));
+
+            }
         }
 
     }
@@ -138,14 +145,44 @@ public class GameApplication : Singleton<GameApplication>
         GameApplication.Instance.players.Add(player);
         player.OnPlayerDeath += RemovePlayerController;
         OnPlayerSpawn.Invoke(player);
-        if(player.GetPlayerNumber()==PlayerNumber.Player1){
-        player.SetCamera(cam1);
-        }else{
-        player.SetCamera(cam2);            
+        Vector3 campos = player.GetPosition();
+        campos = new Vector3(campos.z, campos.y + 25, campos.z);
+        if (player.GetPlayerNumber() == PlayerNumber.Player1)
+        {
+            if (!playerMiniMapCamera.ContainsKey(player.GetPlayerNumber()))
+            {
+                Camera cam = GameObject.Instantiate(miniMapCamera.gameObject, campos, miniMapCamera.gameObject.transform.rotation).GetComponent<Camera>();
+                playerMiniMapCamera.Add(player.GetPlayerNumber(), cam);
+                player.SetCamera(cam1);
+                cam.targetTexture = cameratexture1;
+                ServiceUI.Instance.SetMiniMap(player.GetPlayerNumber(), cameratexture1);
+            }
+            else
+            {
+                 player.SetCamera(cam1);
+                playerMiniMapCamera[player.GetPlayerNumber()].gameObject.SetActive(true);
+            }
         }
+        else
+        {
+            if (!playerMiniMapCamera.ContainsKey(player.GetPlayerNumber()))
+            {
+                Camera cam = GameObject.Instantiate(miniMapCamera.gameObject, campos, miniMapCamera.gameObject.transform.rotation).GetComponent<Camera>();
+                playerMiniMapCamera.Add(player.GetPlayerNumber(), cam);
+                ServiceUI.Instance.SetMiniMap(player.GetPlayerNumber(), cameratexture2);
+                player.SetCamera(cam2);
+                cam.targetTexture = cameratexture2;
+            }
+            else
+            {player.SetCamera(cam2);
+                playerMiniMapCamera[player.GetPlayerNumber()].gameObject.SetActive(true);
+            }
+        }
+        playerMiniMapCamera[player.GetPlayerNumber()].gameObject.GetComponent<MiniMap>().target = player.GetPlayerObject();
     }
     public void RemovePlayerController(ControllerPlayer player, InputComponent inputComponent, Controls controls)
     {
+        playerMiniMapCamera[player.GetPlayerNumber()].gameObject.SetActive(false);
         GameApplication.Instance.players.Remove(player);
         if (!playState)
         {
@@ -163,13 +200,13 @@ public class GameApplication : Singleton<GameApplication>
             }
             else
             {
-                StateManager.Instance.ChangeState(new GameReplayState(), false);
+                StateManager.Instance.ChangeState(new GameOverState(), false);
             }
         }
     }
     IEnumerator LateRespawn(Controls controls, PlayerNumber playerNumber)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
         if (SceneManager.GetActiveScene().name == "GameScene" && playState)
         {
             Vector3 pos = SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions());
@@ -177,13 +214,12 @@ public class GameApplication : Singleton<GameApplication>
             ServiceReplay.Instance.SetPosition(playerNumber, pos, controls);
         }
     }
-    IEnumerator LateReplayRespawn(PlayerNumber playerNumber,Controls controls,Vector3 pos)
+    IEnumerator LateReplayRespawn(PlayerNumber playerNumber, Controls controls, Vector3 pos)
     {
         yield return new WaitForSeconds(3f);
         if (!playState)
         {
             AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
-//            ServiceReplay.Instance.SetPosition(playerNumber, pos, controls);
         }
 
     }

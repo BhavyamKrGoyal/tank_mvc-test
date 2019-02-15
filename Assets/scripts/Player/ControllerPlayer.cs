@@ -34,10 +34,16 @@ public class ControllerPlayer : IBasePlayerController
         StateManager.Instance.OnStateChanged += GamePauseState;
         //GameObject.FindObjectOfType<MiniMap>().SetMinimapTarget(view.gameObject);
     }
+    public GameObject GetPlayerObject(){
+        return view.gameObject;
+    }
     public void SetCamera(Rect camRect){
         
-        Debug.Log(camRect);
+        //Debug.Log(camRect);
         view.gameObject.GetComponentInChildren<Camera>().rect=camRect;
+    }
+    public Vector3 GetPosition(){
+        return view.gameObject.transform.position;
     }
     public void GamePauseState(GameState currentState)
     {
@@ -157,5 +163,6 @@ public class ControllerPlayer : IBasePlayerController
     {
         OnPlayerDeath.Invoke(this, inputComponent, GetControls());
         view.DestroyPlayer();
+        view=null;
     }
 }

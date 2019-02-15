@@ -7,17 +7,27 @@ using UnityEngine.SceneManagement;
 public class ControllerMainMenu
 {
     ViewMainMenu view;
-  
+
     public ControllerMainMenu()
     {
 
         view = GameObject.FindObjectOfType<ViewMainMenu>().GetComponent<ViewMainMenu>();
-       // DisplayUI();
-    
-        
+        // DisplayUI();
+
+
     }
-    
-     public void DestroyUI()
+    public void ShowAchievements(string display)
+    {
+        view.ShowAchievements(display);
+    }
+
+    public void HideAchievements()
+    {
+        view.HideAchievements();
+    }
+
+
+    public void DestroyUI()
     {
         view.DestroyUI();
     }
@@ -25,5 +35,5 @@ public class ControllerMainMenu
     {
         view.DisplayUI();
     }
-    
+
 }

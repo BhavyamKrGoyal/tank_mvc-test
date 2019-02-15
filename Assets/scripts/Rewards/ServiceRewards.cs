@@ -42,7 +42,7 @@ namespace Rewards
         {
             if (scene.name == "MainMenu")
             {
-                scrollPlaceHolder = FindObjectOfType<Canvas>().gameObject.GetComponent<RectTransform>();
+                scrollPlaceHolder = GameObject.FindGameObjectWithTag("ScrollPlaceHolder").gameObject.GetComponent<RectTransform>();
                 RectTransform obj = Instantiate(scrollView, scrollPlaceHolder);
                 scrollContent = obj.GetComponentInChildren<HorizontalLayoutGroup>().gameObject.GetComponent<RectTransform>();
                 SetScrollView(unlockablesDictionary.Keys.ToList());

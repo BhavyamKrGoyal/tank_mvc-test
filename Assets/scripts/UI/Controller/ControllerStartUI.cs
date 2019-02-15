@@ -20,7 +20,10 @@ public class ControllerStartUI
     {
         view.DestroyUI();
         Debug.Log("InStartController");
-        view=null;
+       // view=null;
+    }
+    public void SetMiniMap(RenderTexture texture){
+        view.SetMiniMap(texture);
     }
     public void DisplayUI()
     {

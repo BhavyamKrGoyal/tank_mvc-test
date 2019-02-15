@@ -10,8 +10,9 @@ namespace Cameras
         // Update is called once per frame
         void Update()
         {
-                gameObject.transform.position=new Vector3(target.transform.position.x,transform.position.y,target.transform.position.z);
-            
+            if (target != null)
+                gameObject.transform.position = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+
         }
     }
 }
