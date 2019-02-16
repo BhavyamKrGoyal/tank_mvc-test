@@ -38,7 +38,6 @@ namespace Player
         {
             StateManager.Instance.OnStateChanged+=OnStateChanged;
             spawn = new SafeSpawn();
-            setCameras = new ServiceCameraSettingService(playerObjects.Count);
         }
         public void SetPlayerPrefab(Color color)
         {
@@ -62,6 +61,7 @@ namespace Player
         {
             if (scene.name == "GameScene")
             {
+                setCameras = new ServiceCameraSettingService(playerObjects.Count);
                 playState = true;
                 ServiceEnemy.Instance.SetEnemyList(enemy);
                 for (int i = 0; i < playerObjects.Count; i++)

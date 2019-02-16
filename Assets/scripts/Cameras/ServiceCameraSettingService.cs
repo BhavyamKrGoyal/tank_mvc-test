@@ -55,6 +55,7 @@ namespace Cameras
             cameraPlayer[player.GetPlayerNumber()].miniCamFollow.gameObject.SetActive(false);
             cameraPlayer[player.GetPlayerNumber()].mainCam.gameObject.SetActive(false);
         }
+        
         struct playerCams
         {
             public Camera mainCam, MiniCam;

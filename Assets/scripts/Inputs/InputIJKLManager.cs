@@ -7,10 +7,9 @@ public class InputIJKLManager : MonoBehaviour
 {
     Controls controls = Controls.IJKL;
     InputData inputData;
-    int initialFame;
     private void Start() {
         InputManager.Instance.playerInput.Add(controls,new Queue<InputData>());
-      initialFame = InputManager.Instance.initialFame;
+    
     }
     public void Update()
     {
@@ -37,7 +36,7 @@ public class InputIJKLManager : MonoBehaviour
             {
                 inputData.shoot = false;
             }
-            inputData.frame=Time.frameCount-initialFame;
+            inputData.frame=FrameService.Instance.GetFrame();
         }
         InputManager.Instance.EnqueueData(inputData,controls);
         ServiceReplay.Instance.RecordInput(inputData, controls);

@@ -7,11 +7,10 @@ public class InputWASDManager : MonoBehaviour
 {
     InputData inputData;
     Controls controls = Controls.WASD;
-    int initialFame;
     private void Start()
     {
         InputManager.Instance.playerInput.Add(controls,new Queue<InputData>());
-        initialFame = InputManager.Instance.initialFame;
+
     }
     public void Update()
     {
@@ -43,7 +42,7 @@ public class InputWASDManager : MonoBehaviour
             {
                 PlayerPrefs.DeleteAll();
             }
-            inputData.frame = Time.frameCount - initialFame;
+            inputData.frame=FrameService.Instance.GetFrame();
         }
         InputManager.Instance.EnqueueData(inputData, controls);
         ServiceReplay.Instance.RecordInput(inputData, controls);

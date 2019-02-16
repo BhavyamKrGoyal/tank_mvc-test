@@ -77,6 +77,7 @@ public class ServiceUI : Singleton<ServiceUI>
     {
         if (scene.name == "GameScene")
         {
+            playerUI=new Dictionary<PlayerNumber, ControllerStartUI>();
             startUIParent = GameObject.FindObjectOfType<HorizontalLayoutGroup>().gameObject.GetComponent<RectTransform>();
         }
         else if (scene.name == "MainMenu")

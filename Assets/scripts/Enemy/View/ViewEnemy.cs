@@ -1,8 +1,10 @@
 ﻿using Enemy.Controller;
 using Interfaces;
+using StateMachines;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Enemy
 {
@@ -12,16 +14,38 @@ namespace Enemy
     {
         public ControllerEnemy controller;
         Rigidbody rb;
-       
+        NavMeshAgent navAgent;
+
         public ViewEnemyComponentChasing chasing;
         public ViewEnemyComponentPetrolling petrolling;
 
         // Start is called before the first frame update
         void Start()
         {
+            navAgent = gameObject.GetComponent<NavMeshAgent>();
+            StateManager.Instance.OnStateChanged += OnStateChanged;
             rb = gameObject.GetComponent<Rigidbody>();
         }
-     
+        public void OnStateChanged(GameState state)
+        {
+            if (state is GamePauseState)
+            {
+                if (navAgent != null)
+                {
+                    navAgent.speed = 0;
+                    navAgent.angularSpeed = 0;
+                }
+            }
+            else
+            {
+                if (navAgent != null)
+                {
+                    navAgent.speed = 3.5f;
+                    navAgent.angularSpeed = 500;
+                }
+            }
+        }
+
         public void StateChange(EnemyState state)
         {
             controller.StateChangeNotify(state);

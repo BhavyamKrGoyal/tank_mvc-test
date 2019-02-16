@@ -23,7 +23,7 @@ public class ViewStartUI : MonoBehaviour
 
     public void DestroyUI()
     {
-        Debug.Log("InStartView");
+        //Debug.Log("InStartView");
         // Destroy(this.gameObject);
         score.gameObject.SetActive(false);
         health.gameObject.SetActive(false);

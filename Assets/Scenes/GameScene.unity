@@ -548,7 +548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &810629036
 RectTransform:
   m_ObjectHideFlags: 0
@@ -977,7 +977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8903b073b7ae6345a4f77cc380fef26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  play: {fileID: 0}
+  play: {fileID: 1868887122}
 --- !u!114 &1020654761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,6 +1002,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1055281059}
+  - component: {fileID: 1055281058}
   m_Layer: 0
   m_Name: FrameService
   m_TagString: Untagged
@@ -1009,6 +1010,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1055281058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055281057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bf76e3cb1f46ef418486c6a6956a306, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1055281059
 Transform:
   m_ObjectHideFlags: 0

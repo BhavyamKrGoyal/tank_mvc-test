@@ -322,9 +322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cf60769fdb7984f8e1cd2d61ca478d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialFame: 0
-  pauseFrame: 0
-  resumeFrame: 0
   InputControllersPrefab: {fileID: 8726440734721626323, guid: fef4dcd12812ec44bbd50c7e2d29689a,
     type: 3}
   referenceInput: {fileID: 0}
@@ -377,6 +374,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 39e057b6dc890f14b9cad70007c2dc07, type: 2}
   playerObjects:
   - {fileID: 11400000, guid: ca7cb25099d46994f992b0b9d3678f06, type: 2}
+  - {fileID: 11400000, guid: 8fd23863e3657544faeb96c4bce56da2, type: 2}
 --- !u!4 &855862897
 Transform:
   m_ObjectHideFlags: 0
