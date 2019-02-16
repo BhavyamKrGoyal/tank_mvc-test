@@ -17,10 +17,10 @@ public enum EnemyState{
 }
 public enum PlayerNumber
 {
-    Player1 = 1,
-    Player2 = 2,
-    Player3 = 3,
-    Player4 = 4
+    Player1 = 0,
+    Player2 = 1,
+    Player3 = 2,
+    Player4 = 3
 }
 public enum SaveTypes{
     PlayePrefs,

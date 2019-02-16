@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Enemy;
+using Player;
 using StateMachines;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace Replay_Service
                         Queue<InputData> inputq = new Queue<InputData>();
                         inputq.Enqueue(inputData);
                         inputRecord.Add(controls, inputq);
-                        Debug.Log("Added" + controls + "at frame " + inputData.frame);
+                       
                     }
                 }
             }
@@ -43,6 +44,7 @@ namespace Replay_Service
 
         public void SetPosition(PlayerNumber playerNumber, Vector3 position, Controls controlls)
         {
+           
             PlayerSpawnData spawnData = new PlayerSpawnData();
             spawnData.position = position;
             spawnData.controlls = controlls;
@@ -80,8 +82,6 @@ namespace Replay_Service
         }
         public void SetQueue()
         {
-            //Debug.Log("Last frame number Peek"+inputRecord[Controls.WASD].Peek().frame);
-            //Debug.Log("Last frame number Dequeue"+inputRecord[Controls.WASD].Dequeue().frame);
             InputManager.Instance.SetQueue(inputRecord);
         }
     }

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UI;
 using Achievements;
+using Player;
 
 public class ServiceUI : Singleton<ServiceUI>
 {    //For Changing Between Different UI Screens and any actions to be performed by the UI like Button Press
@@ -32,6 +33,9 @@ public class ServiceUI : Singleton<ServiceUI>
     public void AchievementUnlocked(string display, int achievementId)
     {
         achievementsQueue.Enqueue(display);
+        if(SceneManager.GetActiveScene().name=="MainMenu"){
+            StartCoroutine(DisplayAchievement());
+        }
     }
     public void DisplayStartUI()
     {

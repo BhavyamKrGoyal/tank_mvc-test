@@ -1,4 +1,5 @@
 
+using Player;
 using UnityEngine;
 using UnityEngine.UI;
 namespace Rewards
@@ -31,11 +32,7 @@ namespace Rewards
         {
             if (canSelect)
             {
-                foreach (MeshRenderer renderer in controller.unlockable.playerPrefab.GetComponentsInChildren<MeshRenderer>())
-                {
-                    renderer.sharedMaterial.SetColor("_Color", controller.unlockable.color);
-                }
-                GameApplication.Instance.SetPlayerPrefab(controller.unlockable.playerPrefab);
+                GameApplication.Instance.SetPlayerPrefab(controller.unlockable.color);
                 indicator.gameObject.SetActive(true);
             }
         }

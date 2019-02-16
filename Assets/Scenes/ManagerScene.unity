@@ -368,19 +368,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 855862895}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81437b185b0d6f140b63b5edc491b8dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f6c46d22d102804c944fdf5a5edcac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniMapCamera: {fileID: 8015185834979294569, guid: 2921d5336505ca4429660f36718b5a42,
-    type: 3}
-  noPlayer: 2
-  cameratexture1: {fileID: 8400000, guid: 01d5997e583a19c4184d763319dce63f, type: 2}
-  cameratexture2: {fileID: 8400000, guid: 77b583af4bafb8f47a39432d52ef80a4, type: 2}
   enemy:
   - {fileID: 11400000, guid: 507e62507c0bfdd46a08b35d799aeec0, type: 2}
   - {fileID: 11400000, guid: ae29ec1ecbc06ac47a23307d7940d589, type: 2}
   - {fileID: 11400000, guid: 39e057b6dc890f14b9cad70007c2dc07, type: 2}
-  player: {fileID: 449858025, guid: 51ad16cef455ede4f85d1c7c2b1773e8, type: 3}
+  playerObjects:
+  - {fileID: 11400000, guid: ca7cb25099d46994f992b0b9d3678f06, type: 2}
 --- !u!4 &855862897
 Transform:
   m_ObjectHideFlags: 0
