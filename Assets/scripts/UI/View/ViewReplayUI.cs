@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ namespace UI
         }
         public void OnReplayExit()
         {
-            StateManager.Instance.ChangeState(new GameOverState(), true);
+            ServiceLocator.Instance.get<IStateManager>().ChangeState(new GameOverState(), true);
         }
         public void DestroyUI()
         {
@@ -37,9 +38,9 @@ namespace UI
         }
         public void OnReplayPause()
         {
-            if (!(StateManager.Instance.currentState is GamePauseState))
+            if (!(ServiceLocator.Instance.get<IStateManager>().GetCurrentState() is GamePauseState))
             {
-                StateManager.Instance.ChangeState(new GamePauseState(), false);
+                ServiceLocator.Instance.get<IStateManager>().ChangeState(new GamePauseState(), false);
             }
            // Debug.Log(StateManager.Instance.previousState + " " + StateManager.Instance.currentState);
         }

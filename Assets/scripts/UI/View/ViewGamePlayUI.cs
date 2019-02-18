@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Achievements;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,19 +18,19 @@ namespace UI
         [SerializeField] public Button pause;
         void Start()
         {
-           
+
 
         }
-        
+
         public void GamePaused()
         {
-            StateManager.Instance.ChangeState(new GamePauseState(), false);
+            ServiceLocator.Instance.get<IStateManager>().ChangeState(new GamePauseState(), false);
         }
         public void DestroyUI()
         {
             pause.gameObject.SetActive(false);
             MainPanal.gameObject.SetActive(false);
-           // achievement.gameObject.SetActive(false);
+            // achievement.gameObject.SetActive(false);
             pause.onClick.RemoveListener(GamePaused);
         }
         public void DisplayUI()
@@ -38,7 +39,7 @@ namespace UI
             MainPanal.gameObject.SetActive(true);
             pause.onClick.AddListener(GamePaused);
         }
-      
+
         // Update is called once per frame
         void Update()
         {

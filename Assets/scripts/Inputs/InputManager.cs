@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Interfaces.ServiecesInterface;
 using Player;
 using Replay_Service;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InputManager : Singleton<InputManager>
+public class InputManager : IInputManager
 {
     //public int initialFame, pauseFrame, resumeFrame;
     public Dictionary<Controls, Queue<InputData>> playerInput = new Dictionary<Controls, Queue<InputData>>();
@@ -15,66 +16,59 @@ public class InputManager : Singleton<InputManager>
     bool userControls = true, replay = false, pause = false;
     // Start is called before the first frame update
     // Update is called once per frame
-    void Start()
+    public InputManager()
     {
-
-        StateManager.Instance.OnStateChanged += GameStateChanged;
-
+        InputControllersPrefab = Resources.Load<GameObject>("Inputs");
+        SceneManager.sceneLoaded += OnLevelLoaded;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GameStateChanged;
         GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
+    }
+    public void AddPlayerInputData(Controls controls)
+    {
+        playerInput.Add(controls, new Queue<InputData>());
+
     }
     public void SetQueue(Dictionary<Controls, Queue<InputData>> Pinput)
     {
         playerInput = Pinput;
-        //Debug.Log(playerInput.Count);
-        //Debug.Log(playerInput[Controls.IJKL].Peek().frame);
-
-        // foreach (Controls controls in Pinput.Keys)
-        // {
-        //     for (int i = 0; i < Pinput[controls].Count; i++)
-        //     {
-        //         playerInput[controls].Enqueue(Pinput[controls][i]);
-        //     }
-        // }
     }
-
     public void EnqueueData(InputData inputdata, Controls controls)
     {
-        if (Instance.playerInput.ContainsKey(controls))
+        if (playerInput.ContainsKey(controls))
         {
             //ServiceReplay.Instance.RecordInput(inputdata, controls);
-            Instance.playerInput[controls].Enqueue(inputdata);
+            playerInput[controls].Enqueue(inputdata);
         }
     }
     public void Update()
     {
-
         if (!pause)
-        {Debug.Log(replay);
-            foreach (Controls controls in InputManager.Instance.inputComponents.Keys)
+        {//Debug.Log(replay);
+            foreach (Controls controls in inputComponents.Keys)
             {
 
                 foreach (InputComponent inputComponent in inputComponents[controls])
                 {
-                    if (Instance.playerInput[controls].Count > 0)
+                    if (playerInput[controls].Count > 0)
                     {
                         //
                         // if (replay)
                         // {
                         //         Debug.Log("current: " + (Time.frameCount - initialFame) + "input: " + Instance.playerInput[controls].Peek().frame);
                         // }
-                        if ((FrameService.Instance.GetFrame()) == (Instance.playerInput[controls].Peek().frame))
+                        if ((FrameService.Instance.GetFrame()) == (playerInput[controls].Peek().frame))
                         {
 
                             //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
                             //Debug.Log("try moving");
-                            inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
+                            inputComponent.InputUpdate(playerInput[controls].Dequeue());
                         }
                         else
                         {
-                            while (Instance.playerInput[controls].Count > 0 && (FrameService.Instance.GetFrame()) >= Instance.playerInput[controls].Peek().frame)
+                            while (playerInput[controls].Count > 0 && (FrameService.Instance.GetFrame()) >= playerInput[controls].Peek().frame)
                             {
                                 //Debug.Log("removing");
-                                inputComponent.InputUpdate(Instance.playerInput[controls].Dequeue());
+                                inputComponent.InputUpdate(playerInput[controls].Dequeue());
                             }
                         }
 
@@ -83,12 +77,7 @@ public class InputManager : Singleton<InputManager>
             }
         }
     }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnLevelLoaded;
-    }
-    private void OnDisable()
+    ~InputManager()
     {
         SceneManager.sceneLoaded -= OnLevelLoaded;
     }
@@ -96,11 +85,11 @@ public class InputManager : Singleton<InputManager>
     {
         if (scene.name == "GameScene")
         {
-             playerInput = new Dictionary<Controls, Queue<InputData>>();
+            playerInput = new Dictionary<Controls, Queue<InputData>>();
 
             if (userControls)
             {
-                referenceInput = Instantiate(InputControllersPrefab);
+                referenceInput = GameObject.Instantiate(InputControllersPrefab);
             }
         }
     }
@@ -108,7 +97,7 @@ public class InputManager : Singleton<InputManager>
     {
         if (currentState is GamePlayState)
         {
-            pause=false;
+            pause = false;
             // Debug.Log("gameplaystate");
             userControls = true;
             replay = false;
@@ -125,8 +114,9 @@ public class InputManager : Singleton<InputManager>
             }
             userControls = false;
             if (currentState is GameReplayState)
-            {pause=false;
-                if (StateManager.Instance.previousState is GamePauseState)
+            {
+                pause = false;
+                if (ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GamePauseState)
                 {
                     pause = true;
                 }
@@ -136,7 +126,7 @@ public class InputManager : Singleton<InputManager>
             if (currentState is GamePauseState)
             {
                 pause = true;
-                if (StateManager.Instance.previousState is GameReplayState)
+                if (ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GameReplayState)
                 {
                     replay = false;
                 }
@@ -147,21 +137,19 @@ public class InputManager : Singleton<InputManager>
             }
         }
     }
-
     public void RegisterInputComponent(InputComponent inputComponent, Controls controls)
     {
-        if (!InputManager.Instance.inputComponents.ContainsKey(controls))
+        if (!inputComponents.ContainsKey(controls))
         {
             List<InputComponent> newList = new List<InputComponent>();
             newList.Add(inputComponent);
-            InputManager.Instance.inputComponents.Add(controls, newList);
+            inputComponents.Add(controls, newList);
             //Debug.Log("One InputComponent added, Total=" + inputComponents.Count + "  " + controls);
         }
         else
         {
-            InputManager.Instance.inputComponents[controls].Add(inputComponent);
+            inputComponents[controls].Add(inputComponent);
         }
-
     }
     public void AddPlayerListener(ControllerPlayer controller)
     {
@@ -170,22 +158,18 @@ public class InputManager : Singleton<InputManager>
     }
     public void ResetInput()
     {
-        InputManager.Instance.playerInput = new Dictionary<Controls, Queue<InputData>>();
-        InputManager.Instance.inputComponents = new Dictionary<Controls, List<InputComponent>>();
+        playerInput = new Dictionary<Controls, Queue<InputData>>();
+        inputComponents = new Dictionary<Controls, List<InputComponent>>();
     }
     public void RemoveInputComponent(ControllerPlayer controller, InputComponent inputComponent, Controls controls)
     {
         //Debug.Log("One InputComponent Removed" + controls);
-        InputManager.Instance.inputComponents[controls].Remove(inputComponent);
-
-
-        if (InputManager.Instance.inputComponents.ContainsKey(controls) && InputManager.Instance.inputComponents[controls].Count == 0)
+        inputComponents[controls].Remove(inputComponent);
+        if (inputComponents.ContainsKey(controls) && inputComponents[controls].Count == 0)
         {
-            InputManager.Instance.inputComponents.Remove(controls);
+            inputComponents.Remove(controls);
             //InputManager.Instance.playerInput.Remove(controls);
             // ServiceUI.Instance.GameOver();
         }
-
-
     }
 }

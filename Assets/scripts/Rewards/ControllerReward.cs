@@ -1,3 +1,4 @@
+using Interfaces.ServiecesInterface;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ namespace Rewards
             this.unlockable = unlockable;
             isUnlocked = unlocked;
             SetScrollView(unlockable, scrollContent);
-            ServiceRewards.Instance.OnSelection += Selection;
+            ServiceLocator.Instance.get<IServiceRewards>().OnSelection += Selection;
             
         }
 
@@ -34,7 +35,7 @@ namespace Rewards
             }
         }
         public void RemoveListener(){
-             ServiceRewards.Instance.OnSelection -= Selection;
+              ServiceLocator.Instance.get<IServiceRewards>().OnSelection -= Selection;
         }
 
         public void Selection(ControllerReward reward)

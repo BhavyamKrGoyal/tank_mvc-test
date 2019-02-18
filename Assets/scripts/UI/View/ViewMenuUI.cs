@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,11 +16,11 @@ public class ViewMenuUI : MonoBehaviour
     public void updateUI()
     {
        
-        if ((StateManager.Instance.previousState is GameReplayState))
+        if ((ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GameReplayState))
         {
-             StateManager.Instance.ChangeState(new GameReplayState(), false);
+             ServiceLocator.Instance.get<IStateManager>().ChangeState(new GameReplayState(), false);
         }else{
-            StateManager.Instance.ChangeState(new GamePlayState(), false);
+            ServiceLocator.Instance.get<IStateManager>().ChangeState(new GamePlayState(), false);
         }
         //Debug.Log(StateManager.Instance.previousState+" "+StateManager.Instance.currentState);
        

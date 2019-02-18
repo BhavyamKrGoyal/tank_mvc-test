@@ -1,5 +1,6 @@
 ﻿using Cameras;
 using Enemy;
+using Interfaces.ServiecesInterface;
 using Replay_Service;
 using ScriptableObjects;
 using StateMachines;
@@ -21,14 +22,14 @@ namespace Player
         public event Action<ControllerPlayer> OnPlayerSpawn;
         public List<ControllerPlayer> players = new List<ControllerPlayer>();
         List<Vector3> EnemyPosition = new List<Vector3>();
-        
+
         public void ReSpawnPlayer(Controls controls, PlayerNumber playerNumber)
         {
             StartCoroutine(LateRespawn(controls, playerNumber));
         }
         public void ReSpawnPlayer2(Controls controls, PlayerNumber playerNumber, Vector3 pos)
         {
-           
+
             StartCoroutine(LateReplayRespawn(playerNumber, controls, pos));
             // AddPlayerController(new ControllerPlayer(player, pos, controls, playerNumber, false));
 
@@ -36,7 +37,7 @@ namespace Player
         // Start is called before the first frame update
         void Start()
         {
-            StateManager.Instance.OnStateChanged+=OnStateChanged;
+            ServiceLocator.Instance.get<IStateManager>().OnStateChanged += OnStateChanged;
             spawn = new SafeSpawn();
         }
         public void SetPlayerPrefab(Color color)
@@ -107,13 +108,13 @@ namespace Player
             }
             if (GameApplication.Instance.players.Count == 0)
             {
-                if (StateManager.Instance.currentState is GameReplayState)
+                if (ServiceLocator.Instance.get<IStateManager>().GetCurrentState() is GameReplayState)
                 {
-                    StateManager.Instance.ChangeState(new GameOverState(), true);
+                    ServiceLocator.Instance.get<IStateManager>().ChangeState(new GameOverState(), true);
                 }
                 else
                 {
-                    StateManager.Instance.ChangeState(new GameReplayState(), false);
+                    ServiceLocator.Instance.get<IStateManager>().ChangeState(new GameReplayState(), false);
                 }
             }
         }

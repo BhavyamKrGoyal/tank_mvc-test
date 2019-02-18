@@ -1,5 +1,6 @@
 ﻿using Enemy.Controller;
 using Interfaces;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Enemy
         void Start()
         {
             navAgent = gameObject.GetComponent<NavMeshAgent>();
-            StateManager.Instance.OnStateChanged += OnStateChanged;
+            ServiceLocator.Instance.get<IStateManager>().OnStateChanged += OnStateChanged;
             rb = gameObject.GetComponent<Rigidbody>();
         }
         public void OnStateChanged(GameState state)

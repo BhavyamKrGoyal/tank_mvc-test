@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ public class FrameService : SingletonScene<FrameService>
     bool isPause = false;
     void Start()
     {
-        StateManager.Instance.OnStateChanged += OnStateChanged;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged += OnStateChanged;
     }
     public void OnStateChanged(GameState state)
     {
@@ -20,8 +21,9 @@ public class FrameService : SingletonScene<FrameService>
         }
         else
         {
-            if((state is GameReplayState) && !(StateManager.Instance.previousState is GamePauseState)){
-                frame=0;
+            if ((state is GameReplayState) && !(ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GamePauseState))
+            {
+                frame = 0;
                 Debug.Log("HEy there mate I reset the frame");
             }
             isPause = false;
@@ -29,7 +31,7 @@ public class FrameService : SingletonScene<FrameService>
     }
     private void OnDisable()
     {
-        StateManager.Instance.OnStateChanged -= OnStateChanged;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged -= OnStateChanged;
     }
     // Update is called once per frame
     void Update()
@@ -39,7 +41,8 @@ public class FrameService : SingletonScene<FrameService>
             ++frame;
         }
     }
-    public int GetFrame(){
+    public int GetFrame()
+    {
         return frame;
     }
 }

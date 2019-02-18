@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,7 +44,7 @@ namespace LoadingBar
             {
                 slider.value = loaded;
                 if(changeScene){
-                StateManager.Instance.ChangeState();
+                ServiceLocator.Instance.get<IStateManager>().ChangeState();
                 changeScene=false;
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using System;
 using System.Collections;
@@ -31,18 +32,21 @@ public class ControllerPlayer : IBasePlayerController
         model.gameStarted = gameStarted;
         inputComponent = new InputComponent(this);
         playerData.player = this;
-        StateManager.Instance.OnStateChanged += GamePauseState;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GamePauseState;
         //GameObject.FindObjectOfType<MiniMap>().SetMinimapTarget(view.gameObject);
     }
-    public GameObject GetPlayerObject(){
+    public GameObject GetPlayerObject()
+    {
         return view.gameObject;
     }
-    public void SetCamera(Rect camRect){
-        
+    public void SetCamera(Rect camRect)
+    {
+
         //Debug.Log(camRect);
-        view.gameObject.GetComponentInChildren<Camera>().rect=camRect;
+        view.gameObject.GetComponentInChildren<Camera>().rect = camRect;
     }
-    public Vector3 GetPosition(){
+    public Vector3 GetPosition()
+    {
         return view.gameObject.transform.position;
     }
     public void GamePauseState(GameState currentState)
@@ -82,7 +86,7 @@ public class ControllerPlayer : IBasePlayerController
             if (model.health < 100)
             {
                 model.TakeDamage(-0.1f);
-               // Debug.Log(model.health);
+                // Debug.Log(model.health);
             }
         }
     }
@@ -90,10 +94,13 @@ public class ControllerPlayer : IBasePlayerController
     public void Move(float horizontal, float vertical)
     {
         //Debug.Log("controller");
-        if(horizontal!=0 || vertical!=0){
-        stateMachine.EnterMoveState();
-        view.MovePlayer(horizontal * model.rotationSpeed * Time.deltaTime, vertical * model.speed * Time.deltaTime * model.boost);
-        }else{
+        if (horizontal != 0 || vertical != 0)
+        {
+            stateMachine.EnterMoveState();
+            view.MovePlayer(horizontal * model.rotationSpeed * Time.deltaTime, vertical * model.speed * Time.deltaTime * model.boost);
+        }
+        else
+        {
             stateMachine.EnterIdleState();
         }
         Update();
@@ -111,7 +118,7 @@ public class ControllerPlayer : IBasePlayerController
     {
         model.TakeDamage(damage);
         playerData.score = model.score;
-        playerData.player=this;
+        playerData.player = this;
         playerData.health = (int)model.health;
         playerData.achievementTypes = AchievementTypes.Score;
         OnUIUpdate.Invoke(playerData);
@@ -163,6 +170,6 @@ public class ControllerPlayer : IBasePlayerController
     {
         OnPlayerDeath.Invoke(this, inputComponent, GetControls());
         view.DestroyPlayer();
-        view=null;
+        view = null;
     }
 }

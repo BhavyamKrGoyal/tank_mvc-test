@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ public class ViewBullet : MonoBehaviour
         gameObject.transform.position = muzzle.position;
         gameObject.transform.rotation = muzzle.rotation;
         GetComponent<Rigidbody>().velocity = transform.forward * power;
-        StateManager.Instance.OnStateChanged += GamePauseState;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GamePauseState;
     }
     public void GamePauseState(GameState state)
     {

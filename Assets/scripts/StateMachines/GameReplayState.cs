@@ -1,4 +1,5 @@
 using Enemy;
+using Interfaces.ServiecesInterface;
 using Replay_Service;
 using UI;
 using UnityEngine;
@@ -16,9 +17,9 @@ namespace StateMachines
         }
         public override void OnStateExit()
         {
-            if (!(StateManager.Instance.previousState is GameReplayState))
+            if (!(ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GameReplayState))
             {
-                InputManager.Instance.ResetInput();
+                ServiceLocator.Instance.get<IInputManager>().ResetInput();
             }
             controller.DestroyUI();
             controller = null;
@@ -27,7 +28,7 @@ namespace StateMachines
         {
             controller = new ControllerReplayUI();
             controller.DisplayUI();
-            if (!(StateManager.Instance.previousState is GamePauseState))
+            if (!(ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GamePauseState))
             {
                 ServiceEnemy.Instance.RemoveAllEnemy();
                 ServiceReplay.Instance.ReplaySpawn();

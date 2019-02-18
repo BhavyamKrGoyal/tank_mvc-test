@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using Interfaces.ServiecesInterface;
+using Player;
 using SavingSystem;
 using ScriptableObjects;
 using StateMachines;
@@ -10,39 +11,23 @@ using UnityEngine.SceneManagement;
 
 namespace Achievements
 {
-    public class ServiceAchievements : Singleton<ServiceAchievements>
+    public class ServiceAchievements : IServiceAchievements
     {
         bool listen = true;
 
-        [SerializeField] private Achievement[] achievements;
+        private Achievement[] achievements;
         public event Action<string, int> OnAchievementUnlocked;
         Dictionary<AchievementTypes, Achievement> gameAchievements = new Dictionary<AchievementTypes, Achievement>();
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += OnLevelLoaded;
-        }
-        private void OnDisable()
-        {
-            SceneManager.sceneLoaded -= OnLevelLoaded;
-        }
-        void OnLevelLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (scene.name == "GameScene")
-            {
-                //GameApplication.Instance.OnPlayerSpawn += AddListener;
-            }
-        }
-
-        public void Start()
+        public ServiceAchievements()
         {
             ///GameApplication.Instance.OnPlayerSpawn += AddListener;
-
+            achievements = Resources.LoadAll<Achievement>("Achievements");
             foreach (Achievement achievement in achievements)
             {
                 gameAchievements.Add(achievement.achievementType, achievement);
             }
             GameApplication.Instance.OnPlayerSpawn += AddListener;
-            StateManager.Instance.OnStateChanged += OnStateChanged;
+            ServiceLocator.Instance.get<IStateManager>().OnStateChanged += OnStateChanged;
 
         }
         public void OnStateChanged(GameState currentState)

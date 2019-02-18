@@ -2,15 +2,24 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using UnityEngine.SceneManagement;
+using Interfaces.ServiecesInterface;
 
 namespace StateMachines
 {
-    public class StateManager : Singleton<StateManager>
+    public class StateManager : IStateManager
     {
-        public GameState currentState=null, previousState=null, afterLoadingState;
+        GameState currentState = null, previousState = null, afterLoadingState;
         public event Action<GameState> OnStateChanged;
-        public void Start()
+
+        public GameState GetCurrentState(){
+            return currentState;
+        }
+        public GameState GetPreviousState(){
+            return previousState;
+        }
+        public StateManager()
         {
+            SceneManager.sceneLoaded += OnLevelLoaded;
             SetState(new LoadingState());
         }
         private void SetState(GameState state)
@@ -29,7 +38,10 @@ namespace StateMachines
                 currentState.OnStateEnter();
             }
         }
-        private void OnLevelWasLoaded(int level)
+        ~ StateManager(){
+             SceneManager.sceneLoaded -= OnLevelLoaded;
+        }
+        void OnLevelLoaded(Scene scene, LoadSceneMode mode)
         {
             currentState.Update();
 
@@ -39,7 +51,6 @@ namespace StateMachines
 
             if (previousState == null)
             {
-               
                 SetState(new LobbyState());
             }
             else

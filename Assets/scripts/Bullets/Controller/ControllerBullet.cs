@@ -1,4 +1,5 @@
 ﻿using Interfaces;
+using Interfaces.ServiecesInterface;
 using StateMachines;
 using System;
 using System.Collections;
@@ -17,7 +18,7 @@ public class ControllerBullet
         getViewAndModel();
         view.controller = this;
         //view.time = model.lifeTime;
-        StateManager.Instance.OnStateChanged += GameStateChanged;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GameStateChanged;
     }
     public void GameStateChanged(GameState currentState)
     {

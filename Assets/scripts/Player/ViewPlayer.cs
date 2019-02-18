@@ -7,6 +7,7 @@ public class ViewPlayer : MonoBehaviour
 {
     Rigidbody rb;
     bool shoot = true;
+    Coroutine moveCo;
     public GameObject muzzle;
     ControllerPlayer controller;
     // Start is called before the first frame update
@@ -28,12 +29,18 @@ public class ViewPlayer : MonoBehaviour
     }
     public void MovePlayer(float h,float v)
     {
-        StartCoroutine(Move(h,v));
+        moveCo=StartCoroutine(Move(h,v));
     }
     public void DestroyPlayer()
     {
         Destroy(this.gameObject);
 
+    }
+    private void OnDestroy() {
+        StopCoroutine(moveCo);
+    }
+    private void OnDisable() {
+        StopCoroutine(moveCo);
     }
     public void OnCollisionEnter(Collision collision)
     {

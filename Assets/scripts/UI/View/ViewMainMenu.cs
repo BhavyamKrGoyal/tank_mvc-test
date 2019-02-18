@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-
+using Interfaces.ServiecesInterface;
 
 public class ViewMainMenu : MonoBehaviour
 {
@@ -44,6 +44,6 @@ public void HideAchievements(){
     }
     public void LoadGameScene()
     {
-        StateManager.Instance.ChangeState(new GamePlayState(), true);
+        ServiceLocator.Instance.get<IStateManager>().ChangeState(new GamePlayState(), true);
     }
 }

@@ -1,4 +1,5 @@
 
+using Interfaces.ServiecesInterface;
 using Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ namespace Rewards
             indicator.gameObject.SetActive(false);
         }
         void ButtonClick()
-        { ServiceRewards.Instance.Selected(controller); }
+        {  ServiceLocator.Instance.get<IServiceRewards>().Selected(controller); }
 
         public void SetText(string name)
         {

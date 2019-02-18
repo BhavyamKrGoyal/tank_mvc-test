@@ -9,11 +9,12 @@ using UnityEngine.SceneManagement;
 using UI;
 using Achievements;
 using Player;
+using Interfaces.ServiecesInterface;
 
 public class ServiceUI : Singleton<ServiceUI>
 {    //For Changing Between Different UI Screens and any actions to be performed by the UI like Button Press
     Queue<string> achievementsQueue = new Queue<string>();
-    public GameObject startUI;
+    GameObject startUI;
     public ControllerGamePlayUI GameUI;
     ControllerMainMenu lobbyUI;
     public RectTransform startUIParent;
@@ -21,10 +22,11 @@ public class ServiceUI : Singleton<ServiceUI>
 
     void Start()
     {
-        ServiceAchievements.Instance.OnAchievementUnlocked+=AchievementUnlocked;
+        startUI = Resources.Load<GameObject>("Panel");
+        ServiceLocator.Instance.get<IServiceAchievements>().OnAchievementUnlocked += AchievementUnlocked;
         GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         //Set The Menu UI ie: play Button
-        StateManager.Instance.OnStateChanged += GameStateChanged;
+        ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GameStateChanged;
     }
     public void DestroyStartUI()
     {
@@ -33,7 +35,8 @@ public class ServiceUI : Singleton<ServiceUI>
     public void AchievementUnlocked(string display, int achievementId)
     {
         achievementsQueue.Enqueue(display);
-        if(SceneManager.GetActiveScene().name=="MainMenu"){
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
             StartCoroutine(DisplayAchievement());
         }
     }
@@ -77,7 +80,7 @@ public class ServiceUI : Singleton<ServiceUI>
     {
         if (scene.name == "GameScene")
         {
-            playerUI=new Dictionary<PlayerNumber, ControllerStartUI>();
+            playerUI = new Dictionary<PlayerNumber, ControllerStartUI>();
             startUIParent = GameObject.FindObjectOfType<HorizontalLayoutGroup>().gameObject.GetComponent<RectTransform>();
         }
         else if (scene.name == "MainMenu")
@@ -111,15 +114,15 @@ public class ServiceUI : Singleton<ServiceUI>
     }
     public void Replay()
     {
-        StateManager.Instance.ChangeState(new GamePlayState(), true);
+        ServiceLocator.Instance.get<IStateManager>().ChangeState(new GamePlayState(), true);
     }
     public void GameOver()
     {
-        StateManager.Instance.ChangeState(new GameOverState(), true);
+        ServiceLocator.Instance.get<IStateManager>().ChangeState(new GameOverState(), true);
     }
     public void LoadMenu()
     {
-        StateManager.Instance.ChangeState(new LobbyState(), false);
+        ServiceLocator.Instance.get<IStateManager>().ChangeState(new LobbyState(), false);
     }
     public void AddPlayerListener(ControllerPlayer player)
     {

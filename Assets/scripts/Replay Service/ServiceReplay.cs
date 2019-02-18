@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Enemy;
+using Interfaces.ServiecesInterface;
 using Player;
 using StateMachines;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Replay_Service
         }
         public void RecordInput(InputData inputData, Controls controls)
         {
-            if (!(StateManager.Instance.currentState is GamePauseState))
+            if (!(ServiceLocator.Instance.get<IStateManager>().GetCurrentState() is GamePauseState))
             {
                 if (inputData.direction != 0 || inputData.forward != 0 || inputData.boost || inputData.shoot)
                 {
@@ -82,7 +83,7 @@ namespace Replay_Service
         }
         public void SetQueue()
         {
-            InputManager.Instance.SetQueue(inputRecord);
+            ServiceLocator.Instance.get<IInputManager>().SetQueue(inputRecord);
         }
     }
 }
