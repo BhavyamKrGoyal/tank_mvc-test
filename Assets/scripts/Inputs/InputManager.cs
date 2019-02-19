@@ -56,7 +56,7 @@ public class InputManager : IInputManager
                         // {
                         //         Debug.Log("current: " + (Time.frameCount - initialFame) + "input: " + Instance.playerInput[controls].Peek().frame);
                         // }
-                        if ((FrameService.Instance.GetFrame()) == (playerInput[controls].Peek().frame))
+                        if ((ServiceLocator.Instance.get<IFrameService>().GetFrame()) == (playerInput[controls].Peek().frame))
                         {
 
                             //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
@@ -65,7 +65,7 @@ public class InputManager : IInputManager
                         }
                         else
                         {
-                            while (playerInput[controls].Count > 0 && (FrameService.Instance.GetFrame()) >= playerInput[controls].Peek().frame)
+                            while (playerInput[controls].Count > 0 && (ServiceLocator.Instance.get<IFrameService>().GetFrame()) >= playerInput[controls].Peek().frame)
                             {
                                 //Debug.Log("removing");
                                 inputComponent.InputUpdate(playerInput[controls].Dequeue());

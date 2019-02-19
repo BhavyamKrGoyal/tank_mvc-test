@@ -14,13 +14,13 @@ public class ControllerExplossiveBullet : ControllerBullet
     }
     public override void Shoot(Transform muzzle)
     {
-        view.StartShoot(muzzle, model.power, model.lifeTime);
+        view.StartShoot(muzzle, model.power, model.lifeTime,this);
     }
-    public override void Destroy()
+    public override void DestroyBullet()
     {
-        base.Destroy();
+        base.DestroyBullet();
+        GameObject.Destroy(view.gameObject);
         model = null;
-        view.DestroyBullet();
     }
 
 

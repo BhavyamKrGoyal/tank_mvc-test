@@ -40,7 +40,7 @@ namespace Replay_Service
         }
         public void OnEnemySpawn()
         {
-            enemyData = ServiceEnemy.Instance.GetEnemyData();
+            enemyData = ServiceLocator.Instance.get<IServiceEnemy>().EnemyData;
         }
 
         public void SetPosition(PlayerNumber playerNumber, Vector3 position, Controls controlls)
@@ -69,7 +69,7 @@ namespace Replay_Service
             }
             foreach (EnemyData enemy in enemyData)
             {
-                ServiceEnemy.Instance.SpawnEnemy(enemy);
+                ServiceLocator.Instance.get<IServiceEnemy>().SpawnEnemy(enemy);
             }
         }
         public void ReplayReSpawn(PlayerNumber playerNumber)

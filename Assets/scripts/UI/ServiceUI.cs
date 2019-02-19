@@ -23,9 +23,13 @@ public class ServiceUI : Singleton<ServiceUI>
     void Start()
     {
         startUI = Resources.Load<GameObject>("Panel");
-        ServiceLocator.Instance.get<IServiceAchievements>().OnAchievementUnlocked += AchievementUnlocked;
+       
         GameApplication.Instance.OnPlayerSpawn += AddPlayerListener;
         //Set The Menu UI ie: play Button
+        
+    }
+    public void SetListeners(){
+         ServiceLocator.Instance.get<IServiceAchievements>().OnAchievementUnlocked += AchievementUnlocked;
         ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GameStateChanged;
     }
     public void DestroyStartUI()

@@ -155,7 +155,7 @@ public class ControllerPlayer : IBasePlayerController
                 model.lastShot = Time.timeSinceLevelLoad;
                 playerData.achievementTypes = AchievementTypes.BulletsShot;
                 playerData.progress = 1;
-                ControllerBullet controllerBullet = ServiceBullet.Instance.MakeBullet(model.bulletType);
+                ControllerBullet controllerBullet = ServiceLocator.Instance.get<IServiceBullet>().MakeBullet(model.bulletType);
                 OnBulletShot?.Invoke(playerData);
                 controllerBullet.SetShooter(this);
                 controllerBullet.Shoot(view.muzzle.transform);

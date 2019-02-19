@@ -11,14 +11,15 @@ public class ViewBullet : MonoBehaviour
     bool paused;
     Rigidbody rb;
     Vector3 velocity;
-    public virtual void StartShoot(Transform muzzle, float power, float time)
+    public virtual void StartShoot(Transform muzzle, float power, float time,ControllerBullet controler)
     {
         rb = GetComponent<Rigidbody>();
-        StartCoroutine(DeathTimer(time));
+        //StartCoroutine(DeathTimer(time));
         gameObject.transform.position = muzzle.position;
         gameObject.transform.rotation = muzzle.rotation;
         GetComponent<Rigidbody>().velocity = transform.forward * power;
         ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GamePauseState;
+        controller=controler;
     }
     public void GamePauseState(GameState state)
     {
@@ -49,21 +50,22 @@ public class ViewBullet : MonoBehaviour
 
     public void DestroyBullet()
     {
-        Destroy(gameObject);
+        controller.DestroyBullet();
+        
     }
     IEnumerator DeathTimer(float time)
     {
         float timer = 0f;
         while (timer < time)
         {
-            if(!paused){
-                timer+=Time.deltaTime;
+            if (!paused)
+            {
+                timer += Time.deltaTime;
             }
             yield return null;
-            
         }
         //yield return new WaitForSeconds(time);
-        controller.Destroy();
+        //controller.Destroy();
         DestroyBullet();
     }
     public virtual void OnCollisionEnter(Collision collision)
@@ -71,11 +73,10 @@ public class ViewBullet : MonoBehaviour
         ITakeDamageView damageView = collision.gameObject.GetComponent<ITakeDamageView>();
         if (damageView != null)
         {
-
-
             damageView.TakeDamage(controller.GetDamage(), controller.GetShooter());
-            Destroy(gameObject);
+            
         }
+        DestroyBullet();
     }
 
 

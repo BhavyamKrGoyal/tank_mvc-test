@@ -40,9 +40,9 @@ public class ControllerBullet
         model = new ModelBullet();
         view = new ViewBullet();
     }
-    public virtual void Destroy()
+    public virtual void DestroyBullet()
     {
-        OnBulletDestroy(this);
+        OnBulletDestroy?.Invoke(this);
     }
     public void SetShooter(IBasePlayerController shooter)
     {

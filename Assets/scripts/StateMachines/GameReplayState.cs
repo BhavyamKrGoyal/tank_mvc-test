@@ -30,7 +30,7 @@ namespace StateMachines
             controller.DisplayUI();
             if (!(ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GamePauseState))
             {
-                ServiceEnemy.Instance.RemoveAllEnemy();
+                ServiceLocator.Instance.get<IServiceEnemy>().RemoveAllEnemy();
                 ServiceReplay.Instance.ReplaySpawn();
                 ServiceReplay.Instance.SetQueue();
 

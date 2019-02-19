@@ -3,6 +3,7 @@ using UnityEditor;
 using Enemy.Model;
 using Interfaces;
 using ScriptableObjects;
+using Interfaces.ServiecesInterface;
 
 namespace Enemy.Controller
 {
@@ -72,7 +73,7 @@ namespace Enemy.Controller
         }
         public void SetAlert(Vector3 playerPosition)
         {
-            ServiceEnemy.Instance.SetAlert(playerPosition);
+            ServiceLocator.Instance.get<IServiceEnemy>().SetAlert(playerPosition);
         }
         public void DestroyObject()
         {
@@ -82,7 +83,7 @@ namespace Enemy.Controller
             stateMachine = null;
             view.DestroyEnemy();
             view = null;
-            ServiceEnemy.Instance.RemoveEnemy(this);
+            ServiceLocator.Instance.get<IServiceEnemy>().RemoveEnemy(this);
 
         }
         public void Move(float horizontal, float vertical)

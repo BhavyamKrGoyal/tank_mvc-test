@@ -4,12 +4,12 @@ using Interfaces.ServiecesInterface;
 using StateMachines;
 using UnityEngine;
 
-public class FrameService : SingletonScene<FrameService>
+public class FrameService : IFrameService
 {
     // Start is called before the first frame update
     int frame = -0;
     bool isPause = false;
-    void Start()
+    public FrameService()
     {
         ServiceLocator.Instance.get<IStateManager>().OnStateChanged += OnStateChanged;
     }
@@ -34,7 +34,7 @@ public class FrameService : SingletonScene<FrameService>
         ServiceLocator.Instance.get<IStateManager>().OnStateChanged -= OnStateChanged;
     }
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (!isPause)
         {

@@ -64,7 +64,6 @@ namespace Player
             {
                 setCameras = new ServiceCameraSettingService(playerObjects.Count);
                 playState = true;
-                ServiceEnemy.Instance.SetEnemyList(enemy);
                 for (int i = 0; i < playerObjects.Count; i++)
                 {
                     Vector3 pos = spawn.SpawnPlayer(EnemyPosition);
@@ -123,7 +122,7 @@ namespace Player
             yield return new WaitForSeconds(10f);
             if (SceneManager.GetActiveScene().name == "GameScene" && playState)
             {
-                Vector3 pos = spawn.SpawnPlayer(ServiceEnemy.Instance.GetEnemyPositions());
+                Vector3 pos = spawn.SpawnPlayer(ServiceLocator.Instance.get<IServiceEnemy>().GetEnemyPositions());
                 AddPlayerController(new ControllerPlayer(playerObjects[(int)playerNumber].playerView.gameObject, pos, controls, playerNumber, false));
                 ServiceReplay.Instance.SetPosition(playerNumber, pos, controls);
             }

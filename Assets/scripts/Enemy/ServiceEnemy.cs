@@ -4,17 +4,21 @@ using System.Collections.Generic;
 using Enemy.Controller;
 using ScriptableObjects;
 using Replay_Service;
+using Interfaces.ServiecesInterface;
 
 namespace Enemy
 {
-    public class ServiceEnemy : SingletonScene<ServiceEnemy>
+    public class ServiceEnemy : IServiceEnemy
     {
         ScriptableEnemy[] enemyList;
         public event System.Action<Vector3> OnAlert;
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();
-        void Start()
+        public ServiceEnemy()
         {
-            for (int j = 0; j < 10; j++)
+            enemyList=Resources.LoadAll<ScriptableEnemy>("Enemies");
+        }
+        public void StartSpawning(){
+             for (int j = 0; j < 10; j++)
             {
                 SpawnEnemy();
             }
@@ -22,25 +26,26 @@ namespace Enemy
 
         }
 
-        public void Update()
-        {
-        }
         public void SetAlert(Vector3 playerPos)
         {
             OnAlert.Invoke(playerPos);
         }
-        public List<EnemyData> GetEnemyData()
+        public List<EnemyData> EnemyData
         {
-            List<EnemyData> enemyData = new List<EnemyData>();
-            foreach (ControllerEnemy enemy in enemyController)
+            get
             {
-                EnemyData data = new EnemyData();
-                data.type = enemy.GetEnemyType();
-                data.position = enemy.GetEnemyPosition();
-                enemyData.Add(data);
+                List<EnemyData> enemyData = new List<EnemyData>();
+                foreach (ControllerEnemy enemy in enemyController)
+                {
+                    EnemyData data = new EnemyData();
+                    data.type = enemy.GetEnemyType();
+                    data.position = enemy.GetEnemyPosition();
+                    enemyData.Add(data);
+                }
+                return enemyData;
             }
-            return enemyData;
         }
+
         public List<Vector3> GetEnemyPositions()
         {
             List<Vector3> positions = new List<Vector3>();
@@ -49,10 +54,6 @@ namespace Enemy
                 positions.Add(controller.GetEnemyPosition());
             }
             return positions;
-        }
-        public void SetEnemyList(ScriptableEnemy[] enemyList)
-        {
-            this.enemyList = enemyList;
         }
         public void SpawnEnemy()
         {

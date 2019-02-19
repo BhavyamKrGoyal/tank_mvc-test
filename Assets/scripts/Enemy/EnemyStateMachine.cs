@@ -1,5 +1,6 @@
 using Enemy.Controller;
 using Interfaces;
+using Interfaces.ServiecesInterface;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,13 +13,13 @@ namespace Enemy
         ControllerEnemy controller;
         EnemyState CurrentEnemyState,previousState;
         public EnemyStateMachine(ControllerEnemy controller){
-            ServiceEnemy.Instance.OnAlert+=OnAlert;
+            ServiceLocator.Instance.get<IServiceEnemy>().OnAlert+=OnAlert;
             CurrentEnemyState=EnemyState.Chansing;
             this.controller=controller;
             ChangeEnemyState(EnemyState.Petrolling,new Vector3(0,0,0));
         }
         public void DestroyMachine(){
-            ServiceEnemy.Instance.OnAlert-=OnAlert;
+            ServiceLocator.Instance.get<IServiceEnemy>().OnAlert-=OnAlert;
             controller=null;
         }
 

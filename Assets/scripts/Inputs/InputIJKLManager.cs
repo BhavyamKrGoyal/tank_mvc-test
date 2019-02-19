@@ -37,8 +37,7 @@ public class InputIJKLManager : MonoBehaviour
         {
             inputData.shoot = false;
         }
-        inputData.frame = FrameService.Instance.GetFrame();
-
+        inputData.frame =ServiceLocator.Instance.get<IFrameService>().GetFrame();
         ServiceLocator.Instance.get<IInputManager>().EnqueueData(inputData, controls);
         ServiceReplay.Instance.RecordInput(inputData, controls);
     }
