@@ -61,7 +61,8 @@ namespace Enemy
         }
         public void DestroyEnemy()
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
         }
         public void TurnTowards(Vector3 position)
         {

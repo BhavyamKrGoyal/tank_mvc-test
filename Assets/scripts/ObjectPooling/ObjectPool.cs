@@ -20,7 +20,7 @@ namespace ObjectPooling
 
         public T GetFromPool<BT>() where BT : T, new()
         {
-             Debug.Log("ask from pool count of pool"+objectPool.Count);
+             //Debug.Log("ask from pool count of pool"+objectPool.Count);
             T poolObject=default(T);
             if (objectPool.Count == 0 && objectsInPool <= maxPool)
             {
