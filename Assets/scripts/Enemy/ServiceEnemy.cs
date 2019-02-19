@@ -5,20 +5,23 @@ using Enemy.Controller;
 using ScriptableObjects;
 using Replay_Service;
 using Interfaces.ServiecesInterface;
+using ObjectPooling;
 
 namespace Enemy
 {
     public class ServiceEnemy : IServiceEnemy
     {
         ScriptableEnemy[] enemyList;
+        ObjectPool<ControllerEnemy> enemyPool = new ObjectPool<ControllerEnemy>();
         public event System.Action<Vector3> OnAlert;
         List<ControllerEnemy> enemyController = new List<ControllerEnemy>();
         public ServiceEnemy()
         {
-            enemyList=Resources.LoadAll<ScriptableEnemy>("Enemies");
+            enemyList = Resources.LoadAll<ScriptableEnemy>("Enemies");
         }
-        public void StartSpawning(){
-             for (int j = 0; j < 10; j++)
+        public void StartSpawning()
+        {
+            for (int j = 0; j < 10; j++)
             {
                 SpawnEnemy();
             }
@@ -58,16 +61,21 @@ namespace Enemy
         public void SpawnEnemy()
         {
             int enemyType = Random.Range(0, 3);
-            enemyController.Add(new ControllerEnemy(enemyList[enemyType], enemyType));
+            ControllerEnemy enemy = enemyPool.GetFromPool<ControllerEnemy>();
+            enemy.Set(enemyList[enemyType], enemyType);
+            enemyController.Add(enemy);
 
         }
         public void SpawnEnemy(EnemyData enemy)
         {
-            enemyController.Add(new ControllerEnemy(enemyList[enemy.type], enemy.position, enemy.type));
+            ControllerEnemy enemyObject = enemyPool.GetFromPool<ControllerEnemy>();
+            enemyObject.Set(enemyList[enemy.type], enemy.position, enemy.type);
+            enemyController.Add(enemyObject);
         }
         public void RemoveEnemy(ControllerEnemy enemy)
         {
             enemyController.Remove(enemy);
+            enemyPool.ReturnToPool(enemy);
         }
         public void RemoveAllEnemy()
         {

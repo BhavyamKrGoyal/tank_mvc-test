@@ -4,26 +4,34 @@ using Enemy.Model;
 using Interfaces;
 using ScriptableObjects;
 using Interfaces.ServiecesInterface;
+using ObjectPooling;
 
 namespace Enemy.Controller
 {
-    public class ControllerEnemy : IBasePlayerController
+    public class ControllerEnemy : IBasePlayerController, IPoolableEnemy
     {
         ModelEnemy model;
         ViewEnemy view;
         EnemyStateMachine stateMachine;
-        public ControllerEnemy(ScriptableEnemy enemyTemp, int type)
+        public ControllerEnemy()
         {
-            GetModel(enemyTemp);
-            GetView(model.GetRandomSpawnPoint());
-            model.enemytype = type;
-            stateMachine = new EnemyStateMachine(this);
+            
         }
-        public ControllerEnemy(ScriptableEnemy enemyTemp, Vector3 position, int type)
+        
+        public void Set(ScriptableEnemy enemyTemp, Vector3 position, int type)
         {
             GetModel(enemyTemp);
             GetView(position);
             model.enemytype = type;
+            view.gameObject.SetActive(true);
+            stateMachine = new EnemyStateMachine(this);
+        }
+        public void Set(ScriptableEnemy enemyTemp, int type)
+        {
+            GetModel(enemyTemp);
+            GetView(model.GetRandomSpawnPoint());
+            model.enemytype = type;
+            view.gameObject.SetActive(true);
             stateMachine = new EnemyStateMachine(this);
         }
         public void StateChangeNotify(EnemyState state)
@@ -78,25 +86,20 @@ namespace Enemy.Controller
         public void DestroyObject()
         {
             //ServiceEnemy.Instance.OnAlert-=OnAlert;
-            model = null;
             stateMachine.DestroyMachine();
             stateMachine = null;
-            view.DestroyEnemy();
-            view = null;
             ServiceLocator.Instance.get<IServiceEnemy>().RemoveEnemy(this);
 
         }
-        public void Move(float horizontal, float vertical)
+        public void Reset()
         {
-
+            view.DestroyEnemy();
         }
+
+
         public bool IsFreez()
         {
             return model.freez; ;
-        }
-        public void Shoot()
-        {
-
         }
         public int GetEnemyType()
         {
@@ -129,6 +132,16 @@ namespace Enemy.Controller
         }
 
         public void UpdateScore(int score)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Move(float horizontal, float vertical)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Shoot()
         {
             throw new System.NotImplementedException();
         }

@@ -1,5 +1,6 @@
 ﻿using Interfaces;
 using Interfaces.ServiecesInterface;
+using ObjectPooling;
 using StateMachines;
 using System;
 using System.Collections;
@@ -155,10 +156,10 @@ public class ControllerPlayer : IBasePlayerController
                 model.lastShot = Time.timeSinceLevelLoad;
                 playerData.achievementTypes = AchievementTypes.BulletsShot;
                 playerData.progress = 1;
-                ControllerBullet controllerBullet = ServiceLocator.Instance.get<IServiceBullet>().MakeBullet(model.bulletType);
+                IPoolableBullet controllerBullet = ServiceLocator.Instance.get<IServiceBullet>().MakeBullet(model.bulletType);
                 OnBulletShot?.Invoke(playerData);
                 controllerBullet.SetShooter(this);
-                controllerBullet.Shoot(view.muzzle.transform);
+                controllerBullet.Set(view.muzzle.transform);
             }
         }
     }

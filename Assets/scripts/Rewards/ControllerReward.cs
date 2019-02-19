@@ -43,7 +43,7 @@ namespace Rewards
             if (reward == this)
             {
                 view.Select();
-                Debug.Log("Selected");
+                //Debug.Log("Selected");
                 
             }
             else
