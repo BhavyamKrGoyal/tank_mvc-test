@@ -2,13 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using Interfaces.ServiecesInterface;
+using ObjectPooling;
 using UnityEngine;
 
 
 
 public class ServiceBullet : IServiceBullet
 {
-    public static List<ControllerBullet> bulletList = new List<ControllerBullet>();
+    ObjectPool<ControllerBullet> bulletPool=new ObjectPool<ControllerBullet>();
+    //public static List<ControllerBullet> bulletList = new List<ControllerBullet>();
 
     public ControllerBullet MakeBullet(BulletTypes bulletType)
     {
@@ -16,33 +18,29 @@ public class ServiceBullet : IServiceBullet
         switch (bulletType)
         {
             default:
-                temp = new ControllerDefaultBullet();
-                bulletList.Add(temp);
+                temp = bulletPool.GetFromPool<ControllerDefaultBullet>();
                 break;
 
             case BulletTypes.fastBullet:
-                temp = new ControllerFastBullet();
-                bulletList.Add(temp);
+                temp = bulletPool.GetFromPool<ControllerFastBullet>();
                 break;
 
             case BulletTypes.explossiveBullet:
-                temp = new ControllerExplossiveBullet();
-                bulletList.Add(temp);
+                temp = bulletPool.GetFromPool<ControllerExplossiveBullet>();
                 break;
-
-
         }
         temp.OnBulletDestroy += RemoveBullet;
-        // Debug.Log(bulletList.Count);
         return temp;
     }
 
 
     public void RemoveBullet(ControllerBullet bullet)
     {
-        Debug.Log("Destroying bullet");
+         bullet.OnBulletDestroy -= RemoveBullet;
+        //Debug.Log("Destroying bullet");
         // bulletList.Remove(temp);
-        bulletList.Remove(bullet);
+        //bulletList.Remove(bullet);
+        bulletPool.ReturnToPool(bullet);
 
     }
 

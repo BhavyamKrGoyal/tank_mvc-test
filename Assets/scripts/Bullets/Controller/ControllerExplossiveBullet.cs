@@ -19,8 +19,7 @@ public class ControllerExplossiveBullet : ControllerBullet
     public override void DestroyBullet()
     {
         base.DestroyBullet();
-        GameObject.Destroy(view.gameObject);
-        model = null;
+       // GameObject.Destroy(view.gameObject);
     }
 
 

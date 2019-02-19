@@ -23,7 +23,7 @@ namespace Rewards
         public ServiceRewards()
         {
             unlockables = Resources.LoadAll<ScriptableUnlockable>("Rewards").ToList();
-            Debug.Log(unlockables.Count);
+           // Debug.Log(unlockables.Count);
             scrollContent=Resources.Load<GameObject>("Unlockable").GetComponent<RectTransform>();
             scrollView=Resources.Load<GameObject>("ScrollView").GetComponent<RectTransform>();
             
