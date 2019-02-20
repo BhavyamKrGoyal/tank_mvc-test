@@ -24,7 +24,7 @@ public class FrameService : IFrameService
             if ((state is GameReplayState) && !(ServiceLocator.Instance.get<IStateManager>().GetPreviousState() is GamePauseState))
             {
                 frame = 0;
-                Debug.Log("HEy there mate I reset the frame");
+                //Debug.Log("HEy there mate I reset the frame");
             }
             isPause = false;
         }

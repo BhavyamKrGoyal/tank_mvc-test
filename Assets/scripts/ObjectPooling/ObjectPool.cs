@@ -4,8 +4,8 @@ using UnityEngine;
 namespace ObjectPooling
 {
     public class ObjectPool<T> : IPool where T : IPoolable, new()
-    { 
-        
+    {
+
         List<T> objectPool = new List<T>();
         int objectsInPool, maxPool = 100;
         public ObjectPool()
@@ -20,12 +20,12 @@ namespace ObjectPooling
 
         public T GetFromPool<BT>() where BT : T, new()
         {
-             //Debug.Log("ask from pool count of pool"+objectPool.Count);
-            T poolObject=default(T);
+            //Debug.Log("ask from pool count of pool"+objectPool.Count);
+            T poolObject = default(T);
             if (objectPool.Count == 0 && objectsInPool <= maxPool)
             {
                 objectsInPool++;
-                Debug.Log("creating new object");
+                //Debug.Log("creating new object");
                 poolObject = (T)new BT();
             }
             else
@@ -36,16 +36,18 @@ namespace ObjectPooling
                     {
                         poolObject = obj;
                         objectPool.Remove(poolObject);
-                        Debug.Log("object from pool");
+                        //Debug.Log("object from pool");
                         break;
                     }
-                    else
-                    {
-                        objectsInPool++;
-                        Debug.Log("creating new object");
-                        poolObject = (T)new BT();
-                    }
                 }
+            }
+            if (poolObject == null)
+            {
+
+                objectsInPool++;
+                //Debug.Log("creating new object");
+                poolObject = (T)new BT();
+
             }
             return poolObject;
         }
@@ -53,7 +55,7 @@ namespace ObjectPooling
         {
             objectPool.Add(poolObject);
             poolObject.Reset();
-            Debug.Log("back to pool count of pool"+objectPool.Count);
+            //Debug.Log("back to pool count of pool" + objectPool.Count);
         }
 
     }

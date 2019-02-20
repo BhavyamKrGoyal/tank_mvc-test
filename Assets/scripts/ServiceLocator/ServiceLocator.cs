@@ -15,6 +15,7 @@ public class ServiceLocator : Singleton<ServiceLocator>
 {
     // Start is called before the first frame update
     IFrameService frameService;
+    IServiceSound soundService;
     List<IServices> services = new List<IServices>();
     InputManager inputManager;
     public override void OnInitialize()
@@ -44,22 +45,28 @@ public class ServiceLocator : Singleton<ServiceLocator>
     {
         if (scene.name == "GameScene")
         {
+            if (soundService == null)
+            {
+                soundService = new ServiceSound();
+                Register<IServiceSound>(soundService);
+            }
             frameService = new FrameService();
             Register<IFrameService>(frameService);
             ServiceEnemy enemyservice = new ServiceEnemy();
             Register<IServiceEnemy>(enemyservice);
             enemyservice.StartSpawning();
             Register<IServiceBullet>(new ServiceBullet());
-            Register<IServiceSound>(new ServiceSound());
         }
         else
         {
             frameService = null;
-            foreach (IServices service in services)
+            for (int i = 0; i < services.Count; i++)
             {
-                if (service is IServiceEnemy || service is IServiceBullet || service is IFrameService ||service is IServiceSound)
+                //Debug.Log(services[i]);
+                if (services[i] is IServiceEnemy || services[i] is IServiceBullet || services[i] is IFrameService)
                 {
-                    services.Remove(service);
+                    Debug.Log(services[i]);
+                    services.RemoveAt(i);
                 }
             }
         }

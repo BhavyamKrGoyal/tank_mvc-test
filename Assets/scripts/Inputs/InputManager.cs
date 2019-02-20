@@ -89,6 +89,7 @@ public class InputManager : IInputManager
 
             if (userControls)
             {
+                Debug.Log("NewInput");
                 referenceInput = GameObject.Instantiate(InputControllersPrefab);
             }
         }

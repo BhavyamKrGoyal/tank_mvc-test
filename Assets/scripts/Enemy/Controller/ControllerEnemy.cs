@@ -15,9 +15,9 @@ namespace Enemy.Controller
         EnemyStateMachine stateMachine;
         public ControllerEnemy()
         {
-            
+
         }
-        
+
         public void Set(ScriptableEnemy enemyTemp, Vector3 position, int type)
         {
             GetModel(enemyTemp);
@@ -60,7 +60,8 @@ namespace Enemy.Controller
         }
         public virtual void GetView(Vector3 position)
         {
-            view = GameObject.Instantiate(model.enemyObject.enemyPrefab, position, Quaternion.identity, null).GetComponent<ViewEnemy>();
+            if (view == null)
+                view = GameObject.Instantiate(model.enemyObject.enemyPrefab, position, Quaternion.identity, null).GetComponent<ViewEnemy>();
             view.SetColour(model.enemyObject.color);
             view.controller = this;
         }

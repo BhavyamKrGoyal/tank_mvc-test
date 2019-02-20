@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Interfaces.ServiecesInterface;
 using Player;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Sound
 {
@@ -11,6 +12,8 @@ namespace Sound
         AudioSource backGroundAudioSource, oneShotAudioSource;
         public ServiceSound()
         {
+            SceneManager.sceneLoaded += OnLevelLoaded;
+            Debug.Log("Created");
             backGroudSound = Resources.Load<AudioClip>("BackGroudClip");
             shootSound = Resources.Load<AudioClip>("ShotFiring");
             tankExplodeSound = Resources.Load<AudioClip>("TankExplosion");
@@ -26,20 +29,27 @@ namespace Sound
             player.OnBulletShot += TankShooTSound;
             player.OnPlayerDeath += TankExplosionSound;
         }
-        public void BackGroundSound()
+        ~ServiceSound()
         {
+            SceneManager.sceneLoaded -= OnLevelLoaded;
+            Debug.Log("Destroyed");
         }
-
+        void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "GameScene")
+            {
+                AudioSource[] sources = GameObject.FindObjectsOfType<AudioSource>();
+                backGroundAudioSource = sources[0];
+                oneShotAudioSource = sources[1];
+            }
+        }
         public void TankExplosionSound(ControllerPlayer player, InputComponent inputComponent, Controls controls)
         {
             oneShotAudioSource.clip = tankExplodeSound;
             oneShotAudioSource.Play();
-
-        }
-        public void RemoveListeners(ControllerPlayer player)
-        {
-            //player.OnBulletShot -= TankShooTSound;
+            player.OnBulletShot -= TankShooTSound;
             player.OnPlayerDeath -= TankExplosionSound;
+
         }
 
         public void TankShooTSound(PlayerData data)

@@ -9,7 +9,8 @@ public class ControllerFastBullet : ControllerBullet
     public override void getViewAndModel()
     {
         GameObject shell = Resources.Load<GameObject>("FastShell");
-        view = GameObject.Instantiate<GameObject>(shell).GetComponent<ViewFastBullet>();
+        if (view == null)
+            view = GameObject.Instantiate<GameObject>(shell).GetComponent<ViewFastBullet>();
         model = new ModelFastBullet();
     }
     public override void Shoot(Transform muzzle)
@@ -19,9 +20,6 @@ public class ControllerFastBullet : ControllerBullet
     public override void DestroyBullet()
     {
         base.DestroyBullet();
-        GameObject.Destroy(view.gameObject);
-        model = null;
-
     }
 
 }
