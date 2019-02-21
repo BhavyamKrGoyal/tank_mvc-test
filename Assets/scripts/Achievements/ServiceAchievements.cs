@@ -30,9 +30,12 @@ namespace Achievements
             ServiceLocator.Instance.get<IStateManager>().OnStateChanged += OnStateChanged;
 
         }
+        bool isGameReplayState(GameState currentState){
+            return currentState is GameReplayState;
+        }
         public void OnStateChanged(GameState currentState)
         {
-            if (currentState is GameReplayState)
+            if (isGameReplayState(currentState))
             {
                 listen = false;
             }

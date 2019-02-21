@@ -9,28 +9,30 @@ using UnityEngine;
 
 public class ServiceBullet : IServiceBullet
 {
-    ObjectPool<ControllerBullet> bulletPool=new ObjectPool<ControllerBullet>();
+    ObjectPool<ControllerBullet> bulletPool;
     //public static List<ControllerBullet> bulletList = new List<ControllerBullet>();
-
+    public ServiceBullet(){
+         bulletPool=new ObjectPool<ControllerBullet>();
+    }
     public ControllerBullet MakeBullet(BulletTypes bulletType)
     {
-        ControllerBullet temp = null;
+        ControllerBullet bullet = null;
         switch (bulletType)
         {
             default:
-                temp = bulletPool.GetFromPool<ControllerDefaultBullet>();
+                bullet = bulletPool.GetFromPool<ControllerDefaultBullet>();
                 break;
 
             case BulletTypes.fastBullet:
-                temp = bulletPool.GetFromPool<ControllerFastBullet>();
+                bullet = bulletPool.GetFromPool<ControllerFastBullet>();
                 break;
 
             case BulletTypes.explossiveBullet:
-                temp = bulletPool.GetFromPool<ControllerExplossiveBullet>();
+                bullet = bulletPool.GetFromPool<ControllerExplossiveBullet>();
                 break;
         }
-        temp.OnBulletDestroy += RemoveBullet;
-        return temp;
+        bullet.OnBulletDestroy += RemoveBullet;
+        return bullet;
     }
 
 

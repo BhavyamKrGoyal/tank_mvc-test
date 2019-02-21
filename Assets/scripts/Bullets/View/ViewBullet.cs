@@ -23,14 +23,7 @@ public class ViewBullet : MonoBehaviour
     }
     public void GamePauseState(GameState state)
     {
-        if (state is GamePauseState)
-        {
-            paused = true;
-        }
-        else
-        {
-            paused = false;
-        }
+        paused=(state is GamePauseState);     
     }
     public void BulletPaused()
     {

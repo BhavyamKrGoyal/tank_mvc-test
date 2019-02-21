@@ -6,14 +6,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class ControllerPlayer : IBasePlayerController
 {
-
     ViewPlayer view;
     float pauseTartedTime = 0;
     ModelPlayer model;
-
     public PlayerData playerData;
     InputComponent inputComponent;
     PlayerStateMachine stateMachine;
@@ -24,7 +21,6 @@ public class ControllerPlayer : IBasePlayerController
     public event Action<ControllerPlayer, InputComponent, Controls> OnPlayerDeath;
     public ControllerPlayer(GameObject player, Vector3 spawnPoint, Controls controls, PlayerNumber playerNumber, bool gameStarted)
     {
-
         stateMachine = new PlayerStateMachine(this);
         this.view = GameObject.Instantiate(player, spawnPoint, Quaternion.identity, null).GetComponent<ViewPlayer>();
         this.model = new ModelPlayer(controls);
@@ -34,22 +30,17 @@ public class ControllerPlayer : IBasePlayerController
         inputComponent = new InputComponent(this);
         playerData.player = this;
         ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GamePauseState;
-        //GameObject.FindObjectOfType<MiniMap>().SetMinimapTarget(view.gameObject);
     }
-    public GameObject GetPlayerObject()
-    {
-        return view.gameObject;
-    }
-    public void SetCamera(Rect camRect)
-    {
-
-        //Debug.Log(camRect);
-        view.gameObject.GetComponentInChildren<Camera>().rect = camRect;
-    }
-    public Vector3 GetPosition()
-    {
-        return view.gameObject.transform.position;
-    }
+    public void StartBoost() { model.boost = 2; }
+    public void StopBoost() { model.boost = 1; }
+    public GameObject GetPlayerObject() { return view.gameObject; }
+    public void SetCamera(Rect camRect) { view.gameObject.GetComponentInChildren<Camera>().rect = camRect; }
+    public Vector3 GetPosition() { return view.gameObject.transform.position; }
+    public InputComponent GetInputComponent() { return inputComponent; }
+    public bool GetGameStarted() { return model.gameStarted; }
+    public PlayerNumber GetPlayerNumber() { return model.playerNumber; }
+    public Controls GetControls() { return model.controls; }
+    public bool IsFreez() { return model.freez; }
     public void GamePauseState(GameState currentState)
     {
         if (currentState is GamePauseState)
@@ -63,22 +54,6 @@ public class ControllerPlayer : IBasePlayerController
             pauseTartedTime = Time.timeSinceLevelLoad - pauseTartedTime;
         }
     }
-    public bool GetGameStarted()
-    {
-        return model.gameStarted;
-    }
-    public PlayerNumber GetPlayerNumber()
-    {
-        return model.playerNumber;
-    }
-    public Controls GetControls()
-    {
-        return model.controls;
-    }
-    public bool IsFreez()
-    {
-        return model.freez;
-    }
     public void Update()
     {
         if (!stateMachine.isPaused() && !stateMachine.isMoving())
@@ -91,7 +66,6 @@ public class ControllerPlayer : IBasePlayerController
             }
         }
     }
-
     public void Move(float horizontal, float vertical)
     {
         //Debug.Log("controller");
@@ -100,20 +74,8 @@ public class ControllerPlayer : IBasePlayerController
             stateMachine.EnterMoveState();
             view.MovePlayer(horizontal * model.rotationSpeed * Time.deltaTime, vertical * model.speed * Time.deltaTime * model.boost);
         }
-        else
-        {
-            stateMachine.EnterIdleState();
-        }
+        else { stateMachine.EnterIdleState(); }
         Update();
-
-    }
-    public void StartBoost()
-    {
-        model.boost = 2;
-    }
-    public void StopBoost()
-    {
-        model.boost = 1;
     }
     public void TankHit(int damage)
     {
@@ -123,11 +85,7 @@ public class ControllerPlayer : IBasePlayerController
         playerData.health = (int)model.health;
         playerData.achievementTypes = AchievementTypes.Score;
         OnUIUpdate.Invoke(playerData);
-        if (!model.IsAlive())
-        {
-            DestroyObject();
-        }
-        //ServiceUI.Instance.updateUI(model.health, model.score);
+        if (!model.IsAlive()) { DestroyObject(); }
     }
     public void EnemyKilled(int score)
     {
@@ -162,10 +120,6 @@ public class ControllerPlayer : IBasePlayerController
                 controllerBullet.Set(view.muzzle.transform);
             }
         }
-    }
-    public InputComponent GetInputComponent()
-    {
-        return inputComponent;
     }
     public void DestroyObject()
     {

@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class InputManager : IInputManager
 {
+    IFrameService serviceFrames;
     //public int initialFame, pauseFrame, resumeFrame;
     public Dictionary<Controls, Queue<InputData>> playerInput = new Dictionary<Controls, Queue<InputData>>();
     public GameObject InputControllersPrefab, referenceInput;
@@ -18,6 +19,7 @@ public class InputManager : IInputManager
     // Update is called once per frame
     public InputManager()
     {
+        serviceFrames=ServiceLocator.Instance.get<IFrameService>();
         InputControllersPrefab = Resources.Load<GameObject>("Inputs");
         SceneManager.sceneLoaded += OnLevelLoaded;
         ServiceLocator.Instance.get<IStateManager>().OnStateChanged += GameStateChanged;
@@ -56,7 +58,7 @@ public class InputManager : IInputManager
                         // {
                         //         Debug.Log("current: " + (Time.frameCount - initialFame) + "input: " + Instance.playerInput[controls].Peek().frame);
                         // }
-                        if ((ServiceLocator.Instance.get<IFrameService>().GetFrame()) == (playerInput[controls].Peek().frame))
+                        if ((serviceFrames.GetFrame()) == (playerInput[controls].Peek().frame))
                         {
 
                             //Debug.Log(InputManager.Instance.playerInput[Controls.IJKL].forward);
@@ -65,7 +67,7 @@ public class InputManager : IInputManager
                         }
                         else
                         {
-                            while (playerInput[controls].Count > 0 && (ServiceLocator.Instance.get<IFrameService>().GetFrame()) >= playerInput[controls].Peek().frame)
+                            while (playerInput[controls].Count > 0 && (serviceFrames.GetFrame()) >= playerInput[controls].Peek().frame)
                             {
                                 //Debug.Log("removing");
                                 inputComponent.InputUpdate(playerInput[controls].Dequeue());
